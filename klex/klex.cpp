@@ -1,0 +1,243 @@
+#include "klex.h"
+#include <cctype>
+
+Klex::Klex(const char* filepath) {
+    file = fopen(filepath, "r");
+    if(!file)
+        throw "Could not open file!";
+    printf("File opened!\n");
+    initLexToTokenTable();
+
+    nextChar();
+}
+
+void Klex::initLexToTokenTable() {
+    lexToTokenTable["("] = TokenType::LeftParen;
+    lexToTokenTable[")"] = TokenType::RightParen;
+    lexToTokenTable["["] = TokenType::LeftBrack;
+    lexToTokenTable["]"] = TokenType::RightBrack;
+    lexToTokenTable["{"] = TokenType::LeftCurly;
+    lexToTokenTable["}"] = TokenType::RightCurly;
+    lexToTokenTable["=="] = TokenType::Equals;
+    lexToTokenTable["!="] = TokenType::NotEqu;
+    lexToTokenTable["<"] = TokenType::LThan;
+    lexToTokenTable[">"] = TokenType::GThan;
+    lexToTokenTable["<="] = TokenType::LThanEqu;
+    lexToTokenTable[">="] = TokenType::GThanEqu;
+    lexToTokenTable["!"] = TokenType::Neg;
+    lexToTokenTable["&"] = TokenType::And;
+    lexToTokenTable["|"] = TokenType::Or;
+    lexToTokenTable["="] = TokenType::Assign;
+    lexToTokenTable["+="] = TokenType::PlusAssign;
+    lexToTokenTable["-="] = TokenType::MinusAssign;
+    lexToTokenTable["*="] = TokenType::MultAssign;
+    lexToTokenTable["/="] = TokenType::DivAssign;
+    lexToTokenTable["%="] = TokenType::ModAssign;
+    lexToTokenTable["^="] = TokenType::ExpAssign;
+    lexToTokenTable["+"] = TokenType::Plus;
+    lexToTokenTable["-"] = TokenType::Minus;
+    lexToTokenTable["*"] = TokenType::Mult;
+    lexToTokenTable["/"] = TokenType::Div;
+    lexToTokenTable["%"] = TokenType::Mod;
+    lexToTokenTable["^"] = TokenType::Exp;
+    lexToTokenTable["."] = TokenType::Dot;
+    lexToTokenTable["=>"] = TokenType::Arrow;
+    lexToTokenTable["use"] = TokenType::Use;
+    lexToTokenTable["new"] = TokenType::New;
+    lexToTokenTable["if"] = TokenType::If;
+    lexToTokenTable["elseif"] = TokenType::ElseIf;
+    lexToTokenTable["else"] = TokenType::Else;
+    lexToTokenTable["while"] = TokenType::While;
+    lexToTokenTable["for"] = TokenType::For;
+    lexToTokenTable["in"] = TokenType::In;
+    lexToTokenTable["try"] = TokenType::Try;
+    lexToTokenTable["catch"] = TokenType::Catch;
+    lexToTokenTable["var"] = TokenType::Var;
+    lexToTokenTable["val"] = TokenType::Val;
+    lexToTokenTable["public"] = TokenType::Private;
+    lexToTokenTable["private"] = TokenType::Public;
+    lexToTokenTable[","] = TokenType::Comma;
+    lexToTokenTable[";"] = TokenType::StatEnd;
+}
+
+char Klex::getChar() {
+    return chara;
+}
+
+CharClass Klex::getCharClass() {
+    return charClass;
+}
+
+bool Klex::nextChar() {
+    chara = fgetc(file);
+    
+    if(isalpha(chara) || chara == '_') {
+        charClass = CharClass::LETTER;
+    } else if(isdigit(chara)) {
+        charClass = CharClass::DIGIT;
+    } else if(chara == '\'') {
+        charClass = CharClass::SINGLE_QUOTE;
+    } else if(chara == '"') {
+        charClass = CharClass::DOUBLE_QUOTE;
+    } else {
+        charClass = CharClass::OTHER;
+    }
+
+    return chara != EOF;
+}
+
+void Klex::skipWhitespace() {
+    char c = getChar();
+
+    while(c == ' ' || c == '\t' || c == '\n' || c == '\r') {
+        if(c == '\n')
+            lineNum++;
+
+        nextChar();
+        c = getChar();
+    }
+}
+
+// refactor this!!!
+bool Klex::nextToken() {
+    if(getChar() == EOF)
+        return false;
+    
+    std::string lexeme;
+
+    if(!isInterpolatedString && !isSimpleString)
+        skipWhitespace();
+
+    if(shouldparseOutString && isSimpleString) {
+        lexeme = parseOutString('\'');
+        token = Token(lexeme, TokenType::String, lineNum);
+        shouldparseOutString = false;
+        return true;
+    }
+    
+    if(shouldparseOutString && isInterpolatedString) {
+        lexeme = parseOutString('"');
+        token = Token(lexeme, TokenType::String, lineNum);
+        shouldparseOutString = false;
+        return true;
+    }
+
+    switch(getCharClass()) {
+        case CharClass::LETTER:
+            lexeme = parseOutWord();
+            token = Token(lexeme, getTokenTypeOfLexeme(lexeme, true), lineNum);
+            break;
+        case CharClass::DIGIT:
+            lexeme = parseOutNumber();
+            token = Token(lexeme, TokenType::Number, lineNum);
+            break;
+        case CharClass::SINGLE_QUOTE:
+            if(!isSimpleString)
+                shouldparseOutString = true;
+            isSimpleString = !isSimpleString;
+            lexeme = parseOutSymbol();
+            token = Token(lexeme, TokenType::SingleQuote, lineNum);
+            break;
+        case CharClass::DOUBLE_QUOTE:
+            if(!isInterpolatedString)
+                shouldparseOutString = true;
+            isInterpolatedString = !isInterpolatedString;
+            lexeme = parseOutSymbol();
+            token = Token(lexeme, TokenType::DoubleQuote, lineNum);
+            break;
+        case CharClass::OTHER:
+            lexeme = parseOutSymbol();
+            token = Token(lexeme, getTokenTypeOfLexeme(lexeme), lineNum);
+            break;
+    }
+
+    return true;
+}
+
+std::string Klex::parseOutWord() {
+    std::string lexeme;
+
+    while(getCharClass() == CharClass::LETTER || getCharClass() == CharClass::DIGIT) {
+        lexeme.push_back(getChar());
+        nextChar();
+    }
+
+    return lexeme;
+}
+
+std::string Klex::parseOutNumber() {
+    std::string lexeme;
+    bool onePoint = false;
+
+    while(getCharClass() == CharClass::DIGIT) {
+        lexeme += getChar();
+        nextChar();
+        
+        if(getChar() == '.') {
+            if(onePoint)
+                break;
+            
+            onePoint = true;
+            lexeme.push_back(getChar());
+            nextChar();
+        }
+    }
+
+    return lexeme;
+}
+
+std::string Klex::parseOutSymbol() {
+    std::string lexeme;
+
+    // == => 
+    // != >= <= += -= *= /= %= ^=
+
+    std::string equFirstSymbols = "=>";
+    std::string equSecondSymbols = "!><+-*/%^";
+
+    lexeme.push_back(getChar());
+
+    if(getChar() == '=') {
+        nextChar();
+        if(equFirstSymbols.find(getChar()) != -1) {
+            lexeme.push_back(getChar());
+            nextChar();
+        }
+    } else if(equSecondSymbols.find(getChar()) != -1) {
+        nextChar();
+        if(getChar() == '=') {
+            lexeme.push_back(getChar());
+            nextChar();
+        }
+    }else {
+        nextChar();
+    }
+
+    return lexeme;
+}
+
+std::string Klex::parseOutString(char quote) {
+    std::string lexeme;
+
+    while(getChar() != EOF && getChar() != quote) {
+        lexeme.push_back(getChar());
+        nextChar();
+    }
+
+    return lexeme;
+}
+
+TokenType Klex::getTokenTypeOfLexeme(std::string &lexeme, bool isWord) {
+    if (lexToTokenTable.find(lexeme) == lexToTokenTable.end())
+        return isWord ? TokenType::Identifier : TokenType::Unknown;
+    
+    return lexToTokenTable[lexeme];
+}
+
+Token Klex::getToken() {
+    return token;
+}
+
+Klex::~Klex() {
+    fclose(file);
+}

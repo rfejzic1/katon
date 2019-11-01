@@ -1,0 +1,61 @@
+module -> {use} {decl_stat}
+
+use -> "use" (simple_string | interpolated_string) ["as" ident]
+scope -> "public" | "private"
+decl_stat -> [scope] (varval_decl stat_end | method_decl)
+
+method_decl -> ident "(" [ident_list] ")" stat_block
+stat_block -> "{" {simple_stat | control_stat} "}"
+
+control_stat -> if_stat | for_stat | while_stat | try_catch_stat
+if_stat -> "if" condition stat_block {"elseif" condition stat_block} ["else" condition stat_block]
+for_stat -> "for" ident "in" variable stat_block
+while_stat -> "while" condition stat_block
+try_catch_stat -> "try" stat_block "catch" ident stat_block
+
+condition -> [neg_operator] cond_term {"|" cond_term}
+cond_term -> cond_factor {"&" cond_factor}
+cond_factor -> expr {comp_operator expr}
+comp_operator -> "==" | "!=" | "<=" | "<" | ">" | ">="
+neg_operator -> "!"
+
+simple_stat -> (varval_decl | assign_stat | expr | return_stat | throw_stat) stat_end
+varval_decl -> ("var" | "val") ident decl_operator (expr | "new" variable)
+assign_stat -> variable assign_operator (expr | "new" variable)
+return_stat -> "return" expr;
+throw_stat -> "throw" expr;
+
+expr_list -> expr  { "," expr }
+expr -> term {("+" | "-") term}
+term -> factor {("^" | "*" | "/" | "%") factor}
+factor -> value | variable | "(" expr ")"
+variable -> (ident | call_stat | array_access) [ "." variable ]
+/************Fix here***************/
+call_stat -> ident "(" [expr_list] ")"
+array_access -> ident "[" expr "]"
+value -> number | simple_string | interpolated_string | array | object | lambda
+
+number -> integer | double
+lambda -> "(" ident_list ")" "{" stat_block "}"
+object -> "{" {decl_stat} "}"
+array -> "[" expr_list "]"
+ident -> (alpha | "_") {alpha | digit | "_"}
+ident_list -> ident { "," ident }
+
+boolean -> "true" | "false"
+integer -> digit_zero | digit_no_zero {digit}
+double -> "." integer
+string -> {character | digit}
+interpolated_string -> """ string """
+simple_string -> "'" string "'"
+
+digit_no_zero -> "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" 
+digit_zero -> "0"
+digit -> digit_zero | digit_no_zero
+alpha -> ?any alphabet character?
+special -> ?special chars?
+character -> alpha | special
+
+decl_operator -> "="
+assign_operator -> "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "^="
+stat_end -> ";"
