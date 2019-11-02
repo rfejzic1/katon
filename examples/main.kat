@@ -1,0 +1,8 @@
+use './user' as User
+use 'math'
+
+main() {
+    val name = input("Enter name: ");
+    val user = new User(name, "rfejzic1@etf.unsa.ba", 21);
+    user.getName();
+}

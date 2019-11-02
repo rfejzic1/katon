@@ -1,0 +1,45 @@
+// default scope is public
+
+use "math"
+use "./user.kat" as User
+
+var a = 5;
+val b = 10.0;
+val str = 'Hello, World!';
+val arr = [a, b];
+val obj = {};
+var obj2 = new obj // "new obj" creates deep copy of obj
+val user = new User; // a module is essentialy an object, it's just that objects don't have use statements
+
+val lambda = (a, b) {
+	var pwr = power(a, 2);
+	return pwr + b;
+}
+
+private someFunction (a, b) {
+	return lambda(a, b);
+}
+
+// If a module has the method 'main', it can be executed by the interpreter
+main() {
+	if five > 5 {
+		print("Vece od 5");
+	} elseif five < 5 {
+		print("Manje od 5");
+	} else {
+		print("Jednako 5");
+	}
+
+	while i > 5 {
+		print(i);
+	}
+
+	for elem in array {
+		print(elem);
+	}
+
+	someFunction(a, b);
+}
+
+// dodati da objekti imaju toInt, toDouble, toString metode, tj. da se mogu implementovati
+// pa bivati pozvane

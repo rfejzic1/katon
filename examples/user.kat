@@ -1,0 +1,21 @@
+private var name = '';
+private var email = '';
+private var age = 21;
+
+constructor(name, email, age) {
+    this.name = name;
+    this.email = email;
+    this.age = age;
+}
+
+getName() {
+    return name;
+}
+
+setName(name) {
+    this.name = name;
+}
+
+sayHi() {
+    print "${name} says hi!";
+}
