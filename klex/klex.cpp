@@ -102,22 +102,20 @@ void Klex::skipWhitespace() {
 bool Klex::nextToken() {
     if(getChar() == EOF)
         return false;
-    
-    std::string lexeme;
 
     if(!isInterpolatedString && !isSimpleString)
         skipWhitespace();
 
     if(shouldparseOutString && isSimpleString) {
         lexeme = parseOutString('\'');
-        token = Token(lexeme, TokenType::String, lineNum);
+        tokenType = TokenType::String;
         shouldparseOutString = false;
         return true;
     }
     
     if(shouldparseOutString && isInterpolatedString) {
         lexeme = parseOutString('"');
-        token = Token(lexeme, TokenType::String, lineNum);
+        tokenType = TokenType::String;
         shouldparseOutString = false;
         return true;
     }
@@ -125,29 +123,29 @@ bool Klex::nextToken() {
     switch(getCharClass()) {
         case CharClass::LETTER:
             lexeme = parseOutWord();
-            token = Token(lexeme, getTokenTypeOfLexeme(lexeme, true), lineNum);
+            tokenType = getTokenTypeOfLexeme(lexeme, true);
             break;
         case CharClass::DIGIT:
             lexeme = parseOutNumber();
-            token = Token(lexeme, TokenType::Number, lineNum);
+            tokenType = TokenType::Number;
             break;
         case CharClass::SINGLE_QUOTE:
             if(!isSimpleString)
                 shouldparseOutString = true;
             isSimpleString = !isSimpleString;
             lexeme = parseOutSymbol();
-            token = Token(lexeme, TokenType::SingleQuote, lineNum);
+            tokenType = TokenType::SingleQuote;
             break;
         case CharClass::DOUBLE_QUOTE:
             if(!isInterpolatedString)
                 shouldparseOutString = true;
             isInterpolatedString = !isInterpolatedString;
             lexeme = parseOutSymbol();
-            token = Token(lexeme, TokenType::DoubleQuote, lineNum);
+            tokenType = TokenType::DoubleQuote;
             break;
         case CharClass::OTHER:
             lexeme = parseOutSymbol();
-            token = Token(lexeme, getTokenTypeOfLexeme(lexeme), lineNum);
+            tokenType = getTokenTypeOfLexeme(lexeme);
             break;
     }
 
@@ -189,6 +187,7 @@ std::string Klex::parseOutNumber() {
 std::string Klex::parseOutSymbol() {
     std::string lexeme;
 
+    // Double char symbols
     // == => 
     // != >= <= += -= *= /= %= ^=
 
@@ -235,7 +234,7 @@ TokenType Klex::getTokenTypeOfLexeme(std::string &lexeme, bool isWord) {
 }
 
 Token Klex::getToken() {
-    return token;
+    return Token(lexeme, tokenType, lineNum);
 }
 
 Klex::~Klex() {

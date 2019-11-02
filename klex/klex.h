@@ -12,12 +12,15 @@ enum class CharClass {
 
 class Klex {
     FILE* file;
-    Token token;
     std::unordered_map<std::string, TokenType> lexToTokenTable;
 
     char chara = 0;
     CharClass charClass = CharClass::OTHER;
+    
+    TokenType tokenType = TokenType::Unknown;
+    std::string lexeme;
     long lineNum = 0;
+
 
     bool isSimpleString = false;
     bool isInterpolatedString = false;
