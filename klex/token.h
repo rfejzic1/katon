@@ -52,7 +52,7 @@ enum class TokenType {
     Catch,
     // other
     Var,
-    Val,
+    Const,
     Private,
     Public,
     Comma,

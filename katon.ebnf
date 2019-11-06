@@ -20,7 +20,7 @@ comp_operator -> "==" | "!=" | "<=" | "<" | ">" | ">="
 neg_operator -> "!"
 
 simple_stat -> (varval_decl | assign_stat | expr | return_stat | throw_stat) stat_end
-varval_decl -> ("var" | "val") ident decl_operator (expr | "new" variable)
+varval_decl -> ("var" | "const") ident decl_operator (expr | "new" variable)
 assign_stat -> variable assign_operator (expr | "new" variable)
 return_stat -> "return" expr;
 throw_stat -> "throw" expr;
