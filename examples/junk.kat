@@ -4,14 +4,14 @@ use "math"
 use "./user.kat" as User
 
 var a = 5;
-val b = 10.0;
-val str = 'Hello, World!';
-val arr = [a, b];
-val obj = {};
+const b = 10.0;
+const str = 'Hello, World!';
+const arr = [a, b];
+const obj = {};
 var obj2 = new obj // "new obj" creates deep copy of obj
-val user = new User; // a module is essentialy an object, it's just that objects don't have use statements
+const user = new User; // a module is essentialy an object, it's just that objects don't have use statements
 
-val lambda = (a, b) {
+const lambda = (a, b) {
 	var pwr = power(a, 2);
 	return pwr + b;
 }
