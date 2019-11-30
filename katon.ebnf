@@ -2,9 +2,9 @@ module -> {use} {decl_stat}
 
 use -> "use" (simple_string | interpolated_string) ["as" ident]
 scope -> "public" | "private"
-decl_stat -> [scope] (varval_decl stat_end | method_decl)
+decl_stat -> [scope] (var_decl stat_end | method_decl)
 
-method_decl -> ident "(" [ident_list] ")" stat_block
+method_decl -> ident "(" [param_list] ")" stat_block
 stat_block -> "{" {simple_stat | control_stat} "}"
 
 control_stat -> if_stat | for_stat | while_stat | try_catch_stat
@@ -13,24 +13,25 @@ for_stat -> "for" ident "in" variable stat_block
 while_stat -> "while" condition stat_block
 try_catch_stat -> "try" stat_block "catch" ident stat_block
 
-condition -> [neg_operator] cond_term {"|" cond_term}
-cond_term -> cond_factor {"&" cond_factor}
+condition -> [neg_operator] cond_term {"or" cond_term}
+cond_term -> cond_factor {"and" cond_factor}
 cond_factor -> expr {comp_operator expr}
 comp_operator -> "==" | "!=" | "<=" | "<" | ">" | ">="
-neg_operator -> "!"
+neg_operator -> "not"
 
-simple_stat -> (varval_decl | assign_stat | expr | return_stat | throw_stat) stat_end
-varval_decl -> ("var" | "const") ident decl_operator (expr | "new" variable)
-assign_stat -> variable assign_operator (expr | "new" variable)
+simple_stat -> (var_decl | assign_stat | return_stat | throw_stat) stat_end
+var_decl -> ("var" | "const") ident decl_operator (expr | deep_copy)
+assign_stat -> variable assign_operator (expr | deep_copy)
 return_stat -> "return" expr;
 throw_stat -> "throw" expr;
+deep_copy -> "new" variable;
 
 expr_list -> expr  { "," expr }
 expr -> term {("+" | "-") term}
 term -> factor {("^" | "*" | "/" | "%") factor}
 factor -> value | variable | "(" expr ")"
-variable -> (ident | call_stat | array_access) [ "." variable ]
-/************Fix here***************/
+variable -> (ident | call_stat | array_access) [ "." variable ] [cast]
+cast -> "as" primitive_type
 call_stat -> ident "(" [expr_list] ")"
 array_access -> ident "[" expr "]"
 value -> number | simple_string | interpolated_string | array | object | lambda
@@ -41,6 +42,9 @@ object -> "{" {decl_stat} "}"
 array -> "[" expr_list "]"
 ident -> (alpha | "_") {alpha | digit | "_"}
 ident_list -> ident { "," ident }
+param_list -> param { "," param}
+param -> ident [cast]
+primitive_type -> "String" "Integer" "Double" "Boolean"
 
 boolean -> "true" | "false"
 integer -> digit_zero | digit_no_zero {digit}
