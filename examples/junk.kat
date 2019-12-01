@@ -1,4 +1,4 @@
-// default scope is public
+# default scope is public
 
 use "math"
 use "./user.kat" as User
@@ -8,8 +8,8 @@ const b = 10.0;
 const str = 'Hello, World!';
 const arr = [a, b];
 const obj = {};
-var obj2 = new obj // "new obj" creates deep copy of obj
-const user = new User; // a module is essentialy an object, it's just that objects don't have use statements
+var obj2 = new obj # "new obj" creates deep copy of obj
+const user = new User; # a module is essentialy an object, it's just that objects don't have use statements
 
 const lambda = (a, b) {
 	var pwr = power(a, 2);
@@ -20,7 +20,7 @@ private someFunction (a, b) {
 	return lambda(a, b);
 }
 
-// If a module has the method 'main', it can be executed by the interpreter
+# If a module has the method 'main', it can be executed by the interpreter
 main() {
 	if five > 5 {
 		print("Vece od 5");
@@ -41,5 +41,5 @@ main() {
 	someFunction(a, b);
 }
 
-// dodati da objekti imaju toInt, toDouble, toString metode, tj. da se mogu implementovati
-// pa bivati pozvane
+# dodati da objekti imaju toInt, toDouble, toString metode, tj. da se mogu implementovati
+# pa bivati pozvane

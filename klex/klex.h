@@ -30,6 +30,7 @@ class Klex {
     CharClass getCharClass();
     bool nextChar();
     void skipWhitespace();
+    void skipComment();
 
     TokenType getTokenTypeOfLexeme(std::string &lexeme, bool isWord = false);
     std::string parseOutWord();

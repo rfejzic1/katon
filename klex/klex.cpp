@@ -24,9 +24,9 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable[">"] = TokenType::GThan;
     lexToTokenTable["<="] = TokenType::LThanEqu;
     lexToTokenTable[">="] = TokenType::GThanEqu;
-    lexToTokenTable["!"] = TokenType::Neg;
-    lexToTokenTable["&"] = TokenType::And;
-    lexToTokenTable["|"] = TokenType::Or;
+    lexToTokenTable["not"] = TokenType::Neg;
+    lexToTokenTable["and"] = TokenType::And;
+    lexToTokenTable["or"] = TokenType::Or;
     lexToTokenTable["="] = TokenType::Assign;
     lexToTokenTable["+="] = TokenType::PlusAssign;
     lexToTokenTable["-="] = TokenType::MinusAssign;
@@ -68,9 +68,19 @@ CharClass Klex::getCharClass() {
     return charClass;
 }
 
+void Klex::skipComment() {
+    if(chara == '#') {
+        while(chara != '\n' && chara != '\r' && chara != EOF) {
+            chara = fgetc(file);
+        }
+    }
+}
+
 bool Klex::nextChar() {
     chara = fgetc(file);
-    
+
+    skipComment();
+
     if(isalpha(chara) || chara == '_') {
         charClass = CharClass::LETTER;
     } else if(isdigit(chara)) {
