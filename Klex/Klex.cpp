@@ -1,4 +1,4 @@
-#include "klex.h"
+#include "Klex.h"
 #include <cctype>
 
 Klex::Klex(const char* filepath) {

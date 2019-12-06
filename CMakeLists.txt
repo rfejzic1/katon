@@ -3,4 +3,4 @@ project(Katon)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Katon main.cpp klex/klex.cpp klex/klex.h klex/token.h)
+add_executable(Katon main.cpp Klex/Klex.cpp Klex/Klex.h Klex/Token.h Parser/Parser.cpp Parser/Parser.h)

@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "token.h"
+#include "Token.h"
 
 enum class CharClass {
     DIGIT, LETTER, SINGLE_QUOTE, DOUBLE_QUOTE, OTHER
