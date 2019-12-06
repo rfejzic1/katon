@@ -16,7 +16,7 @@ class Klex {
 
     char chara = 0;
     CharClass charClass = CharClass::OTHER;
-    
+
     TokenType tokenType = TokenType::Unknown;
     std::string lexeme;
     long lineNum = 0;

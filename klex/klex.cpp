@@ -122,7 +122,7 @@ bool Klex::nextToken() {
         shouldparseOutString = false;
         return true;
     }
-    
+
     if(shouldparseOutString && isInterpolatedString) {
         lexeme = parseOutString('"');
         tokenType = TokenType::String;
@@ -180,11 +180,11 @@ std::string Klex::parseOutNumber() {
     while(getCharClass() == CharClass::DIGIT) {
         lexeme += getChar();
         nextChar();
-        
+
         if(getChar() == '.') {
             if(onePoint)
                 break;
-            
+
             onePoint = true;
             lexeme.push_back(getChar());
             nextChar();
@@ -198,7 +198,7 @@ std::string Klex::parseOutSymbol() {
     std::string lexeme;
 
     // Double char symbols
-    // == => 
+    // == =>
     // != >= <= += -= *= /= %= ^=
 
     std::string equFirstSymbols = "=>";
@@ -239,7 +239,7 @@ std::string Klex::parseOutString(char quote) {
 TokenType Klex::getTokenTypeOfLexeme(std::string &lexeme, bool isWord) {
     if (lexToTokenTable.find(lexeme) == lexToTokenTable.end())
         return isWord ? TokenType::Identifier : TokenType::Unknown;
-    
+
     return lexToTokenTable[lexeme];
 }
 
