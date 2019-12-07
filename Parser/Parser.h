@@ -10,12 +10,16 @@
 //  - Symbol table
 
 #include <string>
+#include <vector>
 
 #include "../AbstractSyntaxTree/AbstractSyntaxTree.h"
 #include "../Klex/Klex.h"
 
 class Parser {
     std::string filepath;
+    std::vector<Token> tokens;
+
+    void readTokenStream();
 
     void error(const char* message);
     void log(const char* message);
