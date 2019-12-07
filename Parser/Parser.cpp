@@ -21,7 +21,7 @@ void Parser::error(const char *message) {
 }
 
 void Parser::log(const char *message) {
-    std::cout << "Warning: " << message << std::endl;
+    std::cout << "Log: " << message << std::endl;
 }
 
 void Parser::readTokenStream() {
