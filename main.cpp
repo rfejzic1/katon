@@ -1,6 +1,5 @@
-#include <stdio.h>
-
-#include "Klex/Klex.h"
+#include "Parser/Parser.h"
+#include "Common/ParseException.h"
 
 int main(int argc, char **argv) {
     if(argc < 2) {
@@ -11,14 +10,10 @@ int main(int argc, char **argv) {
     char* filename = argv[1];
     
     try {
-        Klex klex(filename);
-
-        while(klex.nextToken()) {
-            Token token = klex.getToken();
-            printf("Token: %d - Line: %ld - Lexeme: %s\n", token.type, token.line, token.lexeme.c_str());
-        }
-    }catch(const char* e) {
-        printf("%s\n", e);
+        Parser parser(filename);
+        AbstractSyntaxTree abs = parser.parse();
+    }catch(ParseException& e) {
+        printf("%s\n", e.what());
     }
 
     return 0;
