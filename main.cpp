@@ -1,5 +1,5 @@
-#include "Parser/Parser.h"
-#include "Common/ParseException.h"
+#include "include/Parser.h"
+#include "include/ParseException.h"
 
 int main(int argc, char **argv) {
     if(argc < 2) {

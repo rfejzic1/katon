@@ -9,7 +9,7 @@ const str = 'Hello, World!';
 const arr = [a, b];
 const obj = {};
 var obj2 = new obj # "new obj" creates deep copy of obj
-const user = new User; # a module is essentialy an object, it's just that objects don't have use statements
+const user = new User; # a module is essentially an object, it's just that objects don't have use statements
 
 const lambda = (a, b) {
 	var pwr = power(a, 2);

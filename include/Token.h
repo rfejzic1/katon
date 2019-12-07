@@ -2,28 +2,28 @@
 
 enum class TokenType {
     // quotes
-            SingleQuote,
+    SingleQuote,
     DoubleQuote,
     // brackts
-            LeftParen,
+    LeftParen,
     RightParen,
     LeftBrack,
     RightBrack,
     LeftCurly,
     RightCurly,
     // comparison
-            Equals,
+    Equals,
     NotEqu,
     LThan,
     GThan,
     LThanEqu,
     GThanEqu,
     // logical
-            Neg,
+    Neg,
     And,
     Or,
     // assignemnt
-            Assign,
+    Assign,
     PlusAssign,
     MinusAssign,
     MultAssign,
@@ -31,7 +31,7 @@ enum class TokenType {
     ModAssign,
     ExpAssign,
     // operators
-            Plus,
+    Plus,
     Minus,
     Mult,
     Div,
@@ -42,7 +42,7 @@ enum class TokenType {
     Use,
     New,
     // controll
-            If,
+    If,
     ElseIf,
     Else,
     While,
@@ -51,7 +51,7 @@ enum class TokenType {
     Try,
     Catch,
     // other
-            Var,
+    Var,
     Const,
     Private,
     Public,

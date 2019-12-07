@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Interpreter/Interpreter.h"
+#include "../Interpreter.h"
 
 struct Node {
     virtual void accept(Interpreter interpreter) = 0;

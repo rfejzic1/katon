@@ -3,4 +3,4 @@ project(Katon)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Katon main.cpp Klex/Klex.cpp Klex/Klex.h Klex/Token.h Parser/Parser.cpp Parser/Parser.h AbstractSyntaxTree/AbstractSyntaxTree.cpp AbstractSyntaxTree/AbstractSyntaxTree.h Common/ParseException.h AbstractSyntaxTree/Nodes/Node.h Interpreter/Interpreter.cpp Interpreter/Interpreter.h AbstractSyntaxTree/Nodes/BinaryNode.h AbstractSyntaxTree/Nodes/Nodes.h AbstractSyntaxTree/Nodes/NaryNode.h)
+add_executable(Katon main.cpp src/Klex.cpp include/Klex.h include/Token.h src/Parser.cpp include/Parser.h src/AbstractSyntaxTree.cpp include/AbstractSyntaxTree.h include/ParseException.h include/Nodes/Node.h src/Interpreter.cpp include/Interpreter.h include/Nodes/BinaryNode.h include/Nodes/Nodes.h include/Nodes/NaryNode.h)

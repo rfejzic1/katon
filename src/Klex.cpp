@@ -1,11 +1,10 @@
-#include "Klex.h"
+#include "../include/Klex.h"
 #include <cctype>
 
 Klex::Klex(const char* filepath) {
     file = fopen(filepath, "r");
     if(!file)
         throw "Could not open file!";
-    printf("File opened!\n");
     initLexToTokenTable();
 
     nextChar();

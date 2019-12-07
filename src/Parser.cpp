@@ -1,8 +1,7 @@
 #include <iostream>
 
-#include "Parser.h"
-#include "../Common/ParseException.h"
-
+#include "../include/Parser.h"
+#include "../include/ParseException.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath) { }
 

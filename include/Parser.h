@@ -12,8 +12,8 @@
 #include <string>
 #include <vector>
 
-#include "../AbstractSyntaxTree/AbstractSyntaxTree.h"
-#include "../Klex/Klex.h"
+#include "AbstractSyntaxTree.h"
+#include "Klex.h"
 
 class Parser {
     std::string filepath;
