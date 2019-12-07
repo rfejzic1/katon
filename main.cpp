@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv) {
     if(argc < 2) {
-        printf("Usage: klex <filepath>\n");
+        printf("Usage: katon <filepath>\n");
         return 0;
     }
 
@@ -11,7 +11,9 @@ int main(int argc, char **argv) {
     
     try {
         Parser parser(filename);
-        AbstractSyntaxTree abs = parser.parse();
+        AbstractSyntaxTree* abs = parser.parse();
+
+        delete abs;
     }catch(ParseException& e) {
         printf("%s\n", e.what());
     }

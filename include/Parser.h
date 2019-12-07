@@ -17,15 +17,19 @@
 
 class Parser {
     std::string filepath;
-    std::vector<Token> tokens;
+    Klex* klex;
+    AbstractSyntaxTree* astree;
 
-    void readTokenStream();
+    void openKlex();
+    void closeKlex();
 
+    void consume(TokenType tokenType);
     void error(const char* message);
     void log(const char* message);
 
 public:
     Parser(const char* filepath);
-    AbstractSyntaxTree parse();
+    AbstractSyntaxTree* parse();
+    ~Parser();
 };
 

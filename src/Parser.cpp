@@ -3,16 +3,19 @@
 #include "../include/Parser.h"
 #include "../include/ParseException.h"
 
-Parser::Parser(const char *filepath) : filepath(filepath) { }
+Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr), astree(nullptr) { }
 
-AbstractSyntaxTree Parser::parse() {
-    readTokenStream();
+AbstractSyntaxTree* Parser::parse() {
+    openKlex();
 
-    for(Token& token : tokens) {
-        std::cout << token.line << " - " << token.lexeme << std::endl;
-    }
+    delete astree;
+    astree = new AbstractSyntaxTree();
 
-    return AbstractSyntaxTree();
+    return astree;
+}
+
+void Parser::consume(TokenType) {
+
 }
 
 void Parser::error(const char *message) {
@@ -23,17 +26,15 @@ void Parser::log(const char *message) {
     std::cout << "Log: " << message << std::endl;
 }
 
-void Parser::readTokenStream() {
-    try {
-        Klex klex(filepath.c_str());
-        tokens.clear();
-
-        while(klex.nextToken()) {
-            Token token = klex.getToken();
-            tokens.push_back(token);
-        }
-    } catch (const char* err) {
-        throw ParseException(err);
-    }
+void Parser::openKlex() {
+    closeKlex();
+    klex = new Klex(filepath.c_str());
 }
 
+void Parser::closeKlex() {
+    delete klex;
+}
+
+Parser::~Parser() {
+    closeKlex();
+}

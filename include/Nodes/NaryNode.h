@@ -4,7 +4,7 @@
 
 #include "Node.h"
 
-struct NaryNode {
+struct NaryNode : public Node {
     std::vector<Node*> nodes;
 
     void add(Node* node) {
