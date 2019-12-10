@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Node.h"
+#include "../Node.h"
 
 struct BinaryOperator : public Node {
     Node* parent = nullptr;

@@ -1,19 +1,19 @@
 #pragma once
 
-#include "Nodes.h"
+#include "../Nodes.h"
 
-struct Boolean : public Value {
-    bool value = false;
+struct Double : public Value {
+    double value = 0;
 
-    Boolean() = default;
-    Boolean(bool value) : value(value) {}
+    Double() = default;
+    Double(double value) : value(value) {}
 
     void asString(std::string& v_string) override {
         v_string = std::to_string(value);
     }
 
     void asInteger(long long int& v_integer) override {
-        v_integer = value;
+        v_integer = (long long int) value;
     }
 
     void asDouble(double& v_double) override {
@@ -21,6 +21,6 @@ struct Boolean : public Value {
     }
 
     void asBoolean(bool& v_bool) override {
-        v_bool = value;
+        v_bool = value != 0;
     }
 };

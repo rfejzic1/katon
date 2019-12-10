@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Nodes.h"
+#include "../Nodes.h"
 
 struct String : public Value {
     std::string value;

@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-#include "AbstractSyntaxTree.h"
+#include "AbstractSyntaxTree/AbstractSyntaxTree.h"
 #include "Klex.h"
 
 class Parser {

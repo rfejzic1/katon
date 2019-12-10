@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Nodes.h"
+#include "../Nodes.h"
 
 struct Value : public Node {
     virtual void asString(std::string& v_string) = 0;

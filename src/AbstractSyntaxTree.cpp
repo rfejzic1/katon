@@ -1,1 +1,1 @@
-#include "../include/AbstractSyntaxTree.h"
+#include "../include/AbstractSyntaxTree/AbstractSyntaxTree.h"

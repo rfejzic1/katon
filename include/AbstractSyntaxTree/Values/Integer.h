@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Nodes.h"
+#include "../Nodes.h"
 
 struct Integer : public Value {
     long long int value = 0;
