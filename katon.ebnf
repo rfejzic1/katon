@@ -52,10 +52,6 @@ term -> notable { ("^" | "*" | "/" | "%") notable }
 notable -> ["not"] factor [cast]
 factor -> ( variable | value | "(" expr ")" )
 
-let expr = a == b
-let expr = a + c * 4 < b == true and b + 3 > 0 != false or d.getAverage() as Integer
-let expr = ((((a + (c * 4)) < b) == true) and (((b + 3) > 0) != false)) or ((d.getAverage()) as Integer)
-
 variable -> (ident { method_call | array_access }) [ "." variable ]
 method_call -> "(" [expr_list] ")"
 array_access -> "[" expr "]"
