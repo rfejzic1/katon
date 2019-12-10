@@ -21,11 +21,15 @@ class Parser {
     AbstractSyntaxTree* astree;
 
     void openKlex();
+    void checkKlex();
     void closeKlex();
 
+    Token get();
     void consume(TokenType tokenType);
     void error(const char* message);
     void log(const char* message);
+
+
 
 public:
     Parser(const char* filepath);

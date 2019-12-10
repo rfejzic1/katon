@@ -14,8 +14,14 @@ AbstractSyntaxTree* Parser::parse() {
     return astree;
 }
 
-void Parser::consume(TokenType) {
+Token Parser::get() {
+    checkKlex();
+    return klex->getToken();
+}
 
+void Parser::consume(TokenType) {
+    checkKlex();
+    klex->nextToken();
 }
 
 void Parser::error(const char *message) {
@@ -31,8 +37,14 @@ void Parser::openKlex() {
     klex = new Klex(filepath.c_str());
 }
 
+void Parser::checkKlex() {
+    if(!klex)
+        throw ParseException("Klex not defined!");
+}
+
 void Parser::closeKlex() {
     delete klex;
+    klex = nullptr;
 }
 
 Parser::~Parser() {
