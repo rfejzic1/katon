@@ -2,9 +2,9 @@
 
 #include "../Nodes.h"
 
-struct Value : public Node {
-    virtual void asString(std::string& v_string) = 0;
-    virtual void asInteger(long long int& v_integer) = 0;
-    virtual void asDouble(double& v_double) = 0;
-    virtual void asBoolean(bool& v_bool) = 0;
+struct Value : public Expression {
+    virtual std::string asString() = 0;
+    virtual long long int asInteger() = 0;
+    virtual double asDouble() = 0;
+    virtual bool asBoolean() = 0;
 };

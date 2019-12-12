@@ -8,19 +8,19 @@ struct String : public Value {
     String() = default;
     String(std::string& value) : value(value) {}
 
-    void asString(std::string& v_string) override {
-        v_string = value;
+    std::string asString() override {
+        return value;
     }
 
-    void asInteger(long long int& v_integer) override {
-        v_integer = std::stoll(value);
+    long long int asInteger() override {
+        return std::stoll(value);
     }
 
-    void asDouble(double& v_double) override {
-        v_double = std::stod(value);
+    double asDouble() override {
+        return std::stod(value);
     }
 
-    void asBoolean(bool& v_bool) override {
-        v_bool = !value.empty();
+    bool asBoolean() override {
+        return !value.empty();
     }
 };

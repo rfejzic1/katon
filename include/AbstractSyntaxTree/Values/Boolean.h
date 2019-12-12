@@ -8,19 +8,19 @@ struct Boolean : public Value {
     Boolean() = default;
     Boolean(bool value) : value(value) {}
 
-    void asString(std::string& v_string) override {
-        v_string = std::to_string(value);
+    std::string asString() override {
+        return std::to_string(value);
     }
 
-    void asInteger(long long int& v_integer) override {
-        v_integer = value;
+    long long int asInteger() override {
+        return value;
     }
 
-    void asDouble(double& v_double) override {
-        v_double = value;
+    double asDouble() override {
+        return value;
     }
 
-    void asBoolean(bool& v_bool) override {
-        v_bool = value;
+    bool asBoolean() override {
+        return value;
     }
 };
