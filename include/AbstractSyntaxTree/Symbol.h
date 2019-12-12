@@ -2,7 +2,7 @@
 
 #include "Node.h"
 
-class Symbol : public Node {
+struct Symbol : public Node {
     const char* name;
     bool constant;
 

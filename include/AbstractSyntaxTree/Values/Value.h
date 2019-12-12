@@ -7,4 +7,8 @@ struct Value : public Expression {
     virtual long long int asInteger() = 0;
     virtual double asDouble() = 0;
     virtual bool asBoolean() = 0;
+
+    Value* getValue() {
+        return this;
+    }
 };
