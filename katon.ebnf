@@ -8,9 +8,9 @@ var_decl -> ("var" | "const") ident decl_operator
 attrib_decl -> var_decl expr
 
 method_decl -> ident "(" [param_list] ")" stat_block
-stat_block -> "{" {simple_stat | control_stat} "}"
+stat_block -> "{" { simple_stat | control_stat } "}"
 
-simple_stat -> (local_decl | assign_stat | return_stat | continue_stat | break_stat | throw_stat) stat_end
+simple_stat -> (local_decl | assign_stat | return_stat | continue_stat | break_stat | throw_stat) {otherwise_stat} stat_end
 local_decl -> var_decl (expr | deep_copy)
 assign_stat -> variable assign_operator (expr | deep_copy)
 return_stat -> "return" expr;
@@ -23,6 +23,7 @@ control_stat -> if_stat | for_stat | while_stat | try_catch_stat
 if_stat -> "if" expr stat_block {"elseif" expr stat_block} ["else" expr stat_block]
 for_stat -> "for" ident "in" variable stat_block
 while_stat -> "while" expr stat_block
+otherwise_stat -> "otherwise" stat_block
 try_catch_stat -> "try" stat_block "catch" ident stat_block
 
 expr_list -> expr  { "," expr }

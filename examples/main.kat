@@ -1,8 +1,17 @@
-use './user' as User
-use 'math'
+let person = {
+    let name = 'John Doe';
+
+    printName() {
+        print(name);
+    }
+};
+
+doSomething(something) {
+    something.do();
+}
 
 main() {
-    const name = input("Enter name: ");
-    const user = new User(name, "rfejzic1@etf.unsa.ba", 21);
-    user.getName();
+    doSomething(person) otherwise {
+        print("This has gone out of hand, hasn't it?");
+    };
 }
