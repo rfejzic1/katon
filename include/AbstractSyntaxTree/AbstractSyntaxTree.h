@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Nodes/Nodes.h"
+#include "Nodes.h"
 
 class AbstractSyntaxTree {
-    Node* root;
+    ptr<Node> root;
 public:
 
 };
