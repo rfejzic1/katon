@@ -11,6 +11,8 @@ AbstractSyntaxTree* Parser::parse() {
     delete astree;
     astree = new AbstractSyntaxTree();
 
+    expression();
+
     return astree;
 }
 
@@ -49,4 +51,52 @@ void Parser::closeKlex() {
 
 Parser::~Parser() {
     closeKlex();
+}
+
+void Parser::object() {
+
+}
+
+void Parser::attributeDecl() {
+
+}
+
+void Parser::method() {
+
+}
+
+void Parser::statementBlock() {
+
+}
+
+void Parser::statement() {
+
+}
+
+void Parser::ifStatement() {
+
+}
+
+void Parser::whileStatement() {
+
+}
+
+void Parser::forStatement() {
+
+}
+
+void Parser::tryCatchStatement() {
+
+}
+
+void Parser::otherwiseStatement() {
+
+}
+
+void Parser::variableDecl() {
+
+}
+
+void Parser::expression() {
+
 }

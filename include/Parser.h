@@ -29,7 +29,18 @@ class Parser {
     void error(const char* message);
     void log(const char* message);
 
-
+    void object();
+    void attributeDecl();
+    void method();
+    void statementBlock();
+    void statement();
+    void ifStatement();
+    void whileStatement();
+    void forStatement();
+    void tryCatchStatement();
+    void otherwiseStatement();
+    void variableDecl();
+    void expression();
 
 public:
     Parser(const char* filepath);
