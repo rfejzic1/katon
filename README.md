@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Katon is an interpreted language and it's interpreter is built in C++. The Katon interpreter is built for educational
+Katon is an interpreted language and its interpreter is built in C++. The Katon interpreter is built for educational
 purposes as a part of a project assignment. The language itself is simple and is intended to be an object-based scripting 
 language inspired by elements of other languages like JavaScript, C++, Java, Python, PHP etc. 
 
@@ -20,7 +20,7 @@ main() {
     
     # An interpolated string is wrapped in double quotes
     print("${greeting}, ${name}!");
-}
+}s
 
 ```
 
