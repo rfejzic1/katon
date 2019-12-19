@@ -51,7 +51,7 @@ enum class TokenType {
     Try,
     Catch,
     // other
-    Var,
+    Let,
     Const,
     Private,
     Public,
@@ -60,7 +60,11 @@ enum class TokenType {
     Identifier,
     String,
     Number,
-    Unknown
+    Otherwise,
+    Unknown,
+    StringType,
+    NumberType,
+    BooleanType
 };
 
 struct Token {

@@ -51,12 +51,16 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["in"] = TokenType::In;
     lexToTokenTable["try"] = TokenType::Try;
     lexToTokenTable["catch"] = TokenType::Catch;
-    lexToTokenTable["var"] = TokenType::Var;
+    lexToTokenTable["var"] = TokenType::Let;
     lexToTokenTable["const"] = TokenType::Const;
     lexToTokenTable["public"] = TokenType::Private;
     lexToTokenTable["private"] = TokenType::Public;
+    lexToTokenTable["otherwise"] = TokenType::Otherwise;
     lexToTokenTable[","] = TokenType::Comma;
     lexToTokenTable[";"] = TokenType::StatEnd;
+    lexToTokenTable["String"] = TokenType::StringType;
+    lexToTokenTable["Number"] = TokenType::NumberType;
+    lexToTokenTable["Boolean"] = TokenType::BooleanType;
 }
 
 char Klex::getChar() {
