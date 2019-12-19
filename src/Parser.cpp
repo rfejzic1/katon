@@ -11,23 +11,31 @@ AbstractSyntaxTree* Parser::parse() {
     delete astree;
     astree = new AbstractSyntaxTree();
 
-    expression();
+    object();
 
     return astree;
 }
 
-Token Parser::get() {
-    checkKlex();
-    return klex->getToken();
+Token Parser::token() {
+    return currentToken;
 }
 
-void Parser::consume(TokenType) {
+void Parser::consume(TokenType type, const char* message) {
+    if(token().type == type)
+        consume();
+    else
+        error(message);
+}
+
+void Parser::consume() {
     checkKlex();
     klex->nextToken();
+    currentToken = klex->getToken();
 }
 
 void Parser::error(const char *message) {
     std::cout << "Error: " << message << std::endl;
+    throw ParseException(message);
 }
 
 void Parser::log(const char *message) {
@@ -54,15 +62,44 @@ Parser::~Parser() {
 }
 
 void Parser::object() {
-
+    switch(token().type) {
+        case TokenType::Let:
+        case TokenType::Const:
+            attributeDecl();
+            break;
+        case TokenType::Identifier:
+            method();
+            break;
+        default:
+            error("Unexpected token...");
+    }
 }
 
 void Parser::attributeDecl() {
-
+    consume();
+    log("Attribute declaration");
+    expression();
 }
 
 void Parser::method() {
+    log("Method declaration");
+    consume(TokenType::LeftParen, "Expected '('");
+    identifierList();
+    consume(TokenType::RightParen, "Expected ')'");
+    statementBlock();
+}
 
+void Parser::identifierList() {
+    if(token().type != TokenType::Identifier && token().type != TokenType::Comma)
+        return;
+
+    consume(TokenType::Identifier, "Expected identifier");
+    log("Identifier");
+
+    if(token().type == TokenType::Comma) {
+        consume();
+        identifierList();
+    }
 }
 
 void Parser::statementBlock() {
