@@ -1,28 +1,23 @@
 #pragma once
 
 enum class TokenType {
-    // quotes
     SingleQuote,
     DoubleQuote,
-    // brackts
     LeftParen,
     RightParen,
     LeftBrack,
     RightBrack,
     LeftCurly,
     RightCurly,
-    // comparison
     Equals,
     NotEqu,
     LThan,
     GThan,
     LThanEqu,
     GThanEqu,
-    // logical
     Neg,
     And,
     Or,
-    // assignemnt
     Assign,
     PlusAssign,
     MinusAssign,
@@ -30,7 +25,6 @@ enum class TokenType {
     DivAssign,
     ModAssign,
     ExpAssign,
-    // operators
     Plus,
     Minus,
     Mult,
@@ -42,7 +36,6 @@ enum class TokenType {
     Arrow,
     Use,
     New,
-    // controll
     If,
     ElseIf,
     Else,
@@ -66,7 +59,8 @@ enum class TokenType {
     StringType,
     IntegerType,
     DoubleType,
-    BooleanType
+    BooleanType,
+    Function
 };
 
 struct Token {

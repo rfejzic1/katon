@@ -63,6 +63,7 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["Integer"] = TokenType::IntegerType;
     lexToTokenTable["Double"] = TokenType::DoubleType;
     lexToTokenTable["Boolean"] = TokenType::BooleanType;
+    lexToTokenTable["fun"] = TokenType::Function;
 }
 
 char Klex::getChar() {
