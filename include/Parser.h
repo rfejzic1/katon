@@ -17,6 +17,7 @@ class Parser {
     void closeKlex();
 
     Token token();
+    void printToken();
     void consume(TokenType tokenType, const char* what);
     void consume();
     bool match(TokenType type);

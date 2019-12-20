@@ -55,9 +55,13 @@ void Parser::log(const char *message) {
     std::cout << "Log: " << message << std::endl;
 }
 
+void Parser::printToken() {
+    std::cout << "Token " << (int) token().type << " - " << token().lexeme << " on line " << token().line << std::endl;
+}
+
 void Parser::unexpected() {
     std::stringstream msg;
-    msg << "Unexpected '" << token().lexeme.c_str() << "' on line " << token().line + 1;
+    msg << "Unexpected '" << token().lexeme.c_str() << "' on line " << token().line;
     throw ParseException(msg.str().c_str());
 }
 
@@ -108,12 +112,8 @@ void Parser::memberDecl() {
 void Parser::attributeDecl() {
     log("attribute declaration");
 
-    log((std::to_string(static_cast<int>(token().type)) + " : " + token().lexeme).c_str());
-
-    if(matchAny({ TokenType::Let, TokenType::Const })){
-        log("Sass");
+    if(matchAny({ TokenType::Let, TokenType::Const }))
         consume();
-    }
 
     consume();
     consume(TokenType::Assign, "assignment operator '='");
@@ -123,6 +123,9 @@ void Parser::attributeDecl() {
 
 void Parser::method() {
     log("method declaration");
+    consume();
+    printToken();
+    consume(TokenType::Identifier, "identifier");
     consume(TokenType::LeftParen, "'('");
     identifierList();
     consume(TokenType::RightParen, "')'");
@@ -130,12 +133,18 @@ void Parser::method() {
 }
 
 void Parser::identifierList() {
-    if(matchAny({TokenType::Identifier, TokenType::Comma}))
+    if(!matchAny({TokenType::Identifier, TokenType::Comma})) {
+        log("Not a identifier list!");
         return;
+    }
+
+    log("identifier list");
+    printToken();
 
     consume(TokenType::Identifier, "identifier");
 
     if(match(TokenType::Comma)) {
+        log(",");
         consume();
         identifierList();
     }
@@ -148,12 +157,8 @@ void Parser::statementBlock() {
 }
 
 void Parser::statements() {
-    try {
+    while(!match(TokenType::RightCurly))
         statement();
-        statements();
-    } catch(...) {
-
-    }
 }
 
 void Parser::statement() {
@@ -219,6 +224,7 @@ void Parser::variableDecl() {
 
 void Parser::expression() {
     log("expression");
-    log(token().lexeme.c_str());
-    consume();
+    printToken();
+    if(!match(TokenType::RightCurly))
+        consume();
 }
