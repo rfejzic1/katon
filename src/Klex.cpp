@@ -69,7 +69,7 @@ void Klex::initLexToTokenTable() {
 }
 
 char Klex::getChar() {
-    return chara;
+    return currentChar;
 }
 
 CharClass Klex::getCharClass() {
@@ -77,31 +77,31 @@ CharClass Klex::getCharClass() {
 }
 
 void Klex::skipComment() {
-    if(chara == '#') {
-        while(chara != '\n' && chara != '\r' && chara != EOF) {
-            chara = fgetc(file);
+    if(currentChar == '#') {
+        while(currentChar != '\n' && currentChar != '\r' && currentChar != EOF) {
+            currentChar = fgetc(file);
         }
     }
 }
 
 bool Klex::nextChar() {
-    chara = fgetc(file);
+    currentChar = fgetc(file);
 
     skipComment();
 
-    if(isalpha(chara) || chara == '_') {
+    if(isalpha(currentChar) || currentChar == '_') {
         charClass = CharClass::LETTER;
-    } else if(isdigit(chara)) {
+    } else if(isdigit(currentChar)) {
         charClass = CharClass::DIGIT;
-    } else if(chara == '\'') {
+    } else if(currentChar == '\'') {
         charClass = CharClass::SINGLE_QUOTE;
-    } else if(chara == '"') {
+    } else if(currentChar == '"') {
         charClass = CharClass::DOUBLE_QUOTE;
     } else {
         charClass = CharClass::OTHER;
     }
 
-    return chara != EOF;
+    return currentChar != EOF;
 }
 
 void Klex::skipWhitespace() {

@@ -14,7 +14,7 @@ class Klex {
     FILE* file;
     std::unordered_map<std::string, TokenType> lexToTokenTable;
 
-    char chara = 0;
+    char currentChar = 0;
     CharClass charClass = CharClass::OTHER;
 
     TokenType tokenType = TokenType::Unknown;
