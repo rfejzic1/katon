@@ -38,6 +38,7 @@ enum class TokenType {
     Mod,
     Exp,
     Dot,
+    Merge,
     Arrow,
     Use,
     New,
@@ -63,7 +64,8 @@ enum class TokenType {
     Otherwise,
     Unknown,
     StringType,
-    NumberType,
+    IntegerType,
+    DoubleType,
     BooleanType
 };
 

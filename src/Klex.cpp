@@ -41,6 +41,7 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["^"] = TokenType::Exp;
     lexToTokenTable["."] = TokenType::Dot;
     lexToTokenTable["=>"] = TokenType::Arrow;
+    lexToTokenTable["<-"] = TokenType::Merge;
     lexToTokenTable["use"] = TokenType::Use;
     lexToTokenTable["new"] = TokenType::New;
     lexToTokenTable["if"] = TokenType::If;
@@ -59,7 +60,8 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable[","] = TokenType::Comma;
     lexToTokenTable[";"] = TokenType::StatEnd;
     lexToTokenTable["String"] = TokenType::StringType;
-    lexToTokenTable["Number"] = TokenType::NumberType;
+    lexToTokenTable["Integer"] = TokenType::IntegerType;
+    lexToTokenTable["Double"] = TokenType::DoubleType;
     lexToTokenTable["Boolean"] = TokenType::BooleanType;
 }
 
