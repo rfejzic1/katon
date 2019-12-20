@@ -1,7 +1,7 @@
 #pragma once
 
 enum class TokenType {
-    SingleQuote,
+    SingleQuote = 0,
     DoubleQuote,
     LeftParen,
     RightParen,
@@ -60,7 +60,9 @@ enum class TokenType {
     IntegerType,
     DoubleType,
     BooleanType,
-    Function
+    Function,
+    True,
+    False
 };
 
 struct Token {
