@@ -64,6 +64,8 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["Double"] = TokenType::DoubleType;
     lexToTokenTable["Boolean"] = TokenType::BooleanType;
     lexToTokenTable["fun"] = TokenType::Function;
+    lexToTokenTable["true"] = TokenType::True;
+    lexToTokenTable["false"] = TokenType::False;
 }
 
 char Klex::getChar() {
