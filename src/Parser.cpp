@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "../include/Parser.h"
-#include "../include/ParseException.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr), astree(nullptr) { }
 
@@ -21,7 +20,7 @@ Token Parser::token() {
 }
 
 void Parser::consume(TokenType type, const char* message) {
-    if(token().type == type)
+    if(match(type))
         consume();
     else
         error(message);
@@ -31,6 +30,18 @@ void Parser::consume() {
     checkKlex();
     klex->nextToken();
     currentToken = klex->getToken();
+}
+
+bool Parser::match(TokenType type) {
+    return token().type == type;
+}
+
+bool Parser::matchAny(const std::vector<TokenType>& types) {
+    for(const TokenType& type : types) {
+        if(match(type))
+            return true;
+    }
+    return false;
 }
 
 void Parser::error(const char *message) {
@@ -65,9 +76,10 @@ void Parser::object() {
     switch(token().type) {
         case TokenType::Let:
         case TokenType::Const:
+        case TokenType::Identifier:
             attributeDecl();
             break;
-        case TokenType::Identifier:
+        case TokenType::Function:
             method();
             break;
         default:
@@ -90,20 +102,22 @@ void Parser::method() {
 }
 
 void Parser::identifierList() {
-    if(token().type != TokenType::Identifier && token().type != TokenType::Comma)
+    if(matchAny({TokenType::Identifier, TokenType::Comma}))
         return;
 
     consume(TokenType::Identifier, "Expected identifier");
     log("Identifier");
 
-    if(token().type == TokenType::Comma) {
+    if(match(TokenType::Comma)) {
         consume();
         identifierList();
     }
 }
 
 void Parser::statementBlock() {
-
+    consume(TokenType::LeftParen, "Expected '{'");
+    // todo: statement list??? ; separated???
+    consume(TokenType::RightParen, "Expected '}'");
 }
 
 void Parser::statement() {

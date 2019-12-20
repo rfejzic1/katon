@@ -1,19 +1,7 @@
 #pragma once
 
-// ToDo Abstract Syntax Tree
-//  - Literal nodes
-//  - Expression nodes
-//  - Statement nodes
-//  - Nodes for control statements and code blocks
-//  - Should the tree be a binary tree???
-//  - Operator precedence, left and right association
-//  - Symbol table
-
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <functional>
-
 
 #include "AbstractSyntaxTree/AbstractSyntaxTree.h"
 #include "Klex.h"
@@ -31,6 +19,8 @@ class Parser {
     Token token();
     void consume(TokenType tokenType, const char* message);
     void consume();
+    bool match(TokenType type);
+    bool matchAny(const std::vector<TokenType>& types);
     static void error(const char* message);
     static void log(const char* message);
 
