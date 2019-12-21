@@ -42,6 +42,16 @@ class Parser {
     void otherwiseStatement();
     void variableDecl();
     void expression();
+    void logOr();
+    void logAnd();
+    void equality();
+    void comparison();
+    void term();
+    void factor();
+    void unary();
+    void primary();
+    void value();
+    void variable();
 
 public:
     Parser(const char* filepath);

@@ -49,9 +49,9 @@ cond_factor -> cond_equ  { ("==" | "!=") cond_equ }
 cond_equ -> math_expr { ("<=" | "<" | ">" | ">=") math_expr }
 
 math_expr -> term { ("+" | "-") term }
-term -> notable { ("^" | "*" | "/" | "%") notable }
-notable -> ["not"] factor [cast]
-factor -> ( variable | value | "(" expr ")" )
+term -> factor { ("^" | "*" | "/" | "%") factor }
+factor -> ["not" | "-"] primary [cast]
+primary -> variable | value | "(" expr ")"
 
 variable -> (ident { method_call | array_access }) [ "." variable ]
 method_call -> "(" [expr_list] ")"
@@ -69,8 +69,8 @@ param -> ident [cast]
 primitive_type -> "String" | "Integer" | "Double" | "Boolean"
 
 boolean -> "true" | "false"
-integer -> digit_zero | digit_no_zero {digit}
-double -> "." integer
+integer -> digit_zero | (digit_no_zero {digit})
+double -> integer "." integer
 string -> {character | digit}
 interpolated_string -> """ string """
 simple_string -> "'" string "'"

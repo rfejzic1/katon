@@ -11,7 +11,8 @@ AbstractSyntaxTree* Parser::parse() {
     delete astree;
     astree = new AbstractSyntaxTree();
     consume();
-    object();
+    // object();
+    expression();
 
     return astree;
 }
@@ -225,5 +226,109 @@ void Parser::variableDecl() {
 }
 
 void Parser::expression() {
-    consume();
+    log("expression");
+    logOr();
+}
+
+void Parser::logOr() {
+    log("or");
+    logAnd();
+    while(match(TokenType::Or)) {
+        consume();
+        logAnd();
+    }
+}
+
+void Parser::logAnd() {
+    log("and");
+    equality();
+    while(match(TokenType::And)) {
+        consume();
+        equality();
+    }
+}
+
+void Parser::equality() {
+    log("equality");
+    comparison();
+    while(matchAny({ TokenType::NotEqu, TokenType::Equals })) {
+        consume();
+        comparison();
+    }
+}
+
+void Parser::comparison() {
+    log("comparison");
+    term();
+    while(matchAny({ TokenType::LThan, TokenType::LThanEqu, TokenType::GThan, TokenType::GThanEqu })) {
+        consume();
+        term();
+    }
+}
+
+void Parser::term() {
+    log("term");
+    factor();
+    while(matchAny({ TokenType::Plus, TokenType::Minus })) {
+        consume();
+        factor();
+    }
+}
+
+void Parser::factor() {
+    log("factor");
+    unary();
+    while(matchAny({ TokenType::Mult, TokenType::Div, TokenType::Mod, TokenType::Exp })) {
+        consume();
+        unary();
+    }
+}
+
+void Parser::unary() {
+    log("unary");
+    while(match(TokenType::Neg))
+        consume();
+    primary();
+
+    // todo: cast here?
+}
+
+void Parser::primary() {
+    if(match(TokenType::Identifier)) {
+        variable();
+    } else if(match(TokenType::LeftParen)) {
+        log("grouping");
+        consume(TokenType::LeftParen, "'('");
+        expression();
+        consume(TokenType::RightParen, "')'");
+    } else {
+        value();
+    }
+}
+
+void Parser::value() {
+    if(matchAny({ TokenType::True, TokenType::False })) {
+        log("Boolean");
+        consume();
+    } else if(match(TokenType::Number)) {
+        log("Number");
+        consume();
+    } else if(match(TokenType::SingleQuote)) {
+        log("String");
+        consume();
+        consume(TokenType::String, "string");
+        consume(TokenType::SingleQuote, "\"'\"");
+    } else if(match(TokenType::DoubleQuote)) {
+        log("String");
+        consume();
+        consume(TokenType::String, "string");
+        consume(TokenType::DoubleQuote, "'\"'");
+    } else {
+        unexpected();
+    }
+}
+
+void Parser::variable() {
+    log("Variable");
+    consume(TokenType::Identifier, "identifier");
 }
