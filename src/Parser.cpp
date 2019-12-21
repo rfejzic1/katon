@@ -31,6 +31,7 @@ void Parser::consume() {
     checkKlex();
     klex->nextToken();
     currentToken = klex->getToken();
+    printToken();
 }
 
 bool Parser::match(TokenType type) {
@@ -67,7 +68,7 @@ void Parser::unexpected() {
 
 void Parser::expected(const char* what) {
     std::stringstream msg;
-    msg << "Expected " << what << " on line " << token().line + 1;
+    msg << "Expected " << what << " on line " << token().line;
     throw ParseException(msg.str().c_str());
 }
 
@@ -100,6 +101,12 @@ void Parser::object() {
 
 void Parser::memberDecl() {
     while(!match(TokenType::RightCurly)) {
+        if(match(TokenType::Public)) {
+            consume();
+        }else if(match(TokenType::Private)) {
+            consume();
+        }
+
         if(matchAny({ TokenType::Let, TokenType::Const, TokenType::Identifier }))
             attributeDecl();
         else if(match(TokenType::Function))
@@ -124,7 +131,6 @@ void Parser::attributeDecl() {
 void Parser::method() {
     log("method declaration");
     consume();
-    printToken();
     consume(TokenType::Identifier, "identifier");
     consume(TokenType::LeftParen, "'('");
     identifierList();
@@ -133,18 +139,12 @@ void Parser::method() {
 }
 
 void Parser::identifierList() {
-    if(!matchAny({TokenType::Identifier, TokenType::Comma})) {
-        log("Not a identifier list!");
+    if(!matchAny({TokenType::Identifier, TokenType::Comma}))
         return;
-    }
-
-    log("identifier list");
-    printToken();
 
     consume(TokenType::Identifier, "identifier");
 
     if(match(TokenType::Comma)) {
-        log(",");
         consume();
         identifierList();
     }
@@ -172,8 +172,10 @@ void Parser::statement() {
         forStatement();
     else if(match(TokenType::Try))
         tryCatchStatement();
-    else
+    else {
         expression();
+        consume(TokenType::StatEnd, "';'");
+    }
 }
 
 void Parser::ifStatement() {
@@ -223,8 +225,5 @@ void Parser::variableDecl() {
 }
 
 void Parser::expression() {
-    log("expression");
-    printToken();
-    if(!match(TokenType::RightCurly))
-        consume();
+    consume();
 }
