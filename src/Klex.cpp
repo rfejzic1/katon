@@ -54,8 +54,8 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["catch"] = TokenType::Catch;
     lexToTokenTable["let"] = TokenType::Let;
     lexToTokenTable["const"] = TokenType::Const;
-    lexToTokenTable["public"] = TokenType::Private;
-    lexToTokenTable["private"] = TokenType::Public;
+    lexToTokenTable["public"] = TokenType::Public;
+    lexToTokenTable["private"] = TokenType::Private;
     lexToTokenTable["otherwise"] = TokenType::Otherwise;
     lexToTokenTable[","] = TokenType::Comma;
     lexToTokenTable[";"] = TokenType::StatEnd;
