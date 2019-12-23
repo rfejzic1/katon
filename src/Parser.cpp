@@ -12,7 +12,7 @@ AbstractSyntaxTree* Parser::parse() {
     astree = new AbstractSyntaxTree();
     consume();
     // object();
-    expression();
+    statement();
 
     return astree;
 }
@@ -100,11 +100,17 @@ void Parser::object() {
     consume(TokenType::RightCurly, "'}'");
 }
 
+void Parser::array() {
+    consume(TokenType::LeftBrack, "'['");
+    expressionList();
+    consume(TokenType::RightBrack, "']'");
+}
+
 void Parser::memberDecl() {
     while(!match(TokenType::RightCurly)) {
         if(match(TokenType::Public)) {
             consume();
-        }else if(match(TokenType::Private)) {
+        } else if(match(TokenType::Private)) {
             consume();
         }
 
@@ -148,6 +154,16 @@ void Parser::identifierList() {
     if(match(TokenType::Comma)) {
         consume();
         identifierList();
+    }
+}
+
+void Parser::expressionList() {
+    if(!match(TokenType::RightParen)) {
+        expression();
+        while(match(TokenType::Comma)) {
+            consume();
+            expressionList();
+        }
     }
 }
 
@@ -228,6 +244,10 @@ void Parser::variableDecl() {
 void Parser::expression() {
     log("expression");
     logOr();
+    if(matchAny({ TokenType::Assign, TokenType::PlusAssign, TokenType::MultAssign, TokenType::MinusAssign, TokenType::DivAssign, TokenType::ExpAssign, TokenType::ModAssign })) {
+        consume();
+        logOr();
+    }
 }
 
 void Parser::logOr() {
@@ -295,7 +315,7 @@ void Parser::unary() {
 
 void Parser::primary() {
     if(match(TokenType::Identifier)) {
-        variable();
+        variable(nullptr);
     } else if(match(TokenType::LeftParen)) {
         log("grouping");
         consume(TokenType::LeftParen, "'('");
@@ -323,12 +343,42 @@ void Parser::value() {
         consume();
         consume(TokenType::String, "string");
         consume(TokenType::DoubleQuote, "'\"'");
+    } else if(match(TokenType::LeftCurly)) {
+        object();
+    } else if(match(TokenType::LeftBrack)) {
+        array();
     } else {
         unexpected();
     }
 }
 
-void Parser::variable() {
+void Parser::variable(Expression* callee) {
     log("Variable");
     consume(TokenType::Identifier, "identifier");
+    postfix(callee);
+}
+
+void Parser::postfix(Expression* callee) {
+    if(match(TokenType::LeftParen)) {
+        call(callee);
+    } else if(match(TokenType::LeftBrack)) {
+        access(callee);
+    } else if(match(TokenType::Dot)) {
+        consume();
+        variable(callee);
+    }
+}
+
+void Parser::call(Expression* callee) {
+    consume();
+    expressionList();
+    consume(TokenType::RightParen, "')'");
+    postfix(callee);
+}
+
+void Parser::access(Expression* callee) {
+    consume();
+    expression();
+    consume(TokenType::RightBrack, "']'");
+    postfix(callee);
 }

@@ -28,10 +28,12 @@ class Parser {
     static void log(const char* message);
 
     void object();
+    void array();
     void memberDecl();
     void attributeDecl();
     void method();
     void identifierList();
+    void expressionList();
     void statementBlock();
     void statements();
     void statement();
@@ -51,7 +53,10 @@ class Parser {
     void unary();
     void primary();
     void value();
-    void variable();
+    void variable(Expression* callee);
+    void postfix(Expression* callee);
+    void call(Expression* callee);
+    void access(Expression* callee);
 
 public:
     Parser(const char* filepath);
