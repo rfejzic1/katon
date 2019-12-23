@@ -42,7 +42,7 @@ class Parser {
     void forStatement();
     void tryCatchStatement();
     void otherwiseStatement();
-    void variableDecl();
+    void localDecl();
     void expression();
     void logOr();
     void logAnd();

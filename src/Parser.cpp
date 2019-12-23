@@ -180,7 +180,7 @@ void Parser::statements() {
 
 void Parser::statement() {
     if(matchAny({ TokenType ::Let, TokenType::Const }))
-        variableDecl();
+        localDecl();
     else if(match(TokenType::If))
         ifStatement();
     else if(match(TokenType::While))
@@ -232,7 +232,7 @@ void Parser::otherwiseStatement() {
 
 }
 
-void Parser::variableDecl() {
+void Parser::localDecl() {
     log("local variable declaration");
     consume();
     consume(TokenType::Identifier, "identifier");
