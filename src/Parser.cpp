@@ -10,9 +10,9 @@ AbstractSyntaxTree* Parser::parse() {
 
     delete astree;
     astree = new AbstractSyntaxTree();
+
     consume();
-    // object();
-    statement();
+    object();
 
     return astree;
 }
@@ -191,6 +191,9 @@ void Parser::statement() {
         tryCatchStatement();
     else {
         expression();
+        if(match(TokenType::Otherwise)) {
+            otherwiseStatement();
+        }
         consume(TokenType::StatEnd, "';'");
     }
 }
@@ -229,7 +232,8 @@ void Parser::tryCatchStatement() {
 }
 
 void Parser::otherwiseStatement() {
-
+    consume();
+    statementBlock();
 }
 
 void Parser::localDecl() {
