@@ -17,6 +17,8 @@ int main(int argc, char **argv) {
         abs = parser.parse();
     }catch(ParseException& e) {
         std::cout << e.what() << std::endl;
+    } catch(...) {
+        std::cout << "Could not load file..." << std::endl;
     }
 
     delete abs;
