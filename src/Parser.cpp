@@ -58,18 +58,22 @@ void Parser::log(const char *message) {
 }
 
 void Parser::printToken() {
-    std::cout << "Token " << (int) token().type << " - " << token().lexeme << " on line " << token().line << std::endl;
+    std::cout << "Token "
+        << (int) token().type << " - "
+        << token().lexeme << " on line "
+        << token().line << " column "
+        << token().col << std::endl;
 }
 
 void Parser::unexpected() {
     std::stringstream msg;
-    msg << "Unexpected '" << token().lexeme.c_str() << "' on line " << token().line;
+    msg << "Unexpected '" << token().lexeme.c_str() << "' on line " << token().line << " column " << token().col;
     throw ParseException(msg.str().c_str());
 }
 
 void Parser::expected(const char* what) {
     std::stringstream msg;
-    msg << "Expected " << what << " on line " << token().line;
+    msg << "Expected " << what << " on line " << token().line << " column " << token().col;
     throw ParseException(msg.str().c_str());
 }
 
@@ -351,9 +355,19 @@ void Parser::value() {
         object();
     } else if(match(TokenType::LeftBrack)) {
         array();
+    } else if(match(TokenType::Lambda)) {
+        lambda();
     } else {
         unexpected();
     }
+}
+
+void Parser::lambda() {
+    consume();
+    consume(TokenType::LeftParen, "'('");
+    identifierList();
+    consume(TokenType::RightParen, "')'");
+    statementBlock();
 }
 
 void Parser::variable(Expression* callee) {

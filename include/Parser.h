@@ -34,6 +34,7 @@ class Parser {
     void method();
     void identifierList();
     void expressionList();
+    void lambda();
     void statementBlock();
     void statements();
     void statement();
