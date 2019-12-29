@@ -65,19 +65,22 @@ enum class TokenType {
     Break,
     Continue,
     Throw,
-    Lambda
+    Lambda,
+    EndOfFile
 };
 
 struct Token {
     TokenType type = TokenType::Unknown;
     std::string lexeme;
     long line = -1;
+    long col = -1;
 
     Token() {}
 
-    Token(std::string lexeme, TokenType type, long line) {
+    Token(std::string lexeme, TokenType type, long line, long col) {
         Token::type = type;
         Token::lexeme = lexeme;
         Token::line = line;
+        Token::col = col;
     }
 };

@@ -105,6 +105,7 @@ bool Klex::nextChar() {
         charClass = CharClass::OTHER;
     }
 
+    colNum++;
     return currentChar != EOF;
 }
 
@@ -112,8 +113,10 @@ void Klex::skipWhitespace() {
     char c = getChar();
 
     while(c == ' ' || c == '\t' || c == '\n' || c == '\r') {
-        if(c == '\n')
+        if(c == '\n') {
             lineNum++;
+            colNum = 0;
+        }
 
         nextChar();
         c = getChar();
@@ -122,8 +125,11 @@ void Klex::skipWhitespace() {
 
 // refactor this!!!
 bool Klex::nextToken() {
-    if(getChar() == EOF)
+    if(getChar() == EOF) {
+        lexeme = "EOF";
+        tokenType = TokenType::EndOfFile;
         return false;
+    }
 
     if(!isInterpolatedString && !isSimpleString)
         skipWhitespace();
@@ -256,7 +262,7 @@ TokenType Klex::getTokenTypeOfLexeme(std::string &lexeme, bool isWord) {
 }
 
 Token Klex::getToken() {
-    return Token(lexeme, tokenType, lineNum);
+    return Token(lexeme, tokenType, lineNum, colNum);
 }
 
 Klex::~Klex() {
