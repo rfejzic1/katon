@@ -40,7 +40,6 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["%"] = TokenType::Mod;
     lexToTokenTable["^"] = TokenType::Exp;
     lexToTokenTable["."] = TokenType::Dot;
-    lexToTokenTable["=>"] = TokenType::Arrow;
     lexToTokenTable["<-"] = TokenType::Merge;
     lexToTokenTable["use"] = TokenType::Use;
     lexToTokenTable["new"] = TokenType::New;
@@ -66,6 +65,11 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["fun"] = TokenType::Function;
     lexToTokenTable["true"] = TokenType::True;
     lexToTokenTable["false"] = TokenType::False;
+    lexToTokenTable["return"] = TokenType::Return;
+    lexToTokenTable["continue"] = TokenType::Continue;
+    lexToTokenTable["break"] = TokenType::Break;
+    lexToTokenTable["throw"] = TokenType::Throw;
+    lexToTokenTable["lambda"] = TokenType::Lambda;
 }
 
 char Klex::getChar() {

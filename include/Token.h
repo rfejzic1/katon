@@ -33,7 +33,6 @@ enum class TokenType {
     Exp,
     Dot,
     Merge,
-    Arrow,
     Use,
     New,
     If,
@@ -44,7 +43,6 @@ enum class TokenType {
     In,
     Try,
     Catch,
-    // other
     Let,
     Const,
     Private,
@@ -62,7 +60,12 @@ enum class TokenType {
     BooleanType,
     Function,
     True,
-    False
+    False,
+    Return,
+    Break,
+    Continue,
+    Throw,
+    Lambda
 };
 
 struct Token {
