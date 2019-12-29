@@ -19,8 +19,8 @@ class Klex {
 
     TokenType tokenType = TokenType::Unknown;
     std::string lexeme;
-    long lineNum = 1;
-    long colNum = 0;
+    unsigned long lineNum = 1;
+    unsigned long colNum = 0;
 
 
     bool isSimpleString = false;

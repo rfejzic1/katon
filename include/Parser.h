@@ -43,6 +43,10 @@ class Parser {
     void forStatement();
     void tryCatchStatement();
     void otherwiseStatement();
+    void continueStatement();
+    void breakStatement();
+    void returnStatement();
+    void throwStatement();
     void localDecl();
     void expression();
     void logOr();

@@ -72,12 +72,12 @@ enum class TokenType {
 struct Token {
     TokenType type = TokenType::Unknown;
     std::string lexeme;
-    long line = -1;
-    long col = -1;
+    unsigned long line = -1;
+    unsigned long col = -1;
 
     Token() {}
 
-    Token(std::string lexeme, TokenType type, long line, long col) {
+    Token(std::string lexeme, TokenType type, unsigned long line, unsigned long col) {
         Token::type = type;
         Token::lexeme = lexeme;
         Token::line = line;

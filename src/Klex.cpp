@@ -262,7 +262,7 @@ TokenType Klex::getTokenTypeOfLexeme(std::string &lexeme, bool isWord) {
 }
 
 Token Klex::getToken() {
-    return Token(lexeme, tokenType, lineNum, colNum);
+    return Token(lexeme, tokenType, lineNum, colNum - lexeme.length());
 }
 
 Klex::~Klex() {

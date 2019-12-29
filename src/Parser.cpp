@@ -193,6 +193,14 @@ void Parser::statement() {
         forStatement();
     else if(match(TokenType::Try))
         tryCatchStatement();
+    else if(match(TokenType::Continue))
+        continueStatement();
+    else if(match(TokenType::Break))
+        breakStatement();
+    else if(match(TokenType::Throw))
+        throwStatement();
+    else if(match(TokenType::Return))
+        returnStatement();
     else {
         expression();
         if(match(TokenType::Otherwise)) {
@@ -238,6 +246,30 @@ void Parser::tryCatchStatement() {
 void Parser::otherwiseStatement() {
     consume();
     statementBlock();
+}
+
+void Parser::continueStatement() {
+    consume();
+    consume(TokenType::StatEnd, "';'");
+}
+
+void Parser::breakStatement() {
+    consume();
+    consume(TokenType::StatEnd, "';'");
+}
+
+void Parser::returnStatement() {
+    consume();
+    if(!match(TokenType::StatEnd)) {
+        expression();
+    }
+    consume(TokenType::StatEnd, "';'");
+}
+
+void Parser::throwStatement() {
+    consume();
+    expression();
+    consume(TokenType::StatEnd, "';'");
 }
 
 void Parser::localDecl() {
