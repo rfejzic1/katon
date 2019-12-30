@@ -130,7 +130,6 @@ void Parser::memberDecl() {
     else if(match(TokenType::Function))
         method();
     else {
-        log("Shite");
         unexpected();
     }
 }

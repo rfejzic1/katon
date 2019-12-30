@@ -223,10 +223,6 @@ std::string Klex::parseOutNumber() {
 std::string Klex::parseOutSymbol() {
     std::string lexeme;
 
-    // Double char symbols
-    // == =>
-    // != >= <= += -= *= /= %= ^=
-
     std::string equFirstSymbols = "=>";
     std::string equSecondSymbols = "!><+-*/%^";
 
