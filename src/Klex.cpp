@@ -123,16 +123,24 @@ void Klex::skipWhitespace() {
     }
 }
 
-// refactor this!!!
+void Klex::setTokenToEOF() {
+    lexeme = "EOF";
+    tokenType = TokenType::EndOfFile;
+}
+
 bool Klex::nextToken() {
     if(getChar() == EOF) {
-        lexeme = "EOF";
-        tokenType = TokenType::EndOfFile;
+        setTokenToEOF();
         return false;
     }
 
     if(!isInterpolatedString && !isSimpleString)
         skipWhitespace();
+
+    if(getChar() == EOF) {
+        setTokenToEOF();
+        return false;
+    }
 
     if(shouldparseOutString && isSimpleString) {
         lexeme = parseOutString('\'');
@@ -262,7 +270,10 @@ TokenType Klex::getTokenTypeOfLexeme(std::string &lexeme, bool isWord) {
 }
 
 Token Klex::getToken() {
-    return Token(lexeme, tokenType, lineNum, colNum - lexeme.length());
+    unsigned long col = colNum;
+    if(lexeme.length() <= colNum)
+        col = colNum - lexeme.length();
+    return Token(lexeme, tokenType, lineNum, col);
 }
 
 Klex::~Klex() {

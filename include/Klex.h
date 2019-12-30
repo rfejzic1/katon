@@ -39,6 +39,7 @@ class Klex {
     std::string parseOutSymbol();
     std::string parseOutString(char quote);
 
+    void setTokenToEOF();
     void initLexToTokenTable();
 public:
     Klex(const char* filepath);

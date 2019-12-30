@@ -12,7 +12,7 @@ AbstractSyntaxTree* Parser::parse() {
     astree = new AbstractSyntaxTree();
 
     consume();
-    object();
+    module();
 
     return astree;
 }
@@ -98,9 +98,17 @@ Parser::~Parser() {
 
 /************************** Productions ******************************/
 
+void Parser::module() {
+    while(!match(TokenType::EndOfFile)) {
+        memberDecl();
+    }
+}
+
 void Parser::object() {
     consume(TokenType::LeftCurly, "'{'");
-    memberDecl();
+    while(!match(TokenType::RightCurly) && !match(TokenType::EndOfFile)) {
+        memberDecl();
+    }
     consume(TokenType::RightCurly, "'}'");
 }
 
@@ -111,19 +119,19 @@ void Parser::array() {
 }
 
 void Parser::memberDecl() {
-    while(!match(TokenType::RightCurly)) {
-        if(match(TokenType::Public)) {
-            consume();
-        } else if(match(TokenType::Private)) {
-            consume();
-        }
+    if(match(TokenType::Public)) {
+        consume();
+    } else if(match(TokenType::Private)) {
+        consume();
+    }
 
-        if(matchAny({ TokenType::Let, TokenType::Const, TokenType::Identifier }))
-            attributeDecl();
-        else if(match(TokenType::Function))
-            method();
-        else
-            unexpected();
+    if(matchAny({ TokenType::Let, TokenType::Const, TokenType::Identifier }))
+        attributeDecl();
+    else if(match(TokenType::Function))
+        method();
+    else {
+        log("Shite");
+        unexpected();
     }
 }
 

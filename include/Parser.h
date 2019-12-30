@@ -27,6 +27,7 @@ class Parser {
     static void error(const char* message);
     static void log(const char* message);
 
+    void module();
     void object();
     void array();
     void memberDecl();
