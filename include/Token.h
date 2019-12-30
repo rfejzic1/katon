@@ -54,6 +54,7 @@ enum class TokenType {
     Number,
     Otherwise,
     Unknown,
+    As,
     StringType,
     IntegerType,
     DoubleType,

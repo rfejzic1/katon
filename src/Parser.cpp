@@ -355,9 +355,18 @@ void Parser::unary() {
     log("unary");
     while(match(TokenType::Neg))
         consume();
+
     primary();
 
-    // todo: cast here?
+    if(match(TokenType::As)) {
+        consume();
+        if(!matchAny({ TokenType::StringType, TokenType::IntegerType, TokenType::DoubleType, TokenType::BooleanType })) {
+            log("Cast");
+            unexpected();
+        } else {
+            consume();
+        }
+    }
 }
 
 void Parser::primary() {

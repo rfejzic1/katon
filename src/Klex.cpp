@@ -70,6 +70,7 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["break"] = TokenType::Break;
     lexToTokenTable["throw"] = TokenType::Throw;
     lexToTokenTable["lambda"] = TokenType::Lambda;
+    lexToTokenTable["as"] = TokenType::As;
 }
 
 char Klex::getChar() {
