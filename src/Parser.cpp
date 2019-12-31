@@ -344,8 +344,17 @@ void Parser::term() {
 
 void Parser::factor() {
     log("factor");
-    unary();
+    merge();
     while(matchAny({ TokenType::Mult, TokenType::Div, TokenType::Mod, TokenType::Exp })) {
+        consume();
+        merge();
+    }
+}
+
+void Parser::merge() {
+    log("factor");
+    unary();
+    while(match(TokenType::Merge)) {
         consume();
         unary();
     }
@@ -353,8 +362,13 @@ void Parser::factor() {
 
 void Parser::unary() {
     log("unary");
-    while(match(TokenType::Neg))
+    while(matchAny({ TokenType::Neg, TokenType::Minus }))
         consume();
+
+    if(match(TokenType::New)) {
+        log("There is a new one!");
+        consume();
+    }
 
     primary();
 

@@ -224,12 +224,18 @@ std::string Klex::parseOutNumber() {
 std::string Klex::parseOutSymbol() {
     std::string lexeme;
 
-    std::string equFirstSymbols = "=>";
+    std::string equFirstSymbols = "=";
     std::string equSecondSymbols = "!><+-*/%^";
 
     lexeme.push_back(getChar());
 
-    if(getChar() == '=') {
+    if(getChar() == '<')  {
+        nextChar();
+        if(getChar() == '-') {
+            lexeme.push_back(getChar());
+            nextChar();
+        }
+    } else if(getChar() == '=') {
         nextChar();
         if(equFirstSymbols.find(getChar()) != -1) {
             lexeme.push_back(getChar());
@@ -241,7 +247,7 @@ std::string Klex::parseOutSymbol() {
             lexeme.push_back(getChar());
             nextChar();
         }
-    }else {
+    } else {
         nextChar();
     }
 

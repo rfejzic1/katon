@@ -58,6 +58,7 @@ class Parser {
     void factor();
     void unary();
     void primary();
+    void merge();
     void value();
     void variable(Expression* callee);
     void postfix(Expression* callee);
