@@ -1,19 +1,19 @@
 #pragma once
 
-#include "../Nodes.h"
+#include "../../Nodes.h"
 
-struct Double : public Value {
-    double value = 0;
+struct Boolean : public Primitive {
+    bool value = false;
 
-    Double() = default;
-    Double(double value) : value(value) {}
+    Boolean() = default;
+    Boolean(bool value) : value(value) {}
 
     std::string asString() override {
         return std::to_string(value);
     }
 
     long long int asInteger() override {
-        return (long long int) value;
+        return value;
     }
 
     double asDouble() override {
@@ -21,6 +21,6 @@ struct Double : public Value {
     }
 
     bool asBoolean() override {
-        return value != 0;
+        return value;
     }
 };

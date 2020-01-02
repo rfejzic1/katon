@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Nodes.h"
+#include "../../Nodes.h"
 
-struct String : public Value {
+struct String : public Primitive {
     std::string value;
 
     String() = default;

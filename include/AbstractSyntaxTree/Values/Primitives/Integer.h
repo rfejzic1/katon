@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Nodes.h"
+#include "../../Nodes.h"
 
-struct Integer : public Value {
+struct Integer : public Primitive {
     long long int value = 0;
 
     Integer() = default;
