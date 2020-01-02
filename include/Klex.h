@@ -25,7 +25,7 @@ class Klex {
 
     bool isSimpleString = false;
     bool isInterpolatedString = false;
-    bool shouldparseOutString = false;
+    bool shouldParseOutString = false;
 
     char getChar();
     CharClass getCharClass();

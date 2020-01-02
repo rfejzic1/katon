@@ -143,17 +143,17 @@ bool Klex::nextToken() {
         return false;
     }
 
-    if(shouldparseOutString && isSimpleString) {
+    if(shouldParseOutString && isSimpleString) {
         lexeme = parseOutString('\'');
         tokenType = TokenType::String;
-        shouldparseOutString = false;
+        shouldParseOutString = false;
         return true;
     }
 
-    if(shouldparseOutString && isInterpolatedString) {
+    if(shouldParseOutString && isInterpolatedString) {
         lexeme = parseOutString('"');
         tokenType = TokenType::String;
-        shouldparseOutString = false;
+        shouldParseOutString = false;
         return true;
     }
 
@@ -168,14 +168,14 @@ bool Klex::nextToken() {
             break;
         case CharClass::SINGLE_QUOTE:
             if(!isSimpleString)
-                shouldparseOutString = true;
+                shouldParseOutString = true;
             isSimpleString = !isSimpleString;
             lexeme = parseOutSymbol();
             tokenType = TokenType::SingleQuote;
             break;
         case CharClass::DOUBLE_QUOTE:
             if(!isInterpolatedString)
-                shouldparseOutString = true;
+                shouldParseOutString = true;
             isInterpolatedString = !isInterpolatedString;
             lexeme = parseOutSymbol();
             tokenType = TokenType::DoubleQuote;
