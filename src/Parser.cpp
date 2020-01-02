@@ -140,7 +140,7 @@ void Parser::attributeDecl() {
     if(matchAny({ TokenType::Let, TokenType::Const }))
         consume();
 
-    consume();
+    consume(TokenType::Identifier,"identifier");
     consume(TokenType::Assign, "assignment operator '='");
     expression();
     consume(TokenType::StatEnd, "';'");
