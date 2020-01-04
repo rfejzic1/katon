@@ -4,20 +4,18 @@ use -> "use" simple_string ["as" ident]
 scope -> "public" | "private"
 decl_stat -> [scope] (attrib_decl stat_end | method_decl)
 
-var_decl -> ("var" | "const") ident decl_operator
-attrib_decl -> var_decl expr
+attrib_decl -> ["var" | "const"] ident decl_operator expr
 
-method_decl -> ident "(" [param_list] ")" stat_block
+method_decl -> "fun" ident "(" [param_list] ")" stat_block
 stat_block -> "{" { simple_stat | control_stat } "}"
 
-simple_stat -> (local_decl | assign_stat | return_stat | continue_stat | break_stat | throw_stat) {otherwise_stat} stat_end
-local_decl -> var_decl (expr | deep_copy)
-assign_stat -> variable assign_operator (expr | deep_copy)
-return_stat -> "return" expr;
+simple_stat -> (local_decl | return_stat | continue_stat | break_stat | throw_stat | expression) {otherwise_stat} stat_end
+local_decl -> ("var" | "const") ident decl_operator (expr | deep_copy)
+return_stat -> "return" expr stat_end
 continue_stat -> "continue" stat_end
 break_stat -> "break" stat_end
-throw_stat -> "throw" expr;
-deep_copy -> "new" variable;
+throw_stat -> "throw" expr stat_end
+deep_copy -> "new" variable stat_end
 
 control_stat -> if_stat | for_stat | while_stat | try_catch_stat
 if_stat -> "if" expr stat_block {"elseif" expr stat_block} ["else" expr stat_block]
@@ -30,11 +28,12 @@ expr_list -> expr  { "," expr }
 ident_list -> ident { "," ident }
 param_list -> param { "," param }
 
-/ Operator precedence:
+// Operator precedence:
 // function call
 // array access
 // member access
-// not
+// <- new
+// not as
 // * / % ^
 // + -
 // <, <=, >=, >
