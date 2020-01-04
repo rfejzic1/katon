@@ -3,13 +3,13 @@
 #include <string>
 #include <vector>
 
-#include "AbstractSyntaxTree/AbstractSyntaxTree.h"
 #include "Klex.h"
+#include "ParseException.h"
+#include "AbstractSyntaxTree/AbstractSyntaxTree.h"
 
 class Parser {
     std::string filepath;
     Klex* klex;
-    AbstractSyntaxTree* astree;
     Token currentToken;
 
     void openKlex();
@@ -67,7 +67,7 @@ class Parser {
 
 public:
     Parser(const char* filepath);
-    AbstractSyntaxTree* parse();
+    Object* parse();
     ~Parser();
 };
 

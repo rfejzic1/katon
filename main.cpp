@@ -10,18 +10,18 @@ int main(int argc, char **argv) {
     }
 
     char* filename = argv[1];
-    AbstractSyntaxTree* abs = nullptr;
+    Object* object = nullptr;
 
     try {
         Parser parser(filename);
-        abs = parser.parse();
+        object = parser.parse();
     }catch(ParseException& e) {
         std::cout << e.what() << std::endl;
     } catch(...) {
         std::cout << "Could not load file..." << std::endl;
     }
 
-    delete abs;
+    delete object;
 
     return 0;
 }

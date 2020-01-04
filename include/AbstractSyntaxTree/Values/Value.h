@@ -1,14 +1,9 @@
 #pragma once
 
-#include "../Nodes.h"
 #include "../Expression.h"
 
 struct Value : public Expression {
-
-
-    ptr<Value> getValue() {
+    ptr<Value> getValue() override {
         return ptr<Value>(this);
     }
-
-    void accept(Interpreter interpreter) override {}
 };

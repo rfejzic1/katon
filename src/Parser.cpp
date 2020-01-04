@@ -3,18 +3,15 @@
 
 #include "../include/Parser.h"
 
-Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr), astree(nullptr) { }
+Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
-AbstractSyntaxTree* Parser::parse() {
+Object* Parser::parse() {
     openKlex();
-
-    delete astree;
-    astree = new AbstractSyntaxTree();
 
     consume();
     module();
 
-    return astree;
+    return nullptr;
 }
 
 Token Parser::token() {

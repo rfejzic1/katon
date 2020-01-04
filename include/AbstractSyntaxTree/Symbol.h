@@ -1,15 +1,8 @@
 #pragma once
 
-#include "Node.h"
-
-struct Symbol : public Node {
-    const char* name;
+struct Symbol {
+    const std::string& name;
     bool constant;
-
 public:
-    Symbol(const char* name, bool constant) : name(name), constant(constant) {}
-
-    void accept(Interpreter interpreter) override {
-        //
-    }
+    Symbol(const std::string& name, bool constant) : name(name), constant(constant) {}
 };

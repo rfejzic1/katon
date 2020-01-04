@@ -7,5 +7,4 @@ struct Primitive : public Value {
     virtual long long int asInteger() = 0;
     virtual double asDouble() = 0;
     virtual bool asBoolean() = 0;
-
 };
