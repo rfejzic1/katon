@@ -1,17 +1,19 @@
 let person = {
     let name = 'John Doe';
 
-    printName() {
+    fun printName() {
         print(name);
     }
 };
 
-doSomething(something) {
+fun doSomething(something) {
     something.do();
 }
 
-main() {
+fun main() {
     doSomething(person) otherwise {
         print("This has gone out of hand, hasn't it?");
     };
 }
+
+

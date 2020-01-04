@@ -1,26 +1,17 @@
-assign
-=
-array
-=>
-comparison
-==
-!=
->=
-<=
-assign_equ
-+=
--=
-*=
-/=
-%=
-^=
 
-14.5
+a = 1;
+user = {
+    name = 'Rijad';
+    age = 21;
+};
 
-if
+user2 = new user;
+merge = user <- {
+    gender = 'Male';
+};
 
-while
-
-for sass in less {
-
+fun main() {
+    while e {
+        let b = 3 + 7;
+    }
 }

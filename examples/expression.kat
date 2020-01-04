@@ -1,0 +1,36 @@
+
+fun main() {
+    b = 1 + 5 * 3 / 8 - a()(3)[0].c(4)[4];
+}
+
+
+# Operator precedence:
+# function call
+# array access
+# member access
+# not -
+# * / % ^
+# + -
+# <, <=, >=, >
+# != ==
+# and
+# or
+# = += -= *= /= %= ^=
+
+# expression { <assignment> expression }
+
+# figure out how to add assignment operators :(
+
+# let expr = ((((a + (c * 4)) < b) == true) and (((b + 3) > 0) != false)) or ((d.getAverage()) as Integer)
+# let expr = a + c * 4 < b == true and b + 3 > 0 != false or d.getAverage()) as Integer
+
+# expression() -> or();
+# or() -> and(); while(or) { consume(or); and(); }
+# and() -> equality(); while(and) { consume(and); equality(); }
+# equality() -> comparison(); while(!= ==) { consume(!= ==); comparison(); }
+# comparison() -> add(); while(< <= >= >) { consume(<, <=, >=, >); add(); }
+# add() -> mult(); while(+ -) { consume(+ -); mult(); }
+# mult() -> unary(); while(* / % ^) { consume(* / % ^); unary(); }
+# unary() -> if(match(not -)) consume(); if(ident) prim(); else value() if(match(as)) consume(String Double Integer Boolean)
+# prim() -> consume(ident); while(() []) { ... } if(match(.)) { consume(.); primary(); }
+# a[0]()[0]()[0]().b()[0]()[0];

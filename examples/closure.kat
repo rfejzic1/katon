@@ -1,0 +1,22 @@
+obj = {
+    a = (4 + 1) as Double;
+
+    fun outer() {
+        let b = 10;
+        return lambda (c) {
+            # a is a member bound to the owner object
+            # b is a local variable of 'outer'
+            # c is a parameter
+            print('This is a lambda' + (a + b + c));
+        };
+    }
+};
+
+fun main() {
+    # Variable binding
+    let callable = obj.outer();
+    callable(2); # prints 'This is a lambda 17' on the console...
+    obj.a = 10;
+    callable(1); # prints 'This is a lambda 21' on the console...
+}
+
