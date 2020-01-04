@@ -23,4 +23,8 @@ struct Integer : public Primitive {
     bool asBoolean() override {
         return value;
     }
+
+    Type getType() override {
+        return Type::Integer;
+    }
 };

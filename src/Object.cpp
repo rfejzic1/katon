@@ -21,3 +21,7 @@ bool Object::putMethod(const std::string &ident, ptr<Method>& method) {
 ptr<Symbol> Object::getMember(const std::string &ident) {
     return members[ident];
 }
+
+Type Object::getType() {
+    return Type::Object;
+}

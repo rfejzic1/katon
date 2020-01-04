@@ -23,4 +23,8 @@ struct String : public Primitive {
     bool asBoolean() override {
         return !value.empty();
     }
+
+    Type getType() override {
+        return Type::String;
+    }
 };

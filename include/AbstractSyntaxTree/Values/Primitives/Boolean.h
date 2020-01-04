@@ -23,4 +23,8 @@ struct Boolean : public Primitive {
     bool asBoolean() override {
         return value;
     }
+
+    Type getType() override {
+        return Type::Boolean;
+    }
 };

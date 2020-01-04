@@ -12,4 +12,5 @@ public:
     bool putAttribute(const std::string& ident, bool constant, ptr<Value>& value);
     bool putMethod(const std::string& ident, ptr<Method>& method);
     ptr<Symbol> getMember(const std::string& ident);
+    Type getType() override;
 };

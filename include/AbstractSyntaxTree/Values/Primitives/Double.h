@@ -23,4 +23,8 @@ struct Double : public Primitive {
     bool asBoolean() override {
         return value != 0;
     }
+
+    Type getType() override {
+        return Type::Double;
+    }
 };
