@@ -1,6 +1,5 @@
 #include "../include/Interpreter.h"
 
-#include "../include/AbstractSyntaxTree/Function.h"
 #include "../include/AbstractSyntaxTree/FunctionSymbol.h"
 #include "../include/RuntimeException.h"
 
@@ -15,5 +14,5 @@ void Interpreter::execute() {
         throw RuntimeException("Member 'main' is not a function.");
 
     ptr<Function> main = mainFunctionSymbol -> getFunction();
-    main -> call({});
+    main -> call({}, nullptr);
 }

@@ -7,7 +7,7 @@
 class StatementBlock : public Statement {
     std::vector<ptr<Statement>> statements;
 public:
-    void execute(Environment& env) override {
+    void execute(Environment* env) override {
         for(ptr<Statement>& statement : statements) {
             statement -> execute(env);
         }

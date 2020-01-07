@@ -15,7 +15,7 @@ bool Environment::putAttribute(const std::string &ident, bool constant, ptr<Valu
 
 bool Environment::putFunction(const std::string &ident, ptr<Function>& method) {
     bool hadMember = hasMember(ident);
-    symbols[ident] = std::make_shared<FunctionSymbol>(ident, method);
+    symbols[ident] = std::make_shared<FunctionSymbol>(ident, method, this);
     return hadMember;
 }
 
