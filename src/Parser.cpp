@@ -182,7 +182,7 @@ void Parser::statementBlock() {
 }
 
 void Parser::statements() {
-    while(!match(TokenType::RightCurly))
+    while(!matchAny({ TokenType::RightCurly, TokenType::EndOfFile }))
         statement();
 }
 
