@@ -5,7 +5,9 @@
 
 #include "Klex.h"
 #include "ParseException.h"
-#include "AbstractSyntaxTree/AbstractSyntaxTree.h"
+#include "AbstractSyntaxTree/Values/Object.h"
+#include "AbstractSyntaxTree/Expression.h"
+#include "AbstractSyntaxTree/TypeDefinitions.h"
 
 class Parser {
     std::string filepath;

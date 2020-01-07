@@ -2,6 +2,9 @@
 
 #include <memory>
 
+#include "../include/AbstractSyntaxTree/ValueSymbol.h"
+#include "../include/AbstractSyntaxTree/FunctionSymbol.h"
+
 bool Object::hasMember(const std::string &ident) {
     return members.find(ident) != members.end();
 }
@@ -12,9 +15,9 @@ bool Object::putAttribute(const std::string &ident, bool constant, ptr<Value>& v
     return hadMember;
 }
 
-bool Object::putMethod(const std::string &ident, ptr<Method>& method) {
+bool Object::putMethod(const std::string &ident, ptr<Function>& method) {
     bool hadMember = hasMember(ident);
-    members[ident] = std::make_shared<MethodSymbol>(ident, method);
+    members[ident] = std::make_shared<FunctionSymbol>(ident, method);
     return hadMember;
 }
 

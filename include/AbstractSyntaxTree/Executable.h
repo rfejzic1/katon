@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../Interpreter.h"
+class Interpreter;
 
 struct Executable {
-    virtual void execute(Interpreter interpreter) = 0;
+   virtual void execute(Interpreter* interpreter) = 0;
+    virtual ~Executable() {}
 };

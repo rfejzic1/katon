@@ -2,12 +2,14 @@
 
 #include <vector>
 
-#include "AbstractSyntaxTree.h"
+#include "../Interpreter.h"
+#include "./Expression.h"
+#include "./Statement.h"
 
 class StatementBlock : public Executable {
     std::vector<ptr<Statement>> statements;
 public:
-    void execute(Interpreter interpreter) override {
+    void execute(Interpreter* interpreter) override {
         for(ptr<Statement>& statement : statements) {
             statement -> execute(interpreter);
         }

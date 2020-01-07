@@ -1,6 +1,7 @@
 #pragma once
 
-#include "AbstractSyntaxTree.h"
+#include "TypeDefinitions.h"
+#include "Symbol.h"
 
 class ValueSymbol : public Symbol {
     ptr<Value> value;

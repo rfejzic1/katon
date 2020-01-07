@@ -1,7 +1,9 @@
 #include <iostream>
 
 #include "include/Parser.h"
+#include "include/Interpreter.h"
 #include "include/ParseException.h"
+#include "include/RuntimeException.h"
 
 int main(int argc, char **argv) {
     if(argc < 2) {
@@ -10,12 +12,19 @@ int main(int argc, char **argv) {
     }
 
     char* filename = argv[1];
+
     Object* object = nullptr;
 
     try {
         Parser parser(filename);
         object = parser.parse();
-    }catch(ParseException& e) {
+
+        Interpreter interpreter(object);
+        interpreter.execute();
+
+    } catch(ParseException& e) {
+        std::cout << e.what() << std::endl;
+    } catch(RuntimeException& e) {
         std::cout << e.what() << std::endl;
     } catch(...) {
         std::cout << "Could not load file..." << std::endl;

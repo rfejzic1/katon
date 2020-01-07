@@ -1,5 +1,5 @@
 #pragma once
 
 enum class Type {
-    Object, Array, String, Double, Integer, Boolean, Method
+    Function = 0, Object, Array, String, Double, Integer, Boolean
 };

@@ -1,5 +1,11 @@
 #pragma once
 
-class Interpreter {
+#include "./AbstractSyntaxTree/Values/Object.h"
+#include "./AbstractSyntaxTree/TypeDefinitions.h"
 
+class Interpreter {
+    ptr<Object> object;
+public:
+    Interpreter(Object* object) : object(object) {}
+    void execute();
 };
