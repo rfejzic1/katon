@@ -1,0 +1,21 @@
+a = 'a';
+
+glob = {
+	a = 'a0';
+	
+	obj1 = {
+		# a = 'a1';
+		fun printA() {
+			print(a);
+		}
+	};
+
+	obj2 = obj1 <- { a = 'a2': };
+}
+
+fun main() {
+	#let a = 5;
+
+	glob.obj1.printA(); # stack: module <- module.main <- glob <- obj1 <- printA; print: a0
+	glob.obj2.printA(); # stack: module <- module.main <- glob <- obj2 <- printA; print: a2
+}

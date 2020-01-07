@@ -1,0 +1,32 @@
+#!/usr/bin/katon
+
+fun inputTest() {
+	let str = input("Enter a number: ");
+	try {
+		let num = str as Double;
+		print("Your number is " + num);
+	} catch {
+	  print("'" + str + "' is not a number!");
+	}
+
+	# Or
+
+	let num = str as Double otherwise {
+		print("'" + str + "' is not a number!");
+		return;
+	};
+	print("Your number is " + num);
+}
+
+const user = {
+	name = 'Rijad';
+};
+
+const userWithAge = user <- {
+	age = 21;
+};
+
+fun main() {
+	# produces error - 'user' is a const reference!
+	user = user <- { gender = "Male"; };
+}
