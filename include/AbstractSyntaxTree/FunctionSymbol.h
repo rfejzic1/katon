@@ -2,6 +2,7 @@
 
 #include "TypeDefinitions.h"
 #include "Symbol.h"
+#include "Function.h"
 
 class FunctionSymbol : public Symbol {
     ptr<Function> function;

@@ -1,5 +1,7 @@
 #pragma once
 
-#include "Executable.h"
+class Environment;
 
-struct Statement : public Executable { };
+struct Statement {
+    virtual void execute(Environment& env) = 0;
+};
