@@ -2,19 +2,13 @@
 
 fun inputTest() {
 	let str = input("Enter a number: ");
-	try {
-		let num = str as Double;
-		print("Your number is " + num);
-	} catch {
-	  print("'" + str + "' is not a number!");
-	}
+	let num = str as Double;
 
-	# Or
+	otherwise {
+        print("'" + str + "' is not a number!");
+        return;
+    }
 
-	let num = str as Double otherwise {
-		print("'" + str + "' is not a number!");
-		return;
-	};
 	print("Your number is " + num);
 }
 
