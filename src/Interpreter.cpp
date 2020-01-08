@@ -4,7 +4,7 @@
 #include "../include/RuntimeException.h"
 
 void Interpreter::execute() {
-    ptr<Symbol> mainSymbol = object -> getEnvironment().getMember("main");
+    ptr<Symbol> mainSymbol = object -> getEnvironment() -> getMember("main");
     if (!mainSymbol)
         throw RuntimeException("'main' is not defined.");
 

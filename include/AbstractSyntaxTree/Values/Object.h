@@ -6,6 +6,6 @@
 class Object : public Value {
     Environment members;
 public:
-    Environment& getEnvironment();
+    Environment* getEnvironment();
     Type getType() override;
 };

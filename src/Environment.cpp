@@ -22,3 +22,4 @@ bool Environment::putFunction(const std::string &ident, ptr<Function>& method) {
 ptr<Symbol> Environment::getMember(const std::string &ident) {
     return symbols[ident];
 }
+

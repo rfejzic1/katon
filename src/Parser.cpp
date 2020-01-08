@@ -11,7 +11,7 @@ Object* Parser::parse() {
     consume();
     module();
 
-    return nullptr;
+    return new Object();
 }
 
 Token Parser::token() {
@@ -207,10 +207,11 @@ void Parser::statement() {
         returnStatement();
     else {
         expression();
-        if(match(TokenType::Otherwise)) {
-            otherwiseStatement();
-        }
         consume(TokenType::StatEnd, "';'");
+    }
+
+    if(match(TokenType::Otherwise)) {
+        otherwiseStatement();
     }
 }
 

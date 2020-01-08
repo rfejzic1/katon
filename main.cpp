@@ -13,11 +13,9 @@ int main(int argc, char **argv) {
 
     char* filename = argv[1];
 
-    Object* object = nullptr;
-
     try {
         Parser parser(filename);
-        object = parser.parse();
+        Object* object = parser.parse();
 
         Interpreter interpreter(object);
         interpreter.execute();
@@ -29,8 +27,6 @@ int main(int argc, char **argv) {
     } catch(...) {
         std::cout << "Could not load file..." << std::endl;
     }
-
-    delete object;
 
     return 0;
 }

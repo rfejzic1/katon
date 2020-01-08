@@ -6,10 +6,8 @@
 #include "Symbol.h"
 #include "Function.h"
 
-typedef std::unordered_map<std::string, ptr<Symbol>> SymbolMap;
-
 class Environment {
-    SymbolMap symbols;
+    std::unordered_map<std::string, ptr<Symbol>> symbols;
 public:
     bool hasMember(const std::string& ident);
     bool putAttribute(const std::string& ident, bool constant, ptr<Value>& value);
