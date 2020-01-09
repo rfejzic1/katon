@@ -16,4 +16,8 @@ public:
     ptr<Function> getFunction() {
         return function;
     }
+
+    virtual ptr<Value> getValue() override {
+        return nullptr;
+    }
 };

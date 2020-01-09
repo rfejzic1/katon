@@ -5,5 +5,7 @@
 
 struct Expression : public Statement {
     virtual ptr<Value> getValue() = 0;
-    void execute(Environment *env) override { }
+    void execute(Environment *env) override {
+        getValue();
+    }
 };
