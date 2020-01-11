@@ -16,13 +16,13 @@ public:
         if(arguments.size() != parameters.size())
             throw RuntimeException("Number of arguments does not match number of parameters!");
 
-        Environment* localEnv = caller -> getEnvironment();
+        Environment localEnv = *(caller -> getEnvironment());
 
         for(int i = 0; i < arguments.size(); i++)
-            localEnv -> putAttribute(parameters[i], false, arguments[i]);
+            localEnv.putAttribute(parameters[i], false, arguments[i]);
 
         try {
-            statementBlock.execute(localEnv);
+            statementBlock.execute(&localEnv);
         } catch(ptr<Value> value) {
             return value;
         }
