@@ -11,8 +11,8 @@ class TryCatchStatement : public Statement {
     ptr<StatementBlock> tryBlock;
     ptr<StatementBlock> catchBlock;
 public:
-    TryCatchStatement(Identifier& ident, ptr<StatementBlock>& trueBlock, ptr<StatementBlock>& falseBlock)
-            : ident(ident), tryBlock(trueBlock), catchBlock(falseBlock) { }
+    TryCatchStatement(Identifier& ident, ptr<StatementBlock>& tryBlock, ptr<StatementBlock>& catchBlock)
+            : ident(ident), tryBlock(tryBlock), catchBlock(catchBlock) { }
 
     void execute(Environment *env) override {
         try {
