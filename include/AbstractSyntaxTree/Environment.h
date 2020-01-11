@@ -3,6 +3,8 @@
 #include <unordered_map>
 
 #include "TypeDefinitions.h"
+#include "ValueSymbol.h"
+#include "FunctionSymbol.h"
 
 class Value;
 class Symbol;
@@ -13,11 +15,15 @@ class Environment {
     Environment* enclosing;
 public:
     explicit Environment(Environment* enclosing = nullptr) : enclosing(enclosing) { }
-    bool hasMember(const std::string& ident);
-    bool putAttribute(const std::string& ident, bool constant, ptr<Value>& value);
-    bool putFunction(const std::string& ident, ptr<Function>& function);
-    ptr<Symbol> getMember(const std::string& ident);
-    ptr<Symbol> getMemberIncludingFromEnclosingEnvironments(const std::string& ident);
+    bool hasMember(const Identifier& ident);
+    bool putAttribute(const Identifier& ident, bool constant, ptr<Value>& value);
+    bool putFunction(const Identifier& ident, ptr<Function>& function);
+    ptr<Symbol> getMember(const Identifier& ident);
+    ptr<Symbol> getMemberIncludingFromEnclosingEnvironments(const Identifier& ident);
+    ptr<ValueSymbol> getAttribute(const Identifier& ident);
+    ptr<ValueSymbol> getAttributeIncludingFromEnclosingEnvironments(const Identifier& ident);
+    ptr<FunctionSymbol> getFunction(const Identifier& ident);
+    ptr<FunctionSymbol> getFunctionIncludingFromEnclosingEnvironments(const Identifier& ident);
     Environment* getEnclosing();
     void setEnclosing(Environment* enclosing);
 };

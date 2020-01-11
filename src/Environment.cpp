@@ -31,6 +31,19 @@ ptr<Symbol> Environment::getMemberIncludingFromEnclosingEnvironments(const std::
     return currentEnv ? currentEnv -> getMember(ident) : nullptr;
 }
 
+ptr<ValueSymbol> Environment::getAttribute(const Identifier& ident) {
+    return std::dynamic_pointer_cast<ValueSymbol>(getMember(ident));
+}
+ptr<ValueSymbol> Environment::getAttributeIncludingFromEnclosingEnvironments(const Identifier& ident) {
+    return std::dynamic_pointer_cast<ValueSymbol>(getMemberIncludingFromEnclosingEnvironments(ident));
+}
+ptr<FunctionSymbol> Environment::getFunction(const Identifier& ident) {
+    return std::dynamic_pointer_cast<FunctionSymbol>(getMember(ident));
+}
+ptr<FunctionSymbol> Environment::getFunctionIncludingFromEnclosingEnvironments(const Identifier& ident) {
+    return std::dynamic_pointer_cast<FunctionSymbol>(getMemberIncludingFromEnclosingEnvironments(ident));
+}
+
 Environment *Environment::getEnclosing() {
     return enclosing;
 }
