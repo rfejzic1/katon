@@ -16,14 +16,13 @@ public:
 
     void execute(Environment *env) override {
         try {
-            tryBlock -> execute(env);
+            Environment local = *env;
+            tryBlock -> execute(&local);
         } catch(...) {
-            Environment catchEnv = *env;
-            if(!ident.empty()) {
-                ptr<Symbol> catchSymbol = catchEnv.getAttribute(ident);
-                env = &catchEnv;
-            }
-            catchBlock -> execute(env);
+            Environment local = *env;
+            if(!ident.empty())
+                ptr<Symbol> catchSymbol = local.getAttribute(ident);
+            catchBlock -> execute(&local);
         }
     }
 };

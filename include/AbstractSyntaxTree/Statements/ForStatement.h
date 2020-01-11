@@ -18,8 +18,6 @@ public:
     : ident(ident), expression(expression), statementBlock(statementBlock) { }
 
     void execute(Environment *env) override {
-        Environment localEnv = *env;
-
         ptr<Value> expressionResult = expression -> getValue();
         ptr<Iterable> iterable = std::dynamic_pointer_cast<Iterable>(expressionResult);
 
@@ -27,11 +25,11 @@ public:
             throw RuntimeException("Given value is not an iterable");
 
         Iterator iterator(iterable -> getValues());
-        ptr<ValueSymbol> current = localEnv.getAttribute(ident);
 
         while(iterator.hasNext()) {
+            Environment local = *env;
             ptr<Value> newValue = iterator.next();
-            current -> setValue(newValue);
+            local.putAttribute(ident, false, newValue);
             statementBlock -> execute(env);
         }
     }

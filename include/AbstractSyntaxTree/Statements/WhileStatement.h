@@ -4,8 +4,9 @@
 #include "../StatementBlock.h"
 #include "../Expression.h"
 #include "../Values/Value.h"
+#include "../Environment.h"
 
-class WhileStatement : public Statement{
+class WhileStatement : public Statement {
     ptr<Expression> condition;
     ptr<StatementBlock> statementBlock;
 public:
@@ -13,8 +14,9 @@ public:
             : condition(condition), statementBlock(statementBlock) { }
 
     void execute(Environment *env) override {
+        Environment local = *env;
         while(condition -> getValue() -> asBoolean()) {
-            statementBlock -> execute(env);
+            statementBlock -> execute(&local);
         }
     }
 };
