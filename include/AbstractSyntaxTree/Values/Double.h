@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Primitive.h"
+#include "Value.h"
 
-struct Double : public Primitive {
+struct Double : public Value {
     double value = 0;
 
     Double() = default;

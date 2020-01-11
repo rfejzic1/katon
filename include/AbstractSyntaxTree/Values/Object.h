@@ -8,4 +8,8 @@ class Object : public Value {
 public:
     Environment* getEnvironment();
     Type getType() override;
+    std::string asString() override;
+    long long int asInteger() override;
+    double asDouble() override;
+    bool asBoolean() override;
 };

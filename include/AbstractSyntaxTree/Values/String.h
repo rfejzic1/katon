@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Primitive.h"
+#include "Value.h"
 
-struct String : public Primitive {
+struct String : public Value {
     std::string value;
 
     String() = default;

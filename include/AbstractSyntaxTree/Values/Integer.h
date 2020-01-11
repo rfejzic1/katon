@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Primitive.h"
+#include "Value.h"
 
-struct Boolean : public Primitive {
-    bool value = false;
+struct Integer : public Value {
+    long long int value = 0;
 
-    Boolean() = default;
-    explicit Boolean(bool value) : value(value) {}
+    Integer() = default;
+    explicit Integer(long long int value) : value(value) {}
 
     std::string asString() override {
         return std::to_string(value);
@@ -17,14 +17,14 @@ struct Boolean : public Primitive {
     }
 
     double asDouble() override {
-        return value;
+        return (double) value;
     }
 
     bool asBoolean() override {
-        return value;
+        return value != 0;
     }
 
     Type getType() override {
-        return Type::Boolean;
+        return Type::Integer;
     }
 };
