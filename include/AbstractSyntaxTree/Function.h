@@ -10,10 +10,10 @@ class Function : public Callable {
     IdentifierList parameters;
     StatementBlock statementBlock;
 public:
-    Function(const IdentifierList& parameters, const StatementBlock& statementBlock)
-        : parameters(parameters), statementBlock(statementBlock) { }
+    Function(IdentifierList parameters, StatementBlock statementBlock)
+        : parameters(std::move(parameters)), statementBlock(std::move(statementBlock)) { }
 
-    ptr<Value> call(Object* caller, ValueList &arguments) override {
+    ptr<Value> call(Object* caller, ValueList& arguments) override {
         if(arguments.size() != parameters.size())
             throw RuntimeException("Number of arguments does not match number of parameters!");
 

@@ -9,8 +9,8 @@ class Object;
 class FunctionSymbol : public Symbol {
     ptr<Function> function;
 public:
-    FunctionSymbol(const std::string &ident, ptr<Function> function)
-            : Symbol(ident, false, Type::Function), function(function) {}
+    FunctionSymbol(Identifier ident, ptr<Function> function)
+            : Symbol(std::move(ident), false, Type::Function), function(std::move(function)) {}
 
     ptr<Function> getFunction() {
         return function;

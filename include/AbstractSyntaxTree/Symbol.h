@@ -4,9 +4,9 @@
 #include "Expression.h"
 
 struct Symbol : public Expression {
-    const std::string& name;
+    std::string name;
     bool constant;
     Type type;
 public:
-    Symbol(const std::string& name, bool constant, Type type) : name(name), constant(constant), type(type) {}
+    Symbol(Identifier name, bool constant, Type type) : name(std::move(name)), constant(constant), type(type) {}
 };

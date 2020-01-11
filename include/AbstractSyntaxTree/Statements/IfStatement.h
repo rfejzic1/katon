@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "../TypeDefinitions.h"
 #include "../StatementBlock.h"
 #include "../Expression.h"
@@ -11,8 +13,8 @@ class IfStatement : public Statement {
     ptr<StatementBlock> trueBlock;
     ptr<StatementBlock> falseBlock;
 public:
-    IfStatement(ptr<Expression>& condition, ptr<StatementBlock>& trueBlock, ptr<StatementBlock>& falseBlock)
-        : condition(condition), trueBlock(trueBlock), falseBlock(falseBlock) { }
+    IfStatement(ptr<Expression> condition, ptr<StatementBlock> trueBlock, ptr<StatementBlock> falseBlock)
+        : condition(std::move(condition)), trueBlock(std::move(trueBlock)), falseBlock(std::move(falseBlock)) { }
 
     void execute(Environment *env) override {
         bool conditionTrue = condition -> getValue() -> asBoolean();

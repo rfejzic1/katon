@@ -6,7 +6,7 @@
 class ValueSymbol : public Symbol {
     ptr<Value> value;
 public:
-    ValueSymbol(const std::string &ident, bool constant, ptr<Value>& value)
+    ValueSymbol(Identifier ident, bool constant, ptr<Value> value)
         : Symbol(ident, constant, value -> getType()), value(value) { }
 
     ptr<Value> getValue() override {

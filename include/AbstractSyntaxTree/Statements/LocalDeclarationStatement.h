@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "../TypeDefinitions.h"
 #include "../StatementBlock.h"
 #include "../Environment.h"
@@ -10,8 +12,8 @@ class LocalDeclarationStatement : public Statement {
     bool constant;
     ptr<Expression> expression;
 public:
-    LocalDeclarationStatement(Identifier& identifier, bool constant, ptr<Expression>& expression)
-        : identifier(identifier), constant(constant), expression(expression) { }
+    LocalDeclarationStatement(Identifier identifier, bool constant, ptr<Expression> expression)
+        : identifier(std::move(identifier)), constant(constant), expression(std::move(expression)) { }
 
     void execute(Environment *env) override {
         ptr<Value> value = expression -> getValue();

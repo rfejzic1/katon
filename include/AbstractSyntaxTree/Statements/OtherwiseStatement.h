@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "../TypeDefinitions.h"
 #include "../StatementBlock.h"
 #include "../Expression.h"
@@ -10,8 +12,8 @@ class Otherwise : public Statement {
     ptr<Statement> statement;
     ptr<StatementBlock> statementBlock;
 public:
-    Otherwise(ptr<Statement>& statement , ptr<StatementBlock>& statementBlock)
-            : statement(statement), statementBlock(statementBlock) { }
+    Otherwise(ptr<Statement> statement , ptr<StatementBlock> statementBlock)
+            : statement(std::move(statement)), statementBlock(std::move(statementBlock)) { }
 
     void execute(Environment *env) override {
         try {
