@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../Expression.h"
-#include "../TypeDefinitions.h"
 #include "../Type.h"
 
 struct Value : public Expression {

@@ -3,9 +3,9 @@
 #include <unordered_map>
 
 #include "TypeDefinitions.h"
-#include "ValueSymbol.h"
-#include "FunctionSymbol.h"
 
+class ValueSymbol;
+class FunctionSymbol;
 class Value;
 class Symbol;
 class Function;

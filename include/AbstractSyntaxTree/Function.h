@@ -4,6 +4,7 @@
 #include "StatementBlock.h"
 #include "../RuntimeException.h"
 #include "./Values/Object.h"
+#include "Environment.h"
 
 class Function : public Callable {
     IdentifierList parameters;
