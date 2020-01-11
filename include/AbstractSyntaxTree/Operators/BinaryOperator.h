@@ -2,6 +2,8 @@
 
 #include "../Expression.h"
 #include "../../RuntimeException.h"
+#include "../Type.h"
+#include "../Values/Value.h"
 
 struct BinaryOperator : public Expression {
     ptr<Expression> left = nullptr;
@@ -20,6 +22,4 @@ struct BinaryOperator : public Expression {
             throw RuntimeException("Cannot apply operator + to operands of type Array");
         }
     }
-
-
 };

@@ -6,7 +6,7 @@ struct String : public Primitive {
     std::string value;
 
     String() = default;
-    String(std::string& value) : value(value) {}
+    explicit String(std::string& value) : value(value) {}
 
     std::string asString() override {
         return value;

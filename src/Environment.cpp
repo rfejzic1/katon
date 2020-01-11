@@ -13,9 +13,9 @@ bool Environment::putAttribute(const std::string &ident, bool constant, ptr<Valu
     return hadMember;
 }
 
-bool Environment::putFunction(const std::string &ident, ptr<Function>& method) {
+bool Environment::putFunction(const std::string &ident, ptr<Function>& function) {
     bool hadMember = hasMember(ident);
-    symbols[ident] = std::make_shared<FunctionSymbol>(ident, method, this);
+    symbols[ident] = std::make_shared<FunctionSymbol>(ident, function);
     return hadMember;
 }
 
@@ -23,3 +23,18 @@ ptr<Symbol> Environment::getMember(const std::string &ident) {
     return symbols[ident];
 }
 
+ptr<Symbol> Environment::getMemberIncludingFromEnclosingEnvironments(const std::string& ident) {
+    Environment* currentEnv = this;
+    while(currentEnv && !currentEnv -> hasMember(ident)) {
+        currentEnv = currentEnv -> getEnclosing();
+    }
+    return currentEnv ? currentEnv -> getMember(ident) : nullptr;
+}
+
+Environment *Environment::getEnclosing() {
+    return enclosing;
+}
+
+void Environment::setEnclosing(Environment *newEnclosing) {
+    enclosing = newEnclosing;
+}

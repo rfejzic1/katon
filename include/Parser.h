@@ -68,7 +68,7 @@ class Parser {
     void access(Expression* callee);
 
 public:
-    Parser(const char* filepath);
+    explicit Parser(const char* filepath);
     Object* parse();
     ~Parser();
 };

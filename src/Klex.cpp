@@ -73,7 +73,7 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["as"] = TokenType::As;
 }
 
-char Klex::getChar() {
+int Klex::getChar() {
     return currentChar;
 }
 

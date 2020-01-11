@@ -1,8 +1,8 @@
 #pragma once
 
 #include "TypeDefinitions.h"
-class Environment;
+class Object;
 
 struct Callable {
-    virtual ptr<Value> call(const ValueList &arguments, Environment* callerEnv) = 0;
+    virtual ptr<Value> call(Object* caller, ValueList &arguments) = 0;
 };

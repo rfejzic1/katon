@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Type.h"
+#include "Expression.h"
 
 struct Symbol : public Expression {
     const std::string& name;

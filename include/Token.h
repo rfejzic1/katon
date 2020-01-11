@@ -73,8 +73,8 @@ enum class TokenType {
 struct Token {
     TokenType type = TokenType::Unknown;
     std::string lexeme;
-    unsigned long line = -1;
-    unsigned long col = -1;
+    unsigned long line = 0;
+    unsigned long col = 0;
 
     Token() {}
 

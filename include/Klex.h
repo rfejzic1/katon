@@ -14,7 +14,7 @@ class Klex {
     FILE* file;
     std::unordered_map<std::string, TokenType> lexToTokenTable;
 
-    char currentChar = 0;
+    int currentChar = 0;
     CharClass charClass = CharClass::OTHER;
 
     TokenType tokenType = TokenType::Unknown;
@@ -27,7 +27,7 @@ class Klex {
     bool isInterpolatedString = false;
     bool shouldParseOutString = false;
 
-    char getChar();
+    int getChar();
     CharClass getCharClass();
     bool nextChar();
     void skipWhitespace();
@@ -42,7 +42,7 @@ class Klex {
     void setTokenToEOF();
     void initLexToTokenTable();
 public:
-    Klex(const char* filepath);
+    explicit Klex(const char* filepath);
     bool nextToken();
     Token getToken();
     ~Klex();

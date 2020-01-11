@@ -6,7 +6,7 @@ struct Double : public Primitive {
     double value = 0;
 
     Double() = default;
-    Double(double value) : value(value) {}
+    explicit Double(double value) : value(value) {}
 
     std::string asString() override {
         return std::to_string(value);

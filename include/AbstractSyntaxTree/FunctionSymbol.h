@@ -8,10 +8,9 @@ class Object;
 
 class FunctionSymbol : public Symbol {
     ptr<Function> function;
-    Environment* ownerEnv;
 public:
-    FunctionSymbol(const std::string &ident, ptr<Function> function, Environment* ownerEnv)
-            : Symbol(ident, false, Type::Function), function(function), ownerEnv(ownerEnv) {}
+    FunctionSymbol(const std::string &ident, ptr<Function> function)
+            : Symbol(ident, false, Type::Function), function(function) {}
 
     ptr<Function> getFunction() {
         return function;
