@@ -12,4 +12,8 @@ public:
     ptr<Value> getValue() override {
         return value;
     }
+
+    void setValue(const ptr<Value>& newValue) {
+        value = newValue;
+    }
 };
