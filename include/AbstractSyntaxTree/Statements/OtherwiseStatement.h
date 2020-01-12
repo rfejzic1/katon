@@ -9,11 +9,11 @@
 #include "../Environment.h"
 #include "../Packets.h"
 
-class Otherwise : public Statement {
+class OtherwiseStatement : public Statement {
     ptr<Statement> statement;
     ptr<StatementBlock> statementBlock;
 public:
-    Otherwise(ptr<Statement> statement , ptr<StatementBlock> statementBlock)
+    OtherwiseStatement(ptr<Statement> statement , ptr<StatementBlock> statementBlock)
             : statement(std::move(statement)), statementBlock(std::move(statementBlock)) { }
 
     void execute(Environment *env) override {
