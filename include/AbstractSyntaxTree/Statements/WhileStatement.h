@@ -7,6 +7,7 @@
 #include "../Expression.h"
 #include "../Values/Value.h"
 #include "../Environment.h"
+#include "../Packets.h"
 
 class WhileStatement : public Statement {
     ptr<Expression> condition;
@@ -18,7 +19,11 @@ public:
     void execute(Environment *env) override {
         Environment local = *env;
         while(condition -> getValue() -> asBoolean()) {
-            statementBlock -> execute(&local);
+            try {
+                statementBlock->execute(&local);
+            } catch (BreakPacket &) {
+                break;
+            } catch (ContinuePacket &) {}
         }
     }
 };

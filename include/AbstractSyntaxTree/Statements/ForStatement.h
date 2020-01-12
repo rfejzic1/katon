@@ -8,6 +8,7 @@
 #include "../Iterable.h"
 #include "../../RuntimeException.h"
 #include "../Iterator.h"
+#include "../Packets.h"
 
 class ForStatement : public Statement {
     Identifier ident;
@@ -27,10 +28,14 @@ public:
         Iterator iterator(iterable -> getValues());
 
         while(iterator.hasNext()) {
-            Environment local = *env;
-            ptr<Value> newValue = iterator.next();
-            local.putAttribute(ident, false, newValue);
-            statementBlock -> execute(env);
+            try {
+                Environment local = *env;
+                ptr<Value> newValue = iterator.next();
+                local.putAttribute(ident, false, newValue);
+                statementBlock -> execute(env);
+            } catch (BreakPacket&) {
+                break;
+            } catch (ContinuePacket&) { }
         }
     }
 };

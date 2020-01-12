@@ -7,6 +7,7 @@
 #include "../Expression.h"
 #include "../Values/Value.h"
 #include "../Environment.h"
+#include "../Packets.h"
 
 class Otherwise : public Statement {
     ptr<Statement> statement;
@@ -18,7 +19,7 @@ public:
     void execute(Environment *env) override {
         try {
             statement -> execute(env);
-        } catch(...) {
+        } catch(ThrowPacket&) {
             Environment local = *env;
             statementBlock -> execute(&local);
         }

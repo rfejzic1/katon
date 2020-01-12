@@ -7,6 +7,7 @@
 #include "../Expression.h"
 #include "../Values/Value.h"
 #include "../Environment.h"
+#include "../Packets.h"
 
 class TryCatchStatement : public Statement {
     Identifier ident;
@@ -20,10 +21,11 @@ public:
         try {
             Environment local = *env;
             tryBlock -> execute(&local);
-        } catch(...) {
+        } catch(ThrowPacket& throwPacket) {
             Environment local = *env;
-            if(!ident.empty())
+            if(!ident.empty()) {
                 ptr<ValueSymbol> catchSymbol = local.getAttribute(ident);
+            }
             catchBlock -> execute(&local);
         }
     }
