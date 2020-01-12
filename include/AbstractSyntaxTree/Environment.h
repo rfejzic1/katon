@@ -17,8 +17,8 @@ class Environment {
 public:
     explicit Environment(Environment* enclosing = nullptr) : enclosing(enclosing) { }
     bool hasMember(const Identifier& ident);
-    bool putAttribute(const Identifier& ident, bool constant, ptr<Value> value, Scope scope);
-    bool putFunction(const Identifier& ident, ptr<Function> function, Scope scope);
+    bool putAttribute(const Identifier& ident, bool constant, ptr<Value> value, Scope scope = Scope::Public);
+    bool putFunction(const Identifier& ident, ptr<Function> function, Scope scope = Scope::Public);
     ptr<Symbol> getMember(const Identifier& ident);
     ptr<Symbol> getMemberIncludingFromEnclosingEnvironments(const Identifier& ident);
     ptr<ValueSymbol> getAttribute(const Identifier& ident);
