@@ -1,12 +1,14 @@
 #pragma once
 
+#include <utility>
+
 #include "Value.h"
 
 struct String : public Value {
     std::string value;
 
     String() = default;
-    explicit String(std::string& value) : value(value) {}
+    explicit String(std::string  value) : value(std::move(value)) {}
 
     std::string asString() override {
         return value;
