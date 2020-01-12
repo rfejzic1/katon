@@ -2,6 +2,24 @@
 #include <sstream>
 
 #include "../include/Parser.h"
+#include "../include/AbstractSyntaxTree/ValueSymbol.h"
+#include "../include/AbstractSyntaxTree/Function.h"
+#include "../include/AbstractSyntaxTree/Values/Object.h"
+#include "../include/AbstractSyntaxTree/Expression.h"
+#include "../include/AbstractSyntaxTree/TypeDefinitions.h"
+#include "../include/AbstractSyntaxTree/Values/Array.h"
+#include "../include/AbstractSyntaxTree/StatementBlock.h"
+#include "../include/AbstractSyntaxTree/Statements/IfStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/WhileStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/ForStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/TryCatchStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/ContinueStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/BreakStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/ReturnStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/ThrowStatement.h"
+#include "../include/AbstractSyntaxTree/Values/String.h"
+#include "../include/AbstractSyntaxTree/Statements/ExpressionStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/OtherwiseStatement.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
@@ -9,9 +27,9 @@ Object* Parser::parse() {
     openKlex();
 
     consume();
-    module();
+    ptr<Object> moduleObject = module();
 
-    return new Object();
+    return moduleObject.get();
 }
 
 Token Parser::token() {
@@ -95,189 +113,270 @@ Parser::~Parser() {
 
 /************************** Productions ******************************/
 
-void Parser::module() {
+ptr<Object> Parser::module() {
+    ptr<Object> object(new Object());
     while(!match(TokenType::EndOfFile)) {
-        memberDecl();
+        memberDecl(object);
     }
+    return object;
 }
 
-void Parser::object() {
+ptr<Object> Parser::object() {
+    ptr<Object> object(new Object());
+
     consume(TokenType::LeftCurly, "'{'");
     while(!match(TokenType::RightCurly) && !match(TokenType::EndOfFile)) {
-        memberDecl();
+        memberDecl(object);
     }
     consume(TokenType::RightCurly, "'}'");
+
+    return object;
 }
 
-void Parser::array() {
+ptr<Array> Parser::array() {
     consume(TokenType::LeftBrack, "'['");
     expressionList();
     consume(TokenType::RightBrack, "']'");
 }
 
-void Parser::memberDecl() {
+void Parser::memberDecl(ptr<Object>& object) {
+    Scope scope = Scope::Public;
+
     if(match(TokenType::Public)) {
         consume();
     } else if(match(TokenType::Private)) {
+        scope = Scope::Private;
         consume();
     }
 
     if(matchAny({ TokenType::Let, TokenType::Const, TokenType::Identifier }))
-        attributeDecl();
+        attributeDecl(object, scope);
     else if(match(TokenType::Function))
-        method();
+        method(object, scope);
     else {
         unexpected();
     }
 }
 
-void Parser::attributeDecl() {
-    log("attribute declaration");
+void Parser::attributeDecl(ptr<Object>& object, Scope scope) {
+    bool constant = true;
 
-    if(matchAny({ TokenType::Let, TokenType::Const }))
+    if(match(TokenType::Let)) {
         consume();
+    } else if(match(TokenType::Const)) {
+        constant = false;
+        consume();
+    }
 
+    Identifier identifier = token().lexeme;
     consume(TokenType::Identifier,"identifier");
     consume(TokenType::Assign, "assignment operator '='");
-    expression();
+    ptr<Value> value = expression() -> getValue();
     consume(TokenType::StatEnd, "';'");
+
+    object -> getEnvironment() -> putAttribute(identifier, constant, value, scope);
 }
 
-void Parser::method() {
-    log("method declaration");
+void Parser::method(ptr<Object> &object, Scope scope) {
     consume();
+
+    Identifier identifier = token().lexeme;
     consume(TokenType::Identifier, "identifier");
+
     consume(TokenType::LeftParen, "'('");
-    identifierList();
+    IdentifierList parameters = identifierList();
     consume(TokenType::RightParen, "')'");
-    statementBlock();
+
+    ptr<Function> function = std::make_shared<Function>(parameters, *statementBlock());
+    object -> getEnvironment() -> putFunction(identifier, function, scope);
 }
 
-void Parser::identifierList() {
-    if(!matchAny({TokenType::Identifier, TokenType::Comma}))
-        return;
+IdentifierList Parser::identifierList() {
+    IdentifierList identList;
 
+    if(match(TokenType::RightParen))
+        return identList;
+
+    identList.push_back(token().lexeme);
     consume(TokenType::Identifier, "identifier");
 
-    if(match(TokenType::Comma)) {
+    while(match(TokenType::Comma)) {
         consume();
-        identifierList();
+        identList.push_back(token().lexeme);
+        consume(TokenType::Identifier, "identifier");
     }
+
+    return identList;
 }
 
-void Parser::expressionList() {
-    if(!match(TokenType::RightParen)) {
-        expression();
-        while(match(TokenType::Comma)) {
-            consume();
-            expressionList();
-        }
-    }
+ExpressionList Parser::expressionList() {
+     ExpressionList exprList;
+
+     if(match(TokenType::RightParen))
+         return exprList;
+
+     exprList.push_back(expression());
+
+     while(match(TokenType::Comma)) {
+         consume();
+         exprList.push_back(expression());
+     }
+
+     return exprList;
 }
 
-void Parser::statementBlock() {
+ptr<StatementBlock> Parser::statementBlock() {
     consume(TokenType::LeftCurly, "'{'");
-    statements();
+
+    ptr<StatementBlock> statBlock = std::make_shared<StatementBlock>(statements());
+
     consume(TokenType::RightCurly, "'}'");
+
+    return statBlock;
 }
 
-void Parser::statements() {
+std::vector<ptr<Statement>> Parser::statements() {
+    std::vector<ptr<Statement>> statList;
     while(!matchAny({ TokenType::RightCurly, TokenType::EndOfFile }))
-        statement();
+        statList.push_back(statement());
 }
 
-void Parser::statement() {
+ptr<Statement> Parser::statement() {
+    ptr<Statement> stat;
+
     if(matchAny({ TokenType ::Let, TokenType::Const }))
-        localDecl();
+        stat = localDecl(token().type);
     else if(match(TokenType::If))
-        ifStatement();
+        stat = ifStatement();
     else if(match(TokenType::While))
-        whileStatement();
+        stat = whileStatement();
     else if(match(TokenType::For))
-        forStatement();
+        stat = forStatement();
     else if(match(TokenType::Try))
-        tryCatchStatement();
+        stat = tryCatchStatement();
     else if(match(TokenType::Continue))
-        continueStatement();
+        stat = continueStatement();
     else if(match(TokenType::Break))
-        breakStatement();
+        stat = breakStatement();
     else if(match(TokenType::Throw))
-        throwStatement();
+        stat = throwStatement();
     else if(match(TokenType::Return))
-        returnStatement();
-    else {
-        expression();
-        consume(TokenType::StatEnd, "';'");
-    }
+        stat = returnStatement();
+    else
+        stat = expressionStatement();
 
     if(match(TokenType::Otherwise)) {
-        otherwiseStatement();
+        stat = otherwiseStatement(stat);
     }
+
+    return stat;
 }
 
-void Parser::ifStatement() {
-    log("if statement");
+ptr<Statement> Parser::ifStatement() {
     consume();
-    expression();
-    statementBlock();
-}
+    ptr<Expression> condition = expression();
+    ptr<StatementBlock> ifBlock = statementBlock();
+    ptr<StatementBlock> elseBlock;
 
-void Parser::whileStatement() {
-    log("while statement");
-    consume();
-    expression();
-    statementBlock();
-}
-
-void Parser::forStatement() {
-    log("for statement");
-    consume();
-    consume(TokenType::Identifier, "identifier");
-    consume(TokenType::In, "'in'");
-    expression();
-    statementBlock();
-}
-
-void Parser::tryCatchStatement() {
-    log("try statement");
-    consume();
-    statementBlock();
-    consume(TokenType::Catch, "'catch'");
-    if(match(TokenType::Identifier))
+    if(match(TokenType::Else)) {
         consume();
-    statementBlock();
+        elseBlock = statementBlock();
+    }
+
+    return std::make_shared<IfStatement>(condition, ifBlock, elseBlock);
 }
 
-void Parser::otherwiseStatement() {
+ptr<Statement> Parser::whileStatement() {
     consume();
-    statementBlock();
+    ptr<Expression> condition = expression();
+
+    functionCounter++;
+    ptr<StatementBlock> statBlock = statementBlock();
+    functionCounter--;
+
+    return std::make_shared<WhileStatement>(condition, statBlock);
 }
 
-void Parser::continueStatement() {
+ptr<Statement> Parser::forStatement() {
+    consume();
+    Identifier identifier = token().lexeme;
+    consume(TokenType::Identifier, "identifier");
+
+    consume(TokenType::In, "'in'");
+
+    ptr<Expression> iterable = expression();
+
+    functionCounter++;
+    ptr<StatementBlock> statBlock = statementBlock();
+    functionCounter--;
+
+    return std::make_shared<ForStatement>(identifier, iterable, statBlock);
+}
+
+ptr<Statement> Parser::tryCatchStatement() {
+    consume();
+
+    ptr<StatementBlock> tryBlock = statementBlock();
+    consume(TokenType::Catch, "'catch'");
+
+    Identifier identifier;
+    if(match(TokenType::Identifier)) {
+        identifier = token().lexeme;
+        consume();
+    }
+
+    ptr<StatementBlock> catchBlock = statementBlock();
+
+    return std::make_shared<TryCatchStatement>(identifier, tryBlock, catchBlock);
+}
+
+ptr<Statement> Parser::otherwiseStatement(ptr<Statement> stat) {
+    consume();
+    ptr<StatementBlock> statBlock = statementBlock();
+    return std::make_shared<OtherwiseStatement>(std::move(stat), statBlock);
+}
+
+ptr<Statement> Parser::continueStatement() {
+    if(functionCounter == 0)
+        throw ParseException("Unexpected 'continue' outside a function.");
+
     consume();
     consume(TokenType::StatEnd, "';'");
+    return std::make_shared<ContinueStatement>();
 }
 
-void Parser::breakStatement() {
+ptr<Statement> Parser::breakStatement() {
+    if(functionCounter == 0)
+        throw ParseException("Unexpected 'continue' outside a function.");
+
     consume();
     consume(TokenType::StatEnd, "';'");
+    return std::make_shared<BreakStatement>();
 }
 
-void Parser::returnStatement() {
+ptr<Statement> Parser::returnStatement() {
     consume();
+    ptr<Expression> toReturn;
+
     if(!match(TokenType::StatEnd)) {
-        expression();
+        toReturn = expression();
     }
     consume(TokenType::StatEnd, "';'");
+    return std::make_shared<ReturnStatement>(toReturn);
 }
 
-void Parser::throwStatement() {
+ptr<Statement> Parser::throwStatement() {
     consume();
-    expression();
+    ptr<Expression> toThrow;
+
+    if(!match(TokenType::StatEnd)) {
+        toThrow = expression();
+    }
     consume(TokenType::StatEnd, "';'");
+    return std::make_shared<ThrowStatement>(toThrow);
 }
 
-void Parser::localDecl() {
+ptr<Statement> Parser::localDecl(TokenType tokenType) {
     log("local variable declaration");
     consume();
     consume(TokenType::Identifier, "identifier");
@@ -286,13 +385,20 @@ void Parser::localDecl() {
     consume(TokenType::StatEnd, "';'");
 }
 
-void Parser::expression() {
+ptr<Statement> Parser::expressionStatement() {
+    ptr<Expression> expr = expression();
+    consume(TokenType::StatEnd, "';'");
+    return std::make_shared<ExpressionStatement>(expr);
+}
+
+ptr<Expression> Parser::expression() {
     log("expression");
     logOr();
     if(matchAny({ TokenType::Assign, TokenType::PlusAssign, TokenType::MultAssign, TokenType::MinusAssign, TokenType::DivAssign, TokenType::ExpAssign, TokenType::ModAssign })) {
         consume();
         logOr();
     }
+    return std::make_shared<String>("EXPRESSION");
 }
 
 void Parser::logOr() {

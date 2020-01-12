@@ -5,14 +5,23 @@
 
 #include "Klex.h"
 #include "ParseException.h"
-#include "AbstractSyntaxTree/Values/Object.h"
-#include "AbstractSyntaxTree/Expression.h"
 #include "AbstractSyntaxTree/TypeDefinitions.h"
+#include "AbstractSyntaxTree/Scope.h"
+
+class Expression;
+class Object;
+class Statement;
+class StatementBlock;
+class ValueSymbol;
+class FunctionSymbol;
+class Array;
 
 class Parser {
     std::string filepath;
     Klex* klex;
     Token currentToken;
+
+    int functionCounter = 0;
 
     void openKlex();
     void checkKlex();
@@ -29,29 +38,30 @@ class Parser {
     static void error(const char* message);
     static void log(const char* message);
 
-    void module();
-    void object();
-    void array();
-    void memberDecl();
-    void attributeDecl();
-    void method();
-    void identifierList();
-    void expressionList();
+    ptr<Object> module();
+    ptr<Object> object();
+    ptr<Array> array();
+    void memberDecl(ptr<Object>&);
+    void attributeDecl(ptr<Object>& object, Scope scope);
+    void method(ptr<Object> &object, Scope scope);
+    IdentifierList identifierList();
+    ExpressionList expressionList();
     void lambda();
-    void statementBlock();
-    void statements();
-    void statement();
-    void ifStatement();
-    void whileStatement();
-    void forStatement();
-    void tryCatchStatement();
-    void otherwiseStatement();
-    void continueStatement();
-    void breakStatement();
-    void returnStatement();
-    void throwStatement();
-    void localDecl();
-    void expression();
+    ptr<StatementBlock> statementBlock();
+    std::vector<ptr<Statement>> statements();
+    ptr<Statement> statement();
+    ptr<Statement> ifStatement();
+    ptr<Statement> whileStatement();
+    ptr<Statement> forStatement();
+    ptr<Statement> tryCatchStatement();
+    ptr<Statement> otherwiseStatement(ptr<Statement> stat);
+    ptr<Statement> continueStatement();
+    ptr<Statement> breakStatement();
+    ptr<Statement> returnStatement();
+    ptr<Statement> throwStatement();
+    ptr<Statement> localDecl(TokenType tokenType);
+    ptr<Statement> expressionStatement();
+    ptr<Expression> expression();
     void logOr();
     void logAnd();
     void equality();
@@ -72,4 +82,3 @@ public:
     Object* parse();
     ~Parser();
 };
-
