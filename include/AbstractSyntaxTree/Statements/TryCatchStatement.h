@@ -23,9 +23,8 @@ public:
             tryBlock -> execute(&local);
         } catch(ThrowPacket& throwPacket) {
             Environment local = *env;
-            if(!ident.empty()) {
-                ptr<ValueSymbol> catchSymbol = local.getAttribute(ident);
-            }
+            if(!ident.empty())
+                local.putAttribute(ident, false, throwPacket.getValue());
             catchBlock -> execute(&local);
         }
     }
