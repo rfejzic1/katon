@@ -8,7 +8,9 @@
 class ReturnStatement : public Statement {
     ptr<Expression> expression;
 public:
+    explicit ReturnStatement(ptr<Expression> expression = nullptr) : expression(std::move(expression)) { }
     void execute(Environment *env) override {
-        throw ReturnPacket(expression -> getValue());
+        ptr<Value> toReturn = expression ? expression -> getValue() : nullptr;
+        throw ReturnPacket(toReturn);
     }
 };
