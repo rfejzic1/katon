@@ -2,10 +2,7 @@
 
 #include "Type.h"
 #include "Expression.h"
-
-enum class Scope {
-    Public, Private
-};
+#include "Scope.h"
 
 struct Symbol : public Expression {
     std::string name;

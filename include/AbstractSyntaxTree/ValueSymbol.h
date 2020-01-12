@@ -6,8 +6,8 @@
 class ValueSymbol : public Symbol {
     ptr<Value> value;
 public:
-    ValueSymbol(Identifier ident, bool constant, ptr<Value> value)
-        : Symbol(ident, constant, value -> getType()), value(value) { }
+    ValueSymbol(Identifier ident, bool constant, ptr<Value> value, Scope scope = Scope::Public)
+        : Symbol(ident, constant, value -> getType(), scope), value(value) { }
 
     ptr<Value> getValue() override {
         return value;

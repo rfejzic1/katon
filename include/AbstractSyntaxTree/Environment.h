@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "TypeDefinitions.h"
+#include "Scope.h"
 
 class ValueSymbol;
 class FunctionSymbol;
@@ -16,8 +17,8 @@ class Environment {
 public:
     explicit Environment(Environment* enclosing = nullptr) : enclosing(enclosing) { }
     bool hasMember(const Identifier& ident);
-    bool putAttribute(const Identifier& ident, bool constant, ptr<Value> value);
-    bool putFunction(const Identifier& ident, ptr<Function> function);
+    bool putAttribute(const Identifier& ident, bool constant, ptr<Value> value, Scope scope);
+    bool putFunction(const Identifier& ident, ptr<Function> function, Scope scope);
     ptr<Symbol> getMember(const Identifier& ident);
     ptr<Symbol> getMemberIncludingFromEnclosingEnvironments(const Identifier& ident);
     ptr<ValueSymbol> getAttribute(const Identifier& ident);
