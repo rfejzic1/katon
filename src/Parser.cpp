@@ -20,6 +20,7 @@
 #include "../include/AbstractSyntaxTree/Values/String.h"
 #include "../include/AbstractSyntaxTree/Statements/ExpressionStatement.h"
 #include "../include/AbstractSyntaxTree/Statements/OtherwiseStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/LocalDeclarationStatement.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
@@ -377,12 +378,14 @@ ptr<Statement> Parser::throwStatement() {
 }
 
 ptr<Statement> Parser::localDecl(TokenType tokenType) {
-    log("local variable declaration");
+    bool constant = tokenType == TokenType::Const;
     consume();
+    Identifier identifier = token().lexeme;
     consume(TokenType::Identifier, "identifier");
     consume(TokenType::Assign, "assignment operator '='");
-    expression();
+    ptr<Expression> expr = expression();
     consume(TokenType::StatEnd, "';'");
+    return std::make_shared<LocalDeclarationStatement>(identifier, constant, expr);
 }
 
 ptr<Statement> Parser::expressionStatement() {
