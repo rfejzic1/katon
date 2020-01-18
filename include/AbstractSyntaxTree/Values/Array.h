@@ -6,6 +6,7 @@
 
 class Array : public Value, public Iterable {
     ValueList values;
+    ptr<Array> thisArray = ptr<Array>(this);
 public:
     Array() = default;
     Array(ValueList& values) : values(values) { }
@@ -20,6 +21,7 @@ public:
     long long int asInteger() override;
     double asDouble() override;
     bool asBoolean() override;
+    ptr<Array> asArray() override;
 
     ptr<Value> getValue() override;
     ptr<ValueList> getValues() override;

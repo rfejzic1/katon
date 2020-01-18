@@ -24,3 +24,10 @@ bool Object::asBoolean() {
     return false;
 }
 
+ptr<Object> Object::asObject() {
+    return thisObject;
+}
+
+ptr<Array> Object::asArray() {
+    return nullptr;
+}

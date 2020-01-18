@@ -57,3 +57,6 @@ ptr<ValueList> Array::getValues() {
     return std::make_shared<ValueList>(values);
 }
 
+ptr<Array> Array::asArray() {
+    return thisArray;
+}

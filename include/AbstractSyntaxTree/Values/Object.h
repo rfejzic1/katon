@@ -5,6 +5,7 @@
 
 class Object : public Value {
     Environment members;
+    ptr<Object> thisObject = ptr<Object>(this);
 public:
     Environment* getEnvironment();
     Type getType() override;
@@ -12,4 +13,6 @@ public:
     long long int asInteger() override;
     double asDouble() override;
     bool asBoolean() override;
+    ptr<Object> asObject() override;
+    ptr<Array> asArray() override;
 };

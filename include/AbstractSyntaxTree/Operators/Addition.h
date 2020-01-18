@@ -6,7 +6,4 @@
 
 struct Addition : public BinaryOperator {
     Addition(ptr<Expression> left, ptr<Expression> right) : BinaryOperator(std::move(left), std::move(right)) {}
-    ptr<Value> getValue() override {
-
-    }
 };
