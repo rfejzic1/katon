@@ -1,5 +1,9 @@
 #include "../include/AbstractSyntaxTree/Operators/BinaryOperator.h"
 
+BinaryOperator::BinaryOperator(ptr<Expression> left, ptr<Expression> right) : leftExpression(std::move(left)), rightExpression(std::move(right)) {
+    builder.setType("operator_exception");
+}
+
 Type BinaryOperator::getGreaterType(ptr<Value> &left, ptr<Value> &right) {
     Type leftType = left -> getType();
     Type rightType = right -> getType();
@@ -30,7 +34,7 @@ ptr<Value> BinaryOperator::operate(ptr<Value> &left, ptr<Value> &right) {
             result = asBooleans(left, right);
             break;
         default:
-            break;
+            throw ThrowPacket(builder.setMessage("Types are not operable!").build());
     }
     return result;
 }
@@ -42,7 +46,7 @@ ptr<Value> BinaryOperator::getValue() {
     if(!rightValue || !leftValue) {
         ptr<Value> object = ExceptionObjectBuilder()
                 .setType("null_value")
-                .setMessage("Operands must have a value!")
+                .setMessage("Both operands must have a value!")
                 .build();
         throw ThrowPacket(object);
     }
@@ -52,29 +56,25 @@ ptr<Value> BinaryOperator::getValue() {
 }
 
 ptr<Value> BinaryOperator::asStrings(ptr<Value> &leftOperand, ptr<Value> &rightOperand) {
-    throw ThrowPacket(builder.setMessage("").build());
+    throw ThrowPacket(builder.setMessage("Operator not defined for String type").build());
 }
 
 ptr<Value> BinaryOperator::asDoubles(ptr<Value> &leftOperand, ptr<Value> &rightOperand) {
-    throw ThrowPacket(builder.setMessage("").build());
+    throw ThrowPacket(builder.setMessage("Operator not defined for Double type").build());
 }
 
 ptr<Value> BinaryOperator::asIntegers(ptr<Value> &leftOperand, ptr<Value> &rightOperand) {
-    throw ThrowPacket(builder.setMessage("").build());
+    throw ThrowPacket(builder.setMessage("Operator not defined for Integer type").build());
 }
 
 ptr<Value> BinaryOperator::asBooleans(ptr<Value> &leftOperand, ptr<Value> &rightOperand) {
-    throw ThrowPacket(builder.setMessage("").build());
+    throw ThrowPacket(builder.setMessage("Operator not defined for Boolean type").build());
 }
 
 ptr<Value> BinaryOperator::asObjects(ptr<Value> &leftOperand, ptr<Value> &rightOperand) {
-    throw ThrowPacket(builder.setMessage("").build());
+    throw ThrowPacket(builder.setMessage("Operator not defined for Object type").build());
 }
 
 ptr<Value> BinaryOperator::asArrays(ptr<Value> &leftOperand, ptr<Value> &rightOperand) {
-    throw ThrowPacket(builder.setMessage("").build());
-}
-
-BinaryOperator::BinaryOperator(ptr<Expression> left, ptr<Expression> right) : leftExpression(std::move(left)), rightExpression(std::move(right)) {
-    builder.setType("operator_exception");
+    throw ThrowPacket(builder.setMessage("Operator not defined for Array type").build());
 }
