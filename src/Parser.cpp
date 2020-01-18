@@ -138,6 +138,7 @@ ptr<Array> Parser::array() {
     consume(TokenType::LeftBrack, "'['");
     expressionList();
     consume(TokenType::RightBrack, "']'");
+    return nullptr;
 }
 
 void Parser::memberDecl(ptr<Object>& object) {
@@ -240,6 +241,7 @@ std::vector<ptr<Statement>> Parser::statements() {
     std::vector<ptr<Statement>> statList;
     while(!matchAny({ TokenType::RightCurly, TokenType::EndOfFile }))
         statList.push_back(statement());
+    return statList;
 }
 
 ptr<Statement> Parser::statement() {
