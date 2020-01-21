@@ -7,7 +7,10 @@ class Object : public Value {
     Environment members;
     ptr<Object> thisObject = ptr<Object>(this);
 public:
+    Object() = default;
+    Object(Environment* environment) : members(*environment) { }
     Environment* getEnvironment();
+
     Type getType() override;
     std::string asString() override;
     long long int asInteger() override;
