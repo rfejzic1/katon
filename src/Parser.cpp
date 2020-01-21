@@ -189,7 +189,7 @@ void Parser::method(ptr<Object> &object, Scope scope) {
     IdentifierList parameters = identifierList();
     consume(TokenType::RightParen, "')'");
 
-    ptr<Function> function = std::make_shared<Function>(parameters, *statementBlock());
+    ptr<Function> function = make<Function>(parameters, *statementBlock());
     object -> getEnvironment() -> putFunction(identifier, function, scope);
 }
 
@@ -230,7 +230,7 @@ ExpressionList Parser::expressionList() {
 ptr<StatementBlock> Parser::statementBlock() {
     consume(TokenType::LeftCurly, "'{'");
 
-    ptr<StatementBlock> statBlock = std::make_shared<StatementBlock>(statements());
+    ptr<StatementBlock> statBlock = make<StatementBlock>(statements());
 
     consume(TokenType::RightCurly, "'}'");
 
@@ -286,7 +286,7 @@ ptr<Statement> Parser::ifStatement() {
         elseBlock = statementBlock();
     }
 
-    return std::make_shared<IfStatement>(condition, ifBlock, elseBlock);
+    return make<IfStatement>(condition, ifBlock, elseBlock);
 }
 
 ptr<Statement> Parser::whileStatement() {
@@ -297,7 +297,7 @@ ptr<Statement> Parser::whileStatement() {
     ptr<StatementBlock> statBlock = statementBlock();
     functionCounter--;
 
-    return std::make_shared<WhileStatement>(condition, statBlock);
+    return make<WhileStatement>(condition, statBlock);
 }
 
 ptr<Statement> Parser::forStatement() {
@@ -313,7 +313,7 @@ ptr<Statement> Parser::forStatement() {
     ptr<StatementBlock> statBlock = statementBlock();
     functionCounter--;
 
-    return std::make_shared<ForStatement>(identifier, iterable, statBlock);
+    return make<ForStatement>(identifier, iterable, statBlock);
 }
 
 ptr<Statement> Parser::tryCatchStatement() {
@@ -330,13 +330,13 @@ ptr<Statement> Parser::tryCatchStatement() {
 
     ptr<StatementBlock> catchBlock = statementBlock();
 
-    return std::make_shared<TryCatchStatement>(identifier, tryBlock, catchBlock);
+    return make<TryCatchStatement>(identifier, tryBlock, catchBlock);
 }
 
 ptr<Statement> Parser::otherwiseStatement(ptr<Statement> stat) {
     consume();
     ptr<StatementBlock> statBlock = statementBlock();
-    return std::make_shared<OtherwiseStatement>(std::move(stat), statBlock);
+    return make<OtherwiseStatement>(std::move(stat), statBlock);
 }
 
 ptr<Statement> Parser::continueStatement() {
@@ -345,7 +345,7 @@ ptr<Statement> Parser::continueStatement() {
 
     consume();
     consume(TokenType::StatEnd, "';'");
-    return std::make_shared<ContinueStatement>();
+    return make<ContinueStatement>();
 }
 
 ptr<Statement> Parser::breakStatement() {
@@ -354,7 +354,7 @@ ptr<Statement> Parser::breakStatement() {
 
     consume();
     consume(TokenType::StatEnd, "';'");
-    return std::make_shared<BreakStatement>();
+    return make<BreakStatement>();
 }
 
 ptr<Statement> Parser::returnStatement() {
@@ -365,7 +365,7 @@ ptr<Statement> Parser::returnStatement() {
         toReturn = expression();
     }
     consume(TokenType::StatEnd, "';'");
-    return std::make_shared<ReturnStatement>(toReturn);
+    return make<ReturnStatement>(toReturn);
 }
 
 ptr<Statement> Parser::throwStatement() {
@@ -376,7 +376,7 @@ ptr<Statement> Parser::throwStatement() {
         toThrow = expression();
     }
     consume(TokenType::StatEnd, "';'");
-    return std::make_shared<ThrowStatement>(toThrow);
+    return make<ThrowStatement>(toThrow);
 }
 
 ptr<Statement> Parser::localDecl(TokenType tokenType) {
@@ -387,13 +387,13 @@ ptr<Statement> Parser::localDecl(TokenType tokenType) {
     consume(TokenType::Assign, "assignment operator '='");
     ptr<Expression> expr = expression();
     consume(TokenType::StatEnd, "';'");
-    return std::make_shared<LocalDeclarationStatement>(identifier, constant, expr);
+    return make<LocalDeclarationStatement>(identifier, constant, expr);
 }
 
 ptr<Statement> Parser::expressionStatement() {
     ptr<Expression> expr = expression();
     consume(TokenType::StatEnd, "';'");
-    return std::make_shared<ExpressionStatement>(expr);
+    return make<ExpressionStatement>(expr);
 }
 
 ptr<Expression> Parser::expression() {
@@ -403,7 +403,7 @@ ptr<Expression> Parser::expression() {
         consume();
         logOr();
     }
-    return std::make_shared<String>("EXPRESSION");
+    return make<String>("EXPRESSION");
 }
 
 void Parser::logOr() {

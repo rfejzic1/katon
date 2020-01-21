@@ -17,7 +17,7 @@ void Array::clean() {
 }
 
 ptr<Integer> Array::length() {
-    return std::make_shared<Integer>(values.size());
+    return make<Integer>(values.size());
 }
 
 Type Array::getType() {
@@ -54,7 +54,7 @@ ptr<Value> Array::getValue() {
 }
 
 ptr<ValueList> Array::getValues() {
-    return std::make_shared<ValueList>(values);
+    return make<ValueList>(values);
 }
 
 ptr<Array> Array::asArray() {

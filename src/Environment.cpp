@@ -9,13 +9,13 @@ bool Environment::hasMember(const Identifier& ident) {
 
 bool Environment::putAttribute(const Identifier &ident, bool constant, ptr<Value> value, Scope scope) {
     bool hadMember = hasMember(ident);
-    symbols[ident] = std::make_shared<ValueSymbol>(ident, constant, std::move(value), scope);
+    symbols[ident] = make<ValueSymbol>(ident, constant, std::move(value), scope);
     return hadMember;
 }
 
 bool Environment::putFunction(const Identifier &ident, ptr<Function> function, Scope scope) {
     bool hadMember = hasMember(ident);
-    symbols[ident] = std::make_shared<FunctionSymbol>(ident, std::move(function), scope);
+    symbols[ident] = make<FunctionSymbol>(ident, std::move(function), scope);
     return hadMember;
 }
 

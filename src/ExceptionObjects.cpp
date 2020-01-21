@@ -2,7 +2,6 @@
 
 #include "../include/AbstractSyntaxTree/Values/String.h"
 #include "../include/AbstractSyntaxTree/ObjectBuilder.h"
-#include "../include/AbstractSyntaxTree/TypeDefinitions.h"
 
 ptr<Value> ExceptionObjects::null_value(const std::string &message) {
     return simple_exception("null_value", message);
