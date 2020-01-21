@@ -19,6 +19,7 @@ public:
     bool hasMember(const Identifier& ident);
     bool putAttribute(const Identifier& ident, bool constant, ptr<Value> value, Scope scope = Scope::Public);
     bool putFunction(const Identifier& ident, ptr<Function> function, Scope scope = Scope::Public);
+    void merge(Environment* other);
     ptr<Symbol> getMember(const Identifier& ident);
     ptr<Symbol> getMemberIncludingFromEnclosingEnvironments(const Identifier& ident);
     ptr<ValueSymbol> getAttribute(const Identifier& ident);

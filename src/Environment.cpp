@@ -51,3 +51,9 @@ Environment *Environment::getEnclosing() {
 void Environment::setEnclosing(Environment *newEnclosing) {
     enclosing = newEnclosing;
 }
+
+void Environment::merge(Environment *other) {
+    for(auto& it : other -> symbols) {
+        symbols[it.first] = it.second;
+    }
+}
