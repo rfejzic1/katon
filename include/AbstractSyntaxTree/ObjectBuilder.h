@@ -5,7 +5,10 @@
 class Object;
 
 class ObjectBuilder {
-    ptr<Object> object;
+    Environment members;
 public:
-    // todo: Implement object building
+    ObjectBuilder& putAttribute(const Identifier& ident, bool constant, ptr<Value> value, Scope scope = Scope::Public);
+    ObjectBuilder& putFunction(const Identifier& ident, ptr<Function> function, Scope scope = Scope::Public);
+    ObjectBuilder& merge(ptr<Object>& other);
+    ptr<Value> build();
 };
