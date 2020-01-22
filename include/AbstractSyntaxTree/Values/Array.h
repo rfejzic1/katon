@@ -6,7 +6,6 @@
 
 class Array : public Value, public Iterable {
     ValueList values;
-    ptr<Array> thisArray = ptr<Array>(this);
 public:
     Array() = default;
     Array(ValueList& values) : values(values) { }

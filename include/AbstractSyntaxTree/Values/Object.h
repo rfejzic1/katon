@@ -5,7 +5,6 @@
 
 class Object : public Value {
     Environment members;
-    ptr<Object> thisObject = ptr<Object>(this);
 public:
     Object() = default;
     Object(Environment* environment) : members(*environment) { }

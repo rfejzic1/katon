@@ -58,5 +58,5 @@ ptr<ValueList> Array::getValues() {
 }
 
 ptr<Array> Array::asArray() {
-    return thisArray;
+    return make<Array>(values);
 }

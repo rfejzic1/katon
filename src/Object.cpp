@@ -25,7 +25,7 @@ bool Object::asBoolean() {
 }
 
 ptr<Object> Object::asObject() {
-    return thisObject;
+    return make<Object>(&members);
 }
 
 ptr<Array> Object::asArray() {
