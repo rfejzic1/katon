@@ -3,6 +3,13 @@
 #include "../include/AbstractSyntaxTree/Values/String.h"
 #include "../include/AbstractSyntaxTree/ObjectBuilder.h"
 
+ptr<Value> ExceptionObjects::simple_exception(const std::string &type, const std::string &message) {
+    ObjectBuilder builder;
+    builder.putAttribute("type", true, make<String>(type));
+    builder.putAttribute("message", true, make<String>(message));
+    return builder.build();
+}
+
 ptr<Value> ExceptionObjects::null_value(const std::string &message) {
     return simple_exception("null_value", message);
 }
@@ -15,9 +22,6 @@ ptr<Value> ExceptionObjects::undefined_operation(const std::string &message) {
     return simple_exception("undefined_operation", message);
 }
 
-ptr<Value> ExceptionObjects::simple_exception(const std::string &type, const std::string &message) {
-    ObjectBuilder builder;
-    builder.putAttribute("type", true, make<String>(type));
-    builder.putAttribute("message", true, make<String>(message));
-    return builder.build();
+ptr<Value> ExceptionObjects::undefined(const std::string &message) {
+    return simple_exception("undefined", message);
 }
