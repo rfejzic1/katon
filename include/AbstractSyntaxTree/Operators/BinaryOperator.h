@@ -5,8 +5,12 @@
 #include "../Expression.h"
 #include "../Type.h"
 
-class Object;
-class Array;
+#include "../Values/String.h"
+#include "../Values/Integer.h"
+#include "../Values/Boolean.h"
+#include "../Values/Double.h"
+#include "../Values/Object.h"
+#include "../Values/Array.h"
 
 class BinaryOperator : public Expression {
     ptr<Expression> leftExpression = nullptr;

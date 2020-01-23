@@ -4,5 +4,5 @@
 class Object;
 
 struct Callable {
-    virtual ptr<Value> call(Object* caller, ValueList &arguments) = 0;
+    virtual ptr<Value> call(ptr<Object> caller, ValueList &arguments) = 0;
 };

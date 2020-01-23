@@ -79,6 +79,6 @@ class Parser {
 
 public:
     explicit Parser(const char* filepath);
-    Object* parse();
+    ptr<Object> parse();
     ~Parser();
 };

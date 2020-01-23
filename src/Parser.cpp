@@ -24,13 +24,13 @@
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
-Object* Parser::parse() {
+ptr<Object> Parser::parse() {
     openKlex();
 
     consume();
     ptr<Object> moduleObject = module();
 
-    return moduleObject.get();
+    return moduleObject;
 }
 
 Token Parser::token() {
@@ -115,7 +115,7 @@ Parser::~Parser() {
 /************************** Productions ******************************/
 
 ptr<Object> Parser::module() {
-    ptr<Object> object(new Object());
+    ptr<Object> object = make<Object>();
     while(!match(TokenType::EndOfFile)) {
         memberDecl(object);
     }
@@ -123,7 +123,7 @@ ptr<Object> Parser::module() {
 }
 
 ptr<Object> Parser::object() {
-    ptr<Object> object(new Object());
+    ptr<Object> object = make<Object>();
 
     consume(TokenType::LeftCurly, "'{'");
     while(!match(TokenType::RightCurly) && !match(TokenType::EndOfFile)) {

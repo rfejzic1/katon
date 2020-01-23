@@ -6,6 +6,6 @@
 class Interpreter {
     ptr<Object> object;
 public:
-    explicit Interpreter(Object* object) : object(object) {}
+    explicit Interpreter(ptr<Object> object) : object(object) {}
     void execute();
 };

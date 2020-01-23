@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "Callable.h"
 #include "StatementBlock.h"
 #include "../RuntimeException.h"
@@ -13,7 +15,7 @@ public:
     Function(IdentifierList parameters, StatementBlock statementBlock)
         : parameters(std::move(parameters)), statementBlock(std::move(statementBlock)) { }
 
-    ptr<Value> call(Object* caller, ValueList& arguments) override {
+    ptr<Value> call(ptr<Object> caller, ValueList& arguments) override {
         if(arguments.size() != parameters.size())
             throw RuntimeException("Number of arguments does not match number of parameters!");
 

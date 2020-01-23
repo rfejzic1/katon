@@ -3,16 +3,12 @@
 #include "../include/AbstractSyntaxTree/FunctionSymbol.h"
 
 void Interpreter::execute() {
-    ptr<Symbol> mainSymbol = object -> getEnvironment() -> getMember("main");
-    if (!mainSymbol)
-        throw RuntimeException("'main' is not defined.");
+    ptr<FunctionSymbol> mainSymbol = object -> getEnvironment() -> getFunction("main");
 
-    ptr<FunctionSymbol> mainFunctionSymbol = std::dynamic_pointer_cast<FunctionSymbol>(mainSymbol);
+    if(!mainSymbol)
+        throw ThrowPacket(ExceptionObjects::undefined("No function named 'main' is defined"));
 
-    if (!mainFunctionSymbol)
-        throw RuntimeException("Member 'main' is not a function.");
-
-    ptr<Function> main = mainFunctionSymbol -> getFunction();
+    ptr<Function> main = mainSymbol -> getFunction();
     ValueList initial = {};
-    main -> call(object.get(), initial);
+    main -> call(object, initial);
 }
