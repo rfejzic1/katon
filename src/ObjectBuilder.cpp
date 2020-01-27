@@ -18,5 +18,5 @@ ObjectBuilder &ObjectBuilder::merge(ptr<Object> &other) {
 }
 
 ptr<Value> ObjectBuilder::build() {
-    return make<Object>(&members);
+    return make<Object>(members);
 }
