@@ -14,7 +14,7 @@ class OtherwiseStatement : public Statement {
     ptr<StatementBlock> statementBlock;
 public:
     OtherwiseStatement(ptr<Statement> statement , ptr<StatementBlock> statementBlock)
-            : statement(std::move(statement)), statementBlock(std::move(statementBlock)) { }
+            : statement(statement), statementBlock(statementBlock) { }
 
     void execute(Environment *env) override {
         try {

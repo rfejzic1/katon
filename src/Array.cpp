@@ -49,7 +49,7 @@ bool Array::asBoolean() {
     return !values.empty();
 }
 
-ptr<Value> Array::getValue() {
+ptr<Value> Array::evaluate(Environment* env) {
     return nullptr;
 }
 

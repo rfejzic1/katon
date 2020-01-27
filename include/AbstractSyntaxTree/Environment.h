@@ -1,31 +1,42 @@
 #pragma once
 
 #include <unordered_map>
+#include <iostream>
 
 #include "TypeDefinitions.h"
 #include "Scope.h"
+#include "Type.h"
+#include "Symbol.h"
 
-class ValueSymbol;
-class FunctionSymbol;
+class Member;
 class Value;
-class Symbol;
 class Function;
 
+class SymbolHashFunction {
+public:
+    std::size_t operator()(const Symbol& symbol) const {
+        return std::hash<std::string>()(symbol.name);
+    }
+};
+
 class Environment {
-    std::unordered_map<std::string, ptr<Symbol>> symbols;
     Environment* enclosing;
+    std::unordered_map<Symbol, ptr<Member>, SymbolHashFunction> symbols;
+
+    ptr<Member> getMemberDeep(const Identifier& ident);
+
 public:
     explicit Environment(Environment* enclosing = nullptr) : enclosing(enclosing) { }
-    bool hasMember(const Identifier& ident);
-    bool putAttribute(const Identifier& ident, bool constant, ptr<Value> value, Scope scope = Scope::Public);
-    bool putFunction(const Identifier& ident, ptr<Function> function, Scope scope = Scope::Public);
+    void putValue(const Identifier &ident, Scope scope, ptr<Value> value, bool constant);
+    void putFunction(const Identifier& ident, Scope scope, ptr<Function> function);
+    bool hasSymbol(const Identifier& ident);
+    ptr<Member> getMember(const Identifier& ident);
+    ptr<Value> getValue(const Identifier& ident);
+    ptr<Function> getFunction(const Identifier& ident);
     void merge(Environment* other);
-    ptr<Symbol> getMember(const Identifier& ident);
-    ptr<Symbol> getMemberIncludingFromEnclosingEnvironments(const Identifier& ident);
-    ptr<ValueSymbol> getAttribute(const Identifier& ident);
-    ptr<ValueSymbol> getAttributeIncludingFromEnclosingEnvironments(const Identifier& ident);
-    ptr<FunctionSymbol> getFunction(const Identifier& ident);
-    ptr<FunctionSymbol> getFunctionIncludingFromEnclosingEnvironments(const Identifier& ident);
+
     Environment* getEnclosing();
     void setEnclosing(Environment* enclosing);
+
+    ~Environment() { };
 };

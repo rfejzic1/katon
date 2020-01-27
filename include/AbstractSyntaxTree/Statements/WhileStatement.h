@@ -14,11 +14,11 @@ class WhileStatement : public Statement {
     ptr<StatementBlock> statementBlock;
 public:
     WhileStatement(ptr<Expression> condition, ptr<StatementBlock> statementBlock)
-            : condition(std::move(condition)), statementBlock(std::move(statementBlock)) { }
+            : condition(condition), statementBlock(statementBlock) { }
 
     void execute(Environment *env) override {
         Environment local = *env;
-        while(condition -> getValue() -> asBoolean()) {
+        while(condition->evaluate(&local) -> asBoolean()) {
             try {
                 statementBlock->execute(&local);
             } catch (BreakPacket &) {

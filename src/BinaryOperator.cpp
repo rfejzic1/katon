@@ -1,10 +1,7 @@
 #include "../include/AbstractSyntaxTree/Operators/BinaryOperator.h"
 
-#include "../include/AbstractSyntaxTree/Values/Object.h"
-#include "../include/AbstractSyntaxTree/Values/Array.h"
-
 BinaryOperator::BinaryOperator(ptr<Expression> left, ptr<Expression> right)
-    : leftExpression(std::move(left)), rightExpression(std::move(right)) { }
+    : leftExpression(left), rightExpression(right) { }
 
 Type BinaryOperator::getGreaterType(ptr<Value> &left, ptr<Value> &right) {
     Type leftType = left -> getType();
@@ -41,9 +38,9 @@ ptr<Value> BinaryOperator::operate(ptr<Value> &left, ptr<Value> &right) {
     return result;
 }
 
-ptr<Value> BinaryOperator::getValue() {
-    ptr<Value> leftValue = leftExpression -> getValue();
-    ptr<Value> rightValue = rightExpression -> getValue();
+ptr<Value> BinaryOperator::evaluate(Environment* env) {
+    ptr<Value> leftValue = leftExpression->evaluate(env);
+    ptr<Value> rightValue = rightExpression->evaluate(env);
 
     if(!rightValue || !leftValue) {
         ptr<Value> object = ExceptionObjects::null_value("Both operands must have a value");

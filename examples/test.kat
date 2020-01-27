@@ -1,17 +1,16 @@
-
-a = 1;
-user = {
-    name = 'Rijad';
-    age = 21;
-};
-
-user2 = new user;
-merge = user <- {
-    gender = 'Male';
-};
+# a = 5;
 
 fun main() {
-    while e {
-        let b = 3 + 7;
-    }
+    let obj = 5;
+    let s = "neki string";
+    let a = 5;
+
+    let obj = {
+        test = 5;
+    };
+}
+
+fun min() {
+    let bla = 5;
+    bla + 5;
 }

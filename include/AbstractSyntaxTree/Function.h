@@ -8,12 +8,12 @@
 #include "./Values/Object.h"
 #include "Environment.h"
 
-class Function : public Callable {
+class Function : public Member, public Callable {
     IdentifierList parameters;
     StatementBlock statementBlock;
 public:
     Function(IdentifierList parameters, StatementBlock statementBlock)
-        : parameters(std::move(parameters)), statementBlock(std::move(statementBlock)) { }
+        : parameters(parameters), statementBlock(statementBlock) { }
 
     ptr<Value> call(ptr<Object> caller, ValueList& arguments) override {
         if(arguments.size() != parameters.size())
@@ -22,7 +22,7 @@ public:
         Environment localEnv = *(caller -> getEnvironment());
 
         for(int i = 0; i < arguments.size(); i++)
-            localEnv.putAttribute(parameters[i], false, arguments[i]);
+            localEnv.putValue(parameters[i], Scope::Public, arguments[i], false);
 
         try {
             statementBlock.execute(&localEnv);

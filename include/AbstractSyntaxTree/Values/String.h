@@ -8,7 +8,7 @@ struct String : public Value {
     std::string value;
 
     String() = default;
-    explicit String(std::string  value) : value(std::move(value)) {}
+    explicit String(std::string value) : value(value) {}
 
     std::string asString() override {
         return value;

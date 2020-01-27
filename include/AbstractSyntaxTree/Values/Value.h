@@ -4,14 +4,18 @@
 #include "../Type.h"
 #include "../ExceptionObjects.h"
 #include "../Packets.h"
+#include "../Member.h"
 
 class Object;
 class Array;
 
-struct Value : public Expression {
-    ptr<Value> getValue() override {
-        return ptr<Value>(this);
+class Value : public Member, public Expression {
+public:
+    ptr<Value> evaluate(Environment* env) override {
+        // TODO: FIX THIS
+        return std::shared_ptr<Value>(this);
     }
+
     virtual std::string asString() {
         throw ThrowPacket(ExceptionObjects::bad_cast("Could not cast value to String"));
     };
@@ -37,4 +41,5 @@ struct Value : public Expression {
     };
 
     virtual Type getType() = 0;
+    virtual ~Value() { }
 };

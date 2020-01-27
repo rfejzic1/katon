@@ -7,14 +7,14 @@
 #include "ParseException.h"
 #include "AbstractSyntaxTree/TypeDefinitions.h"
 #include "AbstractSyntaxTree/Scope.h"
+#include "AbstractSyntaxTree/Environment.h"
 
 class Expression;
 class Object;
 class Statement;
 class StatementBlock;
-class ValueSymbol;
-class FunctionSymbol;
 class Array;
+class ObjectDescriptor;
 
 class Parser {
     std::string filepath;
@@ -38,12 +38,12 @@ class Parser {
     static void error(const char* message);
     static void log(const char* message);
 
-    ptr<Object> module();
-    ptr<Object> object();
+    ptr<ObjectDescriptor> module();
+    ptr<ObjectDescriptor> object();
     ptr<Array> array();
-    void memberDecl(ptr<Object>&);
-    void attributeDecl(ptr<Object>& object, Scope scope);
-    void method(ptr<Object> &object, Scope scope);
+    void memberDecl(ptr<ObjectDescriptor> &descriptor);
+    void attributeDecl(ptr<ObjectDescriptor> &descriptor, Scope scope);
+    void method(ptr<ObjectDescriptor> &descriptor, Scope scope);
     IdentifierList identifierList();
     ExpressionList expressionList();
     void lambda();
@@ -79,6 +79,6 @@ class Parser {
 
 public:
     explicit Parser(const char* filepath);
-    ptr<Object> parse();
+    ptr<ObjectDescriptor> parse();
     ~Parser();
 };

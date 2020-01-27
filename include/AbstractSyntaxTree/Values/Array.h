@@ -22,6 +22,6 @@ public:
     bool asBoolean() override;
     ptr<Array> asArray() override;
 
-    ptr<Value> getValue() override;
+    ptr<Value> evaluate(Environment* env) override;
     ptr<ValueList> getValues() override;
 };

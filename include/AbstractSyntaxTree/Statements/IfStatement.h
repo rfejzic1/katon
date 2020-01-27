@@ -14,10 +14,10 @@ class IfStatement : public Statement {
     ptr<StatementBlock> falseBlock;
 public:
     IfStatement(ptr<Expression> condition, ptr<StatementBlock> trueBlock, ptr<StatementBlock> falseBlock)
-        : condition(std::move(condition)), trueBlock(std::move(trueBlock)), falseBlock(std::move(falseBlock)) { }
+        : condition(condition), trueBlock(trueBlock), falseBlock(falseBlock) { }
 
     void execute(Environment *env) override {
-        bool conditionTrue = condition -> getValue() -> asBoolean();
+        bool conditionTrue = condition -> evaluate(env) -> asBoolean();
         Environment local = *env;
 
         if(conditionTrue) {

@@ -2,7 +2,6 @@
 #include <sstream>
 
 #include "../include/Parser.h"
-#include "../include/AbstractSyntaxTree/ValueSymbol.h"
 #include "../include/AbstractSyntaxTree/Function.h"
 #include "../include/AbstractSyntaxTree/Values/Object.h"
 #include "../include/AbstractSyntaxTree/Expression.h"
@@ -21,16 +20,17 @@
 #include "../include/AbstractSyntaxTree/Statements/ExpressionStatement.h"
 #include "../include/AbstractSyntaxTree/Statements/OtherwiseStatement.h"
 #include "../include/AbstractSyntaxTree/Statements/LocalDeclarationStatement.h"
+#include "../include/AbstractSyntaxTree/ObjectDescriptor.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
-ptr<Object> Parser::parse() {
+ptr<ObjectDescriptor> Parser::parse() {
     openKlex();
 
     consume();
-    ptr<Object> moduleObject = module();
+    ptr<ObjectDescriptor> moduleDescriptor = module();
 
-    return moduleObject;
+    return moduleDescriptor;
 }
 
 Token Parser::token() {
@@ -114,24 +114,24 @@ Parser::~Parser() {
 
 /************************** Productions ******************************/
 
-ptr<Object> Parser::module() {
-    ptr<Object> object = make<Object>();
+ptr<ObjectDescriptor> Parser::module() {
+    ptr<ObjectDescriptor> objectDescriptor = make<ObjectDescriptor>();
     while(!match(TokenType::EndOfFile)) {
-        memberDecl(object);
+        memberDecl(objectDescriptor);
     }
-    return object;
+    return objectDescriptor;
 }
 
-ptr<Object> Parser::object() {
-    ptr<Object> object = make<Object>();
+ptr<ObjectDescriptor> Parser::object() {
+    ptr<ObjectDescriptor> objectDescriptor = make<ObjectDescriptor>();
 
     consume(TokenType::LeftCurly, "'{'");
     while(!match(TokenType::RightCurly) && !match(TokenType::EndOfFile)) {
-        memberDecl(object);
+        memberDecl(objectDescriptor);
     }
     consume(TokenType::RightCurly, "'}'");
 
-    return object;
+    return objectDescriptor;
 }
 
 ptr<Array> Parser::array() {
@@ -141,7 +141,7 @@ ptr<Array> Parser::array() {
     return nullptr;
 }
 
-void Parser::memberDecl(ptr<Object>& object) {
+void Parser::memberDecl(ptr<ObjectDescriptor> &descriptor) {
     Scope scope = Scope::Public;
 
     if(match(TokenType::Public)) {
@@ -152,15 +152,15 @@ void Parser::memberDecl(ptr<Object>& object) {
     }
 
     if(matchAny({ TokenType::Let, TokenType::Const, TokenType::Identifier }))
-        attributeDecl(object, scope);
+        attributeDecl(descriptor, scope);
     else if(match(TokenType::Function))
-        method(object, scope);
+        method(descriptor, scope);
     else {
         unexpected();
     }
 }
 
-void Parser::attributeDecl(ptr<Object>& object, Scope scope) {
+void Parser::attributeDecl(ptr<ObjectDescriptor> &descriptor, Scope scope) {
     bool constant = true;
 
     if(match(TokenType::Let)) {
@@ -173,13 +173,13 @@ void Parser::attributeDecl(ptr<Object>& object, Scope scope) {
     Identifier identifier = token().lexeme;
     consume(TokenType::Identifier,"identifier");
     consume(TokenType::Assign, "assignment operator '='");
-    ptr<Value> value = expression() -> getValue();
+    ptr<Expression> expr = expression();
     consume(TokenType::StatEnd, "';'");
 
-    object -> getEnvironment() -> putAttribute(identifier, constant, value, scope);
+     descriptor -> putExpression(identifier, scope, expr, constant);
 }
 
-void Parser::method(ptr<Object> &object, Scope scope) {
+void Parser::method(ptr<ObjectDescriptor> &descriptor, Scope scope) {
     consume();
 
     Identifier identifier = token().lexeme;
@@ -190,7 +190,7 @@ void Parser::method(ptr<Object> &object, Scope scope) {
     consume(TokenType::RightParen, "')'");
 
     ptr<Function> function = make<Function>(parameters, *statementBlock());
-    object -> getEnvironment() -> putFunction(identifier, function, scope);
+    descriptor -> putFunction(identifier, scope, function);
 }
 
 IdentifierList Parser::identifierList() {
@@ -403,7 +403,7 @@ ptr<Expression> Parser::expression() {
         consume();
         logOr();
     }
-    return make<String>("EXPRESSION");
+    return make<Integer>(5);
 }
 
 void Parser::logOr() {

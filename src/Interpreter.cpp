@@ -1,14 +1,13 @@
 #include "../include/Interpreter.h"
 
-#include "../include/AbstractSyntaxTree/FunctionSymbol.h"
+#include "../include/AbstractSyntaxTree/Function.h"
 
 void Interpreter::execute() {
-    ptr<FunctionSymbol> mainSymbol = object -> getEnvironment() -> getFunction("main");
+    ptr<Function> main = object -> getFunction("main");
 
-    if(!mainSymbol)
+    if(!main)
         throw ThrowPacket(ExceptionObjects::undefined("No function named 'main' is defined"));
 
-    ptr<Function> main = mainSymbol -> getFunction();
     ValueList initial = {};
     main -> call(object, initial);
 }

@@ -1,9 +1,5 @@
 #include "../include/AbstractSyntaxTree/Values/Object.h"
 
-Environment *Object::getEnvironment() {
-    return &members;
-}
-
 Type Object::getType() {
     return Type::Object;
 }
@@ -25,9 +21,25 @@ bool Object::asBoolean() {
 }
 
 ptr<Object> Object::asObject() {
-    return make<Object>(&members);
+    return make<Object>(members);
 }
 
 ptr<Array> Object::asArray() {
     return nullptr;
+}
+
+ptr<Member> Object::getMember(const Identifier &ident) {
+    return members.getMember(ident);
+}
+
+ptr<Value> Object::getAttribute(const Identifier &ident) {
+    return members.getValue(ident);
+}
+
+ptr<Function> Object::getFunction(const Identifier &ident) {
+    return members.getFunction(ident);
+}
+
+Environment* Object::getEnvironment() {
+    return &members;
 }

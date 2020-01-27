@@ -15,11 +15,11 @@ class ForStatement : public Statement {
     ptr<Expression> expression;
     ptr<StatementBlock> statementBlock;
 public:
-    ForStatement(Identifier& ident, ptr<Expression>& expression, ptr<StatementBlock>& statementBlock)
+    ForStatement(Identifier& ident, ptr<Expression> expression, ptr<StatementBlock> statementBlock)
     : ident(ident), expression(expression), statementBlock(statementBlock) { }
 
     void execute(Environment *env) override {
-        ptr<Value> expressionResult = expression -> getValue();
+        ptr<Value> expressionResult = expression->evaluate(env);
         ptr<Iterable> iterable = std::dynamic_pointer_cast<Iterable>(expressionResult);
 
         if(!iterable)
@@ -31,7 +31,7 @@ public:
             try {
                 Environment local = *env;
                 ptr<Value> newValue = iterator.next();
-                local.putAttribute(ident, false, newValue);
+                local.putValue(ident, Scope::Public, newValue, false);
                 statementBlock -> execute(env);
             } catch (BreakPacket&) {
                 break;

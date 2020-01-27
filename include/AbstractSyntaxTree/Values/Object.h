@@ -7,7 +7,12 @@ class Object : public Value {
     Environment members;
 public:
     Object() = default;
-    Object(Environment* environment) : members(*environment) { }
+    Object(Environment members) : members(std::move(members)) {}
+
+    ptr<Member> getMember(const Identifier& ident);
+    ptr<Value> getAttribute(const Identifier& ident);
+    ptr<Function> getFunction(const Identifier& ident);
+
     Environment* getEnvironment();
 
     Type getType() override;
@@ -17,4 +22,6 @@ public:
     bool asBoolean() override;
     ptr<Object> asObject() override;
     ptr<Array> asArray() override;
+
+    virtual ~Object() { }
 };

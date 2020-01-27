@@ -5,7 +5,8 @@
 #include "include/Interpreter.h"
 #include "include/ParseException.h"
 #include "include/RuntimeException.h"
-#include "include/AbstractSyntaxTree/ValueSymbol.h"
+#include "include/AbstractSyntaxTree/Symbol.h"
+#include "include/AbstractSyntaxTree/ObjectDescriptor.h"
 
 int main(int argc, char **argv) {
     if(argc < 2) {
@@ -17,9 +18,12 @@ int main(int argc, char **argv) {
 
     try {
         Parser parser(filename);
-        ptr<Object> object = parser.parse();
+        ptr<ObjectDescriptor> moduleDescriptor = parser.parse();
+        ptr<Object> module = moduleDescriptor -> evaluate(nullptr) -> asObject();
 
-        Interpreter interpreter(object);
+        std::cout << "Parse complete" << std::endl;
+
+        Interpreter interpreter(module);
         interpreter.execute();
 
     } catch(ParseException& e) {
@@ -27,8 +31,8 @@ int main(int argc, char **argv) {
     } catch(ThrowPacket& packet) {
         std::stringstream str;
         ptr<Object> exception = packet.getValue() -> asObject();
-        auto type = exception -> getEnvironment() -> getAttribute("type") -> getValue() -> asString();
-        auto message = exception -> getEnvironment() -> getAttribute("message") -> getValue() -> asString();
+        auto type = exception->getAttribute("type")->evaluate(exception->getEnvironment()) -> asString();
+        auto message = exception->getAttribute("message")->evaluate(exception->getEnvironment()) -> asString();
 
         str << "Unhandled exception of type '" << type << "':" << std::endl
         << "\t" << message << std::endl;

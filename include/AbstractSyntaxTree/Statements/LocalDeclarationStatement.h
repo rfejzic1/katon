@@ -13,10 +13,10 @@ class LocalDeclarationStatement : public Statement {
     ptr<Expression> expression;
 public:
     LocalDeclarationStatement(Identifier identifier, bool constant, ptr<Expression> expression)
-        : identifier(std::move(identifier)), constant(constant), expression(std::move(expression)) { }
+        : identifier(std::move(identifier)), constant(constant), expression(expression) { }
 
     void execute(Environment *env) override {
-        ptr<Value> value = expression -> getValue();
-        env -> putAttribute(identifier, constant, value);
+        ptr<Value> value = expression->evaluate(env);
+        env -> putValue(identifier, Scope::Public, value, constant);
     }
 };
