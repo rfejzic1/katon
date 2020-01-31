@@ -1,4 +1,6 @@
 #include "../include/AbstractSyntaxTree/Operators/BinaryOperator.h"
+#include "../include/AbstractSyntaxTree/ExceptionObjects.h"
+#include "../include/AbstractSyntaxTree/Packets.h"
 
 BinaryOperator::BinaryOperator(ptr<Expression> left, ptr<Expression> right)
     : leftExpression(left), rightExpression(right) { }

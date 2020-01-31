@@ -1,6 +1,8 @@
 #include "../include/Interpreter.h"
 
 #include "../include/AbstractSyntaxTree/Function.h"
+#include "../include/AbstractSyntaxTree/ExceptionObjects.h"
+#include "../include/AbstractSyntaxTree/Packets.h"
 
 void Interpreter::execute() {
     ptr<Function> main = object -> getFunction("main");

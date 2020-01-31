@@ -4,9 +4,8 @@
 #include "include/Parser.h"
 #include "include/Interpreter.h"
 #include "include/ParseException.h"
-#include "include/RuntimeException.h"
-#include "include/AbstractSyntaxTree/Symbol.h"
-#include "include/AbstractSyntaxTree/ObjectDescriptor.h"
+#include "include/AbstractSyntaxTree/ValueExpression/ObjectExpression.h"
+#include "include/AbstractSyntaxTree/Packets.h"
 
 int main(int argc, char **argv) {
     if(argc < 2) {
@@ -18,7 +17,7 @@ int main(int argc, char **argv) {
 
     try {
         Parser parser(filename);
-        ptr<ObjectDescriptor> moduleDescriptor = parser.parse();
+        ptr<ObjectExpression> moduleDescriptor = parser.parse();
         ptr<Object> module = moduleDescriptor -> evaluate(nullptr) -> asObject();
 
         std::cout << "Parse complete" << std::endl;
@@ -31,8 +30,8 @@ int main(int argc, char **argv) {
     } catch(ThrowPacket& packet) {
         std::stringstream str;
         ptr<Object> exception = packet.getValue() -> asObject();
-        auto type = exception->getAttribute("type")->evaluate(exception->getEnvironment()) -> asString();
-        auto message = exception->getAttribute("message")->evaluate(exception->getEnvironment()) -> asString();
+        auto type = exception->getAttribute("type") -> asString();
+        auto message = exception->getAttribute("message") -> asString();
 
         str << "Unhandled exception of type '" << type << "':" << std::endl
         << "\t" << message << std::endl;

@@ -13,8 +13,8 @@ class Expression;
 class Object;
 class Statement;
 class StatementBlock;
-class Array;
-class ObjectDescriptor;
+class ArrayExpression;
+class ObjectExpression;
 
 class Parser {
     std::string filepath;
@@ -38,12 +38,12 @@ class Parser {
     static void error(const char* message);
     static void log(const char* message);
 
-    ptr<ObjectDescriptor> module();
-    ptr<ObjectDescriptor> object();
-    ptr<Array> array();
-    void memberDecl(ptr<ObjectDescriptor> &descriptor);
-    void attributeDecl(ptr<ObjectDescriptor> &descriptor, Scope scope);
-    void method(ptr<ObjectDescriptor> &descriptor, Scope scope);
+    ptr<ObjectExpression> module();
+    ptr<ObjectExpression> object();
+    ptr<ArrayExpression> array();
+    void memberDecl(ptr<ObjectExpression> &descriptor);
+    void attributeDecl(ptr<ObjectExpression> &descriptor, Scope scope);
+    void method(ptr<ObjectExpression> &descriptor, Scope scope);
     IdentifierList identifierList();
     ExpressionList expressionList();
     void lambda();
@@ -79,6 +79,6 @@ class Parser {
 
 public:
     explicit Parser(const char* filepath);
-    ptr<ObjectDescriptor> parse();
+    ptr<ObjectExpression> parse();
     ~Parser();
 };

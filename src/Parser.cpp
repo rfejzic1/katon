@@ -20,15 +20,17 @@
 #include "../include/AbstractSyntaxTree/Statements/ExpressionStatement.h"
 #include "../include/AbstractSyntaxTree/Statements/OtherwiseStatement.h"
 #include "../include/AbstractSyntaxTree/Statements/LocalDeclarationStatement.h"
-#include "../include/AbstractSyntaxTree/ObjectDescriptor.h"
+#include "../include/AbstractSyntaxTree/ValueExpression/ObjectExpression.h"
+#include "../include/AbstractSyntaxTree/ValueExpression/PrimitiveExpression.h"
+#include "../include/AbstractSyntaxTree/ValueExpression/ArrayExpression.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
-ptr<ObjectDescriptor> Parser::parse() {
+ptr<ObjectExpression> Parser::parse() {
     openKlex();
 
     consume();
-    ptr<ObjectDescriptor> moduleDescriptor = module();
+    ptr<ObjectExpression> moduleDescriptor = module();
 
     return moduleDescriptor;
 }
@@ -114,16 +116,16 @@ Parser::~Parser() {
 
 /************************** Productions ******************************/
 
-ptr<ObjectDescriptor> Parser::module() {
-    ptr<ObjectDescriptor> objectDescriptor = make<ObjectDescriptor>();
+ptr<ObjectExpression> Parser::module() {
+    ptr<ObjectExpression> objectDescriptor = make<ObjectExpression>();
     while(!match(TokenType::EndOfFile)) {
         memberDecl(objectDescriptor);
     }
     return objectDescriptor;
 }
 
-ptr<ObjectDescriptor> Parser::object() {
-    ptr<ObjectDescriptor> objectDescriptor = make<ObjectDescriptor>();
+ptr<ObjectExpression> Parser::object() {
+    ptr<ObjectExpression> objectDescriptor = make<ObjectExpression>();
 
     consume(TokenType::LeftCurly, "'{'");
     while(!match(TokenType::RightCurly) && !match(TokenType::EndOfFile)) {
@@ -134,14 +136,14 @@ ptr<ObjectDescriptor> Parser::object() {
     return objectDescriptor;
 }
 
-ptr<Array> Parser::array() {
+ptr<ArrayExpression> Parser::array() {
     consume(TokenType::LeftBrack, "'['");
     expressionList();
     consume(TokenType::RightBrack, "']'");
-    return nullptr;
+    return make<ArrayExpression>();
 }
 
-void Parser::memberDecl(ptr<ObjectDescriptor> &descriptor) {
+void Parser::memberDecl(ptr<ObjectExpression> &descriptor) {
     Scope scope = Scope::Public;
 
     if(match(TokenType::Public)) {
@@ -160,7 +162,7 @@ void Parser::memberDecl(ptr<ObjectDescriptor> &descriptor) {
     }
 }
 
-void Parser::attributeDecl(ptr<ObjectDescriptor> &descriptor, Scope scope) {
+void Parser::attributeDecl(ptr<ObjectExpression> &descriptor, Scope scope) {
     bool constant = true;
 
     if(match(TokenType::Let)) {
@@ -179,7 +181,7 @@ void Parser::attributeDecl(ptr<ObjectDescriptor> &descriptor, Scope scope) {
      descriptor -> putExpression(identifier, scope, expr, constant);
 }
 
-void Parser::method(ptr<ObjectDescriptor> &descriptor, Scope scope) {
+void Parser::method(ptr<ObjectExpression> &descriptor, Scope scope) {
     consume();
 
     Identifier identifier = token().lexeme;
@@ -403,7 +405,7 @@ ptr<Expression> Parser::expression() {
         consume();
         logOr();
     }
-    return make<Integer>(5);
+    return make<PrimitiveExpression<String>>("EXPRESSION");
 }
 
 void Parser::logOr() {

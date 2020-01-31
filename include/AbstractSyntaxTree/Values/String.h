@@ -8,7 +8,8 @@ struct String : public Value {
     std::string value;
 
     String() = default;
-    explicit String(std::string value) : value(value) {}
+    String(std::string value) : value(value) {}
+    String(const char* value) : value(value) {}
 
     std::string asString() override {
         return value;

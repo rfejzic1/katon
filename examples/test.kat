@@ -1,13 +1,11 @@
-# a = 5;
+a = 5;
+
+obj = {
+    testAttrib = 1;
+}
 
 fun main() {
     let obj = 5;
-    let s = "neki string";
-    let a = 5;
-
-    let obj = {
-        test = 5;
-    };
 }
 
 fun min() {

@@ -49,10 +49,6 @@ bool Array::asBoolean() {
     return !values.empty();
 }
 
-ptr<Value> Array::evaluate(Environment* env) {
-    return nullptr;
-}
-
 ptr<ValueList> Array::getValues() {
     return make<ValueList>(values);
 }

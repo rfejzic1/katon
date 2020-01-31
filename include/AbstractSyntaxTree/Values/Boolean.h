@@ -6,7 +6,7 @@ struct Boolean : public Value {
     bool value = false;
 
     Boolean() = default;
-    explicit Boolean(bool value) : value(value) {}
+    Boolean(bool value) : value(value) {}
 
     std::string asString() override {
         return std::to_string(value);
