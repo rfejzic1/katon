@@ -4,7 +4,7 @@
 
 #include "BinaryOperator.h"
 
-struct Disjunction : public BinaryOperator {
+class Disjunction : public BinaryOperator {
     ptr<Value> asIntegers(long long leftOperand, long long rightOperand) override {
         return make<Integer>(leftOperand || rightOperand);
     }
