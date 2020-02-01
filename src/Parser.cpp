@@ -37,6 +37,10 @@
 #include "../include/AbstractSyntaxTree/Operators/GreaterThan.h"
 #include "../include/AbstractSyntaxTree/Operators/GreaterThanOrEqual.h"
 #include "../include/AbstractSyntaxTree/Operators/Merge.h"
+#include "../include/AbstractSyntaxTree/Operators/New.h"
+#include "../include/AbstractSyntaxTree/Operators/Negation.h"
+#include "../include/AbstractSyntaxTree/Operators/Negative.h"
+#include "../include/AbstractSyntaxTree/Operators/Cast.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
@@ -535,7 +539,7 @@ ptr<Expression> Parser::factor() {
 }
 
 ptr<Expression> Parser::merge() {
-    ptr<Expression> expr = unary();
+    ptr<Expression> expr = castable();
 
     if(match(TokenType::Merge)) {
         consume();
@@ -545,76 +549,125 @@ ptr<Expression> Parser::merge() {
     return expr;
 }
 
-ptr<Expression> Parser::unary() {
-    log("unary");
-    while(matchAny({ TokenType::Neg, TokenType::Minus }))
-        consume();
-
-    if(match(TokenType::New)) {
-        log("There is a new one!");
-        consume();
-    }
-
-    primary();
+ptr<Expression> Parser::castable() {
+    ptr<Expression> expr = unary();
 
     if(match(TokenType::As)) {
         consume();
-        if(!matchAny({ TokenType::StringType, TokenType::IntegerType, TokenType::DoubleType, TokenType::BooleanType })) {
-            log("Cast");
-            unexpected();
-        } else {
+
+        if(match(TokenType::StringType)) {
             consume();
+            expr = make<Cast>(expr, Type::String);
+        } else if(match(TokenType::DoubleType)) {
+            consume();
+            expr = make<Cast>(expr, Type::Double);
+        } else if(match(TokenType::IntegerType)) {
+            consume();
+            expr = make<Cast>(expr, Type::Integer);
+        } else if(match(TokenType::BooleanType)) {
+            consume();
+            expr = make<Cast>(expr, Type::Boolean);
+        } else {
+            unexpected();
         }
     }
+
+    return expr;
 }
 
-void Parser::primary() {
+ptr<Expression> Parser::unary() {
+    if(match(TokenType::Neg)) {
+        consume();
+        return make<Negation>(unary());
+    }
+
+    if(match(TokenType::Minus)) {
+        consume();
+        return make<Negative>(unary());
+    }
+
+    bool isNew = false;
+    if(match(TokenType::New)) {
+        consume();
+        isNew = true;
+    }
+
+    ptr<Expression> expr = primary();
+
+    if(isNew) {
+        expr = make<New>(expr);
+    }
+
+    return expr;
+}
+
+ptr<Expression> Parser::primary() {
     if(match(TokenType::Identifier)) {
+        // todo: deal with symbols
         variable(nullptr);
     } else if(match(TokenType::LeftParen)) {
-        log("grouping");
         consume(TokenType::LeftParen, "'('");
-        expression();
+        ptr<Expression> expr = expression();
         consume(TokenType::RightParen, "')'");
+        return expr;
     } else {
-        value();
+        return value();
     }
 }
 
-void Parser::value() {
+ptr<Expression> Parser::value() {
     if(matchAny({ TokenType::True, TokenType::False })) {
-        log("Boolean");
+        bool logicalValue = token().type == TokenType::True;
         consume();
+        return make<PrimitiveExpression<Boolean>>(logicalValue);
+
     } else if(match(TokenType::Number)) {
-        log("Number");
+        long long int integerValue = std::stoll(token().lexeme);
+        double doubleValue = std::stod(token().lexeme);
         consume();
+
+        if(integerValue == doubleValue) {
+            return make<PrimitiveExpression<Integer>>(integerValue);
+        }
+
+        return make<PrimitiveExpression<Double>>(doubleValue);
+
     } else if(match(TokenType::SingleQuote)) {
-        log("String");
         consume();
+        ptr<Expression> expr = make<PrimitiveExpression<String>>(token().lexeme);
         consume(TokenType::String, "string");
         consume(TokenType::SingleQuote, "\"'\"");
+        return expr;
+
     } else if(match(TokenType::DoubleQuote)) {
-        log("String");
         consume();
+        ptr<Expression> expr = make<PrimitiveExpression<String>>(token().lexeme);
         consume(TokenType::String, "string");
         consume(TokenType::DoubleQuote, "'\"'");
+        return expr;
+
     } else if(match(TokenType::LeftCurly)) {
-        object();
+        return object();
     } else if(match(TokenType::LeftBrack)) {
-        array();
+        return array();
     } else if(match(TokenType::Lambda)) {
-        lambda();
+        return lambda();
     } else {
         unexpected();
     }
 }
 
-void Parser::lambda() {
+ptr<Expression> Parser::lambda() {
     consume();
     consume(TokenType::LeftParen, "'('");
-    identifierList();
+    IdentifierList parameters = identifierList();
     consume(TokenType::RightParen, "')'");
-    statementBlock();
+
+    ptr<Function> function = make<Function>(parameters, *statementBlock());
+
+    ptr<ObjectExpression> objectDescriptor = make<ObjectExpression>();
+    objectDescriptor -> putFunction("call", Scope::Public, function);
+    return objectDescriptor;
 }
 
 void Parser::variable(Expression* callee) {

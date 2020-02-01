@@ -46,7 +46,7 @@ class Parser {
     void method(ptr<ObjectExpression> &descriptor, Scope scope);
     IdentifierList identifierList();
     ExpressionList expressionList();
-    void lambda();
+    ptr<Expression> lambda();
     ptr<StatementBlock> statementBlock();
     std::vector<ptr<Statement>> statements();
     ptr<Statement> statement();
@@ -68,10 +68,11 @@ class Parser {
     ptr<Expression> comparison();
     ptr<Expression> term();
     ptr<Expression> factor();
-    ptr<Expression> unary();
-    void primary();
     ptr<Expression> merge();
-    void value();
+    ptr<Expression> unary();
+    ptr<Expression> castable();
+    ptr<Expression> primary();
+    ptr<Expression> value();
     void variable(Expression* callee);
     void postfix(Expression* callee);
     void call(Expression* callee);
