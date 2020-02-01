@@ -20,8 +20,6 @@ int main(int argc, char **argv) {
         ptr<ObjectExpression> moduleDescriptor = parser.parse();
         ptr<Object> module = moduleDescriptor -> evaluate(nullptr) -> asObject();
 
-        std::cout << "Parse complete" << std::endl;
-
         Interpreter interpreter(module);
         interpreter.execute();
 
@@ -29,12 +27,12 @@ int main(int argc, char **argv) {
         std::cout << e.what() << std::endl;
     } catch(ThrowPacket& packet) {
         std::stringstream str;
-        ptr<Object> exception = packet.getValue() -> asObject();
-        auto type = exception->getAttribute("type") -> asString();
-        auto message = exception->getAttribute("message") -> asString();
+        ptr<Object> exception = packet.getValue()->asObject();
+        auto type = exception->getAttribute("type")->asString();
+        auto message = exception->getAttribute("message")->asString();
 
         str << "Unhandled exception of type '" << type << "':" << std::endl
-        << "\t" << message << std::endl;
+            << "\t" << message << std::endl;
         std::cout << str.str() << std::endl;
     }
 

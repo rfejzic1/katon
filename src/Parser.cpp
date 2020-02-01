@@ -71,7 +71,6 @@ void Parser::consume() {
     checkKlex();
     klex->nextToken();
     currentToken = klex->getToken();
-    printToken();
 }
 
 bool Parser::match(TokenType type) {
