@@ -35,7 +35,7 @@ class Parser {
     bool matchAny(const std::vector<TokenType>& types);
     void unexpected();
     void expected(const char* what);
-    static void error(const char* message);
+    void error(const char* message);
     static void log(const char* message);
 
     ptr<ObjectExpression> module();
@@ -62,15 +62,15 @@ class Parser {
     ptr<Statement> localDecl(TokenType tokenType);
     ptr<Statement> expressionStatement();
     ptr<Expression> expression();
-    void logOr();
-    void logAnd();
-    void equality();
-    void comparison();
-    void term();
-    void factor();
-    void unary();
+    ptr<Expression> disjunction();
+    ptr<Expression> conjunction();
+    ptr<Expression> equality();
+    ptr<Expression> comparison();
+    ptr<Expression> term();
+    ptr<Expression> factor();
+    ptr<Expression> unary();
     void primary();
-    void merge();
+    ptr<Expression> merge();
     void value();
     void variable(Expression* callee);
     void postfix(Expression* callee);

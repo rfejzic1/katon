@@ -3,8 +3,6 @@
 
 #include "../include/Parser.h"
 #include "../include/AbstractSyntaxTree/Function.h"
-#include "../include/AbstractSyntaxTree/Values/Object.h"
-#include "../include/AbstractSyntaxTree/Expression.h"
 #include "../include/AbstractSyntaxTree/TypeDefinitions.h"
 #include "../include/AbstractSyntaxTree/Values/Array.h"
 #include "../include/AbstractSyntaxTree/StatementBlock.h"
@@ -23,6 +21,22 @@
 #include "../include/AbstractSyntaxTree/ValueExpression/ObjectExpression.h"
 #include "../include/AbstractSyntaxTree/ValueExpression/PrimitiveExpression.h"
 #include "../include/AbstractSyntaxTree/ValueExpression/ArrayExpression.h"
+#include "../include/AbstractSyntaxTree/Operators/Assignment.h"
+#include "../include/AbstractSyntaxTree/Operators/Addition.h"
+#include "../include/AbstractSyntaxTree/Operators/Multiplication.h"
+#include "../include/AbstractSyntaxTree/Operators/Subtraction.h"
+#include "../include/AbstractSyntaxTree/Operators/Division.h"
+#include "../include/AbstractSyntaxTree/Operators/Exponentiation.h"
+#include "../include/AbstractSyntaxTree/Operators/Modulo.h"
+#include "../include/AbstractSyntaxTree/Operators/Disjunction.h"
+#include "../include/AbstractSyntaxTree/Operators/Conjunction.h"
+#include "../include/AbstractSyntaxTree/Operators/Equality.h"
+#include "../include/AbstractSyntaxTree/Operators/Inequality.h"
+#include "../include/AbstractSyntaxTree/Operators/LessThan.h"
+#include "../include/AbstractSyntaxTree/Operators/LessThanOrEqual.h"
+#include "../include/AbstractSyntaxTree/Operators/GreaterThan.h"
+#include "../include/AbstractSyntaxTree/Operators/GreaterThanOrEqual.h"
+#include "../include/AbstractSyntaxTree/Operators/Merge.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
@@ -67,7 +81,7 @@ bool Parser::matchAny(const std::vector<TokenType>& types) {
 
 void Parser::error(const char *message) {
     std::stringstream msg;
-    msg << "Error: " << message;
+    msg << "Parse error on line " << token().line <<  " column " << token().col << ":\n\t" << message;
     throw ParseException(msg.str().c_str());
 }
 
@@ -343,7 +357,7 @@ ptr<Statement> Parser::otherwiseStatement(ptr<Statement> stat) {
 
 ptr<Statement> Parser::continueStatement() {
     if(functionCounter == 0)
-        throw ParseException("Unexpected 'continue' outside a function.");
+        error("Unexpected 'continue' outside a function.");
 
     consume();
     consume(TokenType::StatEnd, "';'");
@@ -352,7 +366,7 @@ ptr<Statement> Parser::continueStatement() {
 
 ptr<Statement> Parser::breakStatement() {
     if(functionCounter == 0)
-        throw ParseException("Unexpected 'continue' outside a function.");
+        error("Unexpected 'continue' outside a function.");
 
     consume();
     consume(TokenType::StatEnd, "';'");
@@ -399,79 +413,139 @@ ptr<Statement> Parser::expressionStatement() {
 }
 
 ptr<Expression> Parser::expression() {
-    log("expression");
-    logOr();
+    ptr<Expression> expr = disjunction();
+
     if(matchAny({ TokenType::Assign, TokenType::PlusAssign, TokenType::MultAssign, TokenType::MinusAssign, TokenType::DivAssign, TokenType::ExpAssign, TokenType::ModAssign })) {
+        // todo: Do a better symbol check!!!
+        ptr<Symbol> symbol = std::dynamic_pointer_cast<Symbol>(expr);
+        if(!symbol)
+            error("The left operand of the assignment operator is not an lvalue");
+
+        TokenType assignType = token().type;
         consume();
-        logOr();
+        ptr<Operation> additionalOperation;
+
+        if(assignType == TokenType::PlusAssign)
+            additionalOperation = make<Addition>();
+        else if(assignType == TokenType::MultAssign)
+            additionalOperation = make<Multiplication>();
+        else if(assignType == TokenType::MinusAssign)
+            additionalOperation = make<Subtraction>();
+        else if(assignType == TokenType::DivAssign)
+            additionalOperation = make<Division>();
+        else if(assignType == TokenType::ExpAssign)
+            additionalOperation = make<Exponentiation>();
+        else if(assignType == TokenType::ModAssign)
+            additionalOperation = make<Modulo>();
+
+        expr = make<Assignment>(additionalOperation, symbol, disjunction());
     }
-    return make<PrimitiveExpression<String>>("EXPRESSION");
+
+    return expr;
 }
 
-void Parser::logOr() {
-    log("or");
-    logAnd();
-    while(match(TokenType::Or)) {
+ptr<Expression> Parser::disjunction() {
+    ptr<Expression> expr = conjunction();
+
+    if(match(TokenType::Or)) {
         consume();
-        logAnd();
+        expr = make<BinaryOperator>(make<Disjunction>(), expr, disjunction());
     }
+
+    return expr;
 }
 
-void Parser::logAnd() {
-    log("and");
-    equality();
-    while(match(TokenType::And)) {
+ptr<Expression> Parser::conjunction() {
+    ptr<Expression> expr = equality();
+
+    if(match(TokenType::And)) {
         consume();
-        equality();
+        expr = make<BinaryOperator>(make<Conjunction>(), expr, conjunction());
     }
+
+    return expr;
 }
 
-void Parser::equality() {
-    log("equality");
-    comparison();
-    while(matchAny({ TokenType::NotEqu, TokenType::Equals })) {
+ptr<Expression> Parser::equality() {
+    ptr<Expression> expr = comparison();
+
+    if(match(TokenType::Equals)) {
         consume();
-        comparison();
+        expr = make<BinaryOperator>(make<Equality>(), expr, equality());
+    }else if(match(TokenType::NotEqu)) {
+        consume();
+        expr = make<BinaryOperator>(make<Inequality>(), expr, equality());
     }
+
+    return expr;
 }
 
-void Parser::comparison() {
-    log("comparison");
-    term();
-    while(matchAny({ TokenType::LThan, TokenType::LThanEqu, TokenType::GThan, TokenType::GThanEqu })) {
+ptr<Expression> Parser::comparison() {
+    ptr<Expression> expr = term();
+
+    if(match(TokenType::LThan)) {
         consume();
-        term();
+        expr = make<BinaryOperator>(make<LessThan>(), expr, comparison());
+    } else if(match(TokenType::LThanEqu)) {
+        consume();
+        expr = make<BinaryOperator>(make<LessThanOrEqual>(), expr, comparison());
+    } else if(match(TokenType::GThanEqu)) {
+        consume();
+        expr = make<BinaryOperator>(make<GreaterThan>(), expr, comparison());
+    } else if(match(TokenType::GThanEqu)) {
+        consume();
+        expr = make<BinaryOperator>(make<GreaterThanOrEqual>(), expr, comparison());
     }
+
+    return expr;
 }
 
-void Parser::term() {
-    log("term");
-    factor();
-    while(matchAny({ TokenType::Plus, TokenType::Minus })) {
+ptr<Expression> Parser::term() {
+    ptr<Expression> expr = factor();
+
+    if(match(TokenType::Plus)) {
         consume();
-        factor();
+        expr = make<BinaryOperator>(make<Addition>(), expr, term());
+    } else if(match(TokenType::Minus)) {
+        consume();
+        expr = make<BinaryOperator>(make<Subtraction>(), expr, term());
     }
+
+    return expr;
 }
 
-void Parser::factor() {
-    log("factor");
-    merge();
-    while(matchAny({ TokenType::Mult, TokenType::Div, TokenType::Mod, TokenType::Exp })) {
+ptr<Expression> Parser::factor() {
+    ptr<Expression> expr = merge();
+
+    if(match(TokenType::Mult)) {
         consume();
-        merge();
+        expr = make<BinaryOperator>(make<Multiplication>(), expr, factor());
+    } else if(match(TokenType::Div)) {
+        consume();
+        expr = make<BinaryOperator>(make<Division>(), expr, factor());
+    } else if(match(TokenType::Exp)) {
+        consume();
+        expr = make<BinaryOperator>(make<Exponentiation>(), expr, factor());
+    } else if(match(TokenType::Mod)) {
+        consume();
+        expr = make<BinaryOperator>(make<Modulo>(), expr, factor());
     }
+
+    return expr;
 }
 
-void Parser::merge() {
-    log("factor");
-    unary();
-    while(match(TokenType::Merge)) {
+ptr<Expression> Parser::merge() {
+    ptr<Expression> expr = unary();
+
+    if(match(TokenType::Merge)) {
         consume();
-        unary();
+        expr = make<BinaryOperator>(make<Merge>(), expr, merge());
     }
+
+    return expr;
 }
 
-void Parser::unary() {
+ptr<Expression> Parser::unary() {
     log("unary");
     while(matchAny({ TokenType::Neg, TokenType::Minus }))
         consume();
