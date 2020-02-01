@@ -4,13 +4,13 @@ use -> "use" simple_string ["as" ident]
 scope -> "public" | "private"
 decl_stat -> [scope] (attrib_decl stat_end | method_decl)
 
-attrib_decl -> ["var" | "const"] ident decl_operator expr
+attrib_decl -> ["let" | "const"] ident decl_operator expr
 
 method_decl -> "fun" ident "(" [param_list] ")" stat_block
 stat_block -> "{" { simple_stat | control_stat } "}"
 
 simple_stat -> (local_decl | return_stat | continue_stat | break_stat | throw_stat | expression) {otherwise_stat} stat_end
-local_decl -> ("var" | "const") ident decl_operator (expr | deep_copy)
+local_decl -> ("let" | "const") ident decl_operator (expr | deep_copy)
 return_stat -> "return" expr stat_end
 continue_stat -> "continue" stat_end
 break_stat -> "break" stat_end

@@ -7,5 +7,5 @@ ptr <Value> Symbol::evaluate(Environment *env) {
 }
 
 bool Symbol::operator==(const Symbol &symbol) const {
-    return false;
+    return name == symbol.name;
 }

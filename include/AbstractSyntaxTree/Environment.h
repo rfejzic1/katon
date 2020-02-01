@@ -11,6 +11,7 @@
 class Member;
 class Value;
 class Function;
+class Object;
 
 class SymbolHashFunction {
 public:
@@ -20,13 +21,12 @@ public:
 };
 
 class Environment {
-    Environment* enclosing;
     std::unordered_map<Symbol, ptr<Member>, SymbolHashFunction> symbols;
-
-    ptr<Member> getMemberDeep(const Identifier& ident);
-
 public:
-    explicit Environment(Environment* enclosing = nullptr) : enclosing(enclosing) { }
+    explicit Environment() = default;
+    Environment(const Environment& other);
+    Environment& operator =(const Environment& other);
+
     void putValue(const Identifier &ident, Scope scope, ptr<Value> value, bool constant);
     void putFunction(const Identifier& ident, Scope scope, ptr<Function> function);
     bool hasSymbol(const Identifier& ident);
@@ -34,9 +34,6 @@ public:
     ptr<Value> getValue(const Identifier& ident);
     ptr<Function> getFunction(const Identifier& ident);
     void merge(Environment* other);
-
-    Environment* getEnclosing();
-    void setEnclosing(Environment* enclosing);
-
+    void setFunctionsOwner(Object* object);
     ~Environment() { };
 };

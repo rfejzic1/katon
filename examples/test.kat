@@ -1,14 +1,19 @@
-a = 5;
+a = 10;
+
+fun funny(param) {
+    return param + 5;
+}
 
 obj = {
-    testAttrib = 1;
-}
+    a = 1;
+
+    fun funny(a) {
+        print(a);
+    }
+};
 
 fun main() {
-    let obj = 5;
-}
-
-fun min() {
-    let bla = 5;
-    bla + 5;
+    a = 5;
+    print(funny(a));
+    a.funny();
 }

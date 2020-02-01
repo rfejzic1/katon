@@ -6,7 +6,7 @@
 
 class Merge : public Operation {
     ptr<Value> asObjects(const ptr<Object> &leftOperand, const ptr<Object> &rightOperand) override {
-        leftOperand -> getEnvironment() -> merge(rightOperand -> getEnvironment());
+        leftOperand -> merge(rightOperand);
         return leftOperand;
     }
 };

@@ -9,4 +9,5 @@ public:
     static ptr<Value> bad_cast(const std::string& message);
     static ptr<Value> undefined_operation(const std::string& message);
     static ptr<Value> undefined(const std::string& message);
+    static ptr<Value> call_failed(const std::string& message);
 };

@@ -11,5 +11,5 @@ void Interpreter::execute() {
         throw ThrowPacket(ExceptionObjects::undefined("No function named 'main' is defined"));
 
     ValueList initial = {};
-    main -> call(object, initial);
+    main -> call(initial);
 }

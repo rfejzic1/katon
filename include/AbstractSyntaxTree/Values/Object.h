@@ -2,8 +2,9 @@
 
 #include "Value.h"
 #include "../Environment.h"
+#include "../Callable.h"
 
-class Object : public Value {
+class Object : public Value, public Callable {
     Environment members;
 public:
     Object() = default;
@@ -14,6 +15,8 @@ public:
     ptr<Function> getFunction(const Identifier& ident);
 
     Environment* getEnvironment();
+    void setEnvironment(Environment* env);
+    void merge(ptr<Object> other);
 
     Type getType() override;
     std::string asString() override;
@@ -22,6 +25,9 @@ public:
     bool asBoolean() override;
     ptr<Object> asObject() override;
     ptr<Array> asArray() override;
+
+    ptr<Value> call(ValueList &arguments) override;
+    Object* getCaller() override;
 
     virtual ~Object() { }
 };

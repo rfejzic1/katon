@@ -41,6 +41,9 @@
 #include "../include/AbstractSyntaxTree/Operators/Negation.h"
 #include "../include/AbstractSyntaxTree/Operators/Negative.h"
 #include "../include/AbstractSyntaxTree/Operators/Cast.h"
+#include "../include/AbstractSyntaxTree/Operators/MemberAccess.h"
+#include "../include/AbstractSyntaxTree/Operators/Call.h"
+#include "../include/AbstractSyntaxTree/Operators/ElementAccess.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
@@ -156,9 +159,9 @@ ptr<ObjectExpression> Parser::object() {
 
 ptr<ArrayExpression> Parser::array() {
     consume(TokenType::LeftBrack, "'['");
-    expressionList();
+    ptr<ArrayExpression> expr = make<ArrayExpression>(expressionList());
     consume(TokenType::RightBrack, "']'");
-    return make<ArrayExpression>();
+    return expr;
 }
 
 void Parser::memberDecl(ptr<ObjectExpression> &descriptor) {
@@ -209,7 +212,7 @@ void Parser::method(ptr<ObjectExpression> &descriptor, Scope scope) {
     IdentifierList parameters = identifierList();
     consume(TokenType::RightParen, "')'");
 
-    ptr<Function> function = make<Function>(parameters, *statementBlock());
+    ptr<Function> function = make<Function>(make<IdentifierList>(parameters), statementBlock());
     descriptor -> putFunction(identifier, scope, function);
 }
 
@@ -603,8 +606,8 @@ ptr<Expression> Parser::unary() {
 
 ptr<Expression> Parser::primary() {
     if(match(TokenType::Identifier)) {
-        // todo: deal with symbols
-        variable(nullptr);
+        ptr<Expression> expr = variable();
+        return postfix(expr);
     } else if(match(TokenType::LeftParen)) {
         consume(TokenType::LeftParen, "'('");
         ptr<Expression> expr = expression();
@@ -663,40 +666,50 @@ ptr<Expression> Parser::lambda() {
     IdentifierList parameters = identifierList();
     consume(TokenType::RightParen, "')'");
 
-    ptr<Function> function = make<Function>(parameters, *statementBlock());
+    ptr<Function> function = make<Function>(make<IdentifierList>(parameters), statementBlock());
 
     ptr<ObjectExpression> objectDescriptor = make<ObjectExpression>();
     objectDescriptor -> putFunction("call", Scope::Public, function);
     return objectDescriptor;
 }
 
-void Parser::variable(Expression* callee) {
-    log("Variable");
+ptr<Expression> Parser::variable() {
+    Identifier ident = token().lexeme;
     consume(TokenType::Identifier, "identifier");
-    postfix(callee);
+    ptr<Expression> expr = make<Symbol>(ident);
+    return expr;
 }
 
-void Parser::postfix(Expression* callee) {
+ptr<Expression> Parser::postfix(ptr<Expression> callee) {
     if(match(TokenType::LeftParen)) {
-        call(callee);
+        return call(callee);
     } else if(match(TokenType::LeftBrack)) {
-        access(callee);
+        return access(callee);
     } else if(match(TokenType::Dot)) {
-        consume();
-        variable(callee);
+        return memberAccess(callee);
     }
+    return callee;
 }
 
-void Parser::call(Expression* callee) {
+ptr<Expression> Parser::call(ptr<Expression> callee) {
     consume();
-    expressionList();
+    ExpressionList exprList = expressionList();
     consume(TokenType::RightParen, "')'");
-    postfix(callee);
+
+    ptr<Expression> expr = make<Call>(callee, exprList);
+    return postfix(expr);
 }
 
-void Parser::access(Expression* callee) {
+ptr<Expression> Parser::access(ptr<Expression> callee) {
     consume();
-    expression();
+    ptr<Expression> accessValue = expression();
     consume(TokenType::RightBrack, "']'");
-    postfix(callee);
+    ptr<Expression> expr = make<ElementAccess>(callee, accessValue);
+    return postfix(expr);
+}
+
+ptr<Expression> Parser::memberAccess(ptr<Expression> callee) {
+    consume();
+    ptr<Expression> expr = make<MemberAccess>(callee, variable());
+    return postfix(expr);
 }

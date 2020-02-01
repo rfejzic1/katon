@@ -73,10 +73,11 @@ class Parser {
     ptr<Expression> castable();
     ptr<Expression> primary();
     ptr<Expression> value();
-    void variable(Expression* callee);
-    void postfix(Expression* callee);
-    void call(Expression* callee);
-    void access(Expression* callee);
+    ptr<Expression> variable();
+    ptr<Expression> postfix(ptr<Expression> callee);
+    ptr<Expression> call(ptr<Expression> callee);
+    ptr<Expression> access(ptr<Expression> callee);
+    ptr<Expression> memberAccess(ptr<Expression> callee);
 
 public:
     explicit Parser(const char* filepath);

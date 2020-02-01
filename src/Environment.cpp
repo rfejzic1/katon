@@ -26,32 +26,55 @@ ptr<Member> Environment::getMember(const Identifier &ident) {
     return symbols[ident];
 }
 
-ptr<Member> Environment::getMemberDeep(const Identifier& ident) {
-    Environment* currentEnv = this;
-    while(currentEnv && !currentEnv -> hasSymbol(ident)) {
-        currentEnv = currentEnv -> getEnclosing();
-    }
-    return currentEnv ? currentEnv -> getMember(ident) : nullptr;
-}
-
 ptr<Value> Environment::getValue(const Identifier &ident) {
-    return std::dynamic_pointer_cast<Value>(getMemberDeep(ident));
+    return std::dynamic_pointer_cast<Value>(getMember(ident));
 }
 
 ptr<Function> Environment::getFunction(const Identifier &ident) {
-    return std::dynamic_pointer_cast<Function>(getMemberDeep(ident));
-}
-
-Environment *Environment::getEnclosing() {
-    return enclosing;
-}
-
-void Environment::setEnclosing(Environment *newEnclosing) {
-    enclosing = newEnclosing;
+    return std::dynamic_pointer_cast<Function>(getMember(ident));
 }
 
 void Environment::merge(Environment *other) {
     for(auto& it : other -> symbols) {
         symbols[it.first] = it.second;
     }
+}
+
+void Environment::setFunctionsOwner(Object *object) {
+    for(auto& it : symbols) {
+        ptr<Function> function = std::dynamic_pointer_cast<Function>(it.second);
+        if(function)
+            function->setOwner(object);
+    }
+}
+
+Environment::Environment(const Environment &other) {
+    for(const auto& it : other.symbols) {
+        ptr<Member> member = it.second;
+        ptr<Function> function = std::dynamic_pointer_cast<Function>(member);
+        if(function) {
+            symbols[it.first] = make<Function>(*function);
+        } else {
+            symbols[it.first] = member;
+        }
+    }
+}
+
+Environment& Environment::operator=(const Environment &other) {
+    if(this == &other)
+        return *this;
+
+    symbols.clear();
+
+    for(const auto& it : other.symbols) {
+        ptr<Member> member = it.second;
+        ptr<Function> function = std::dynamic_pointer_cast<Function>(member);
+        if(function) {
+            symbols[it.first] = make<Function>(*function);
+        } else {
+            symbols[it.first] = member;
+        }
+    }
+
+    return *this;
 }

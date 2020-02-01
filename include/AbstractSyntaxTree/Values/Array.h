@@ -5,10 +5,10 @@
 #include "../Iterable.h"
 
 class Array : public Value, public Iterable {
-    ValueList values;
+    ptr<ValueList> values;
 public:
     Array() = default;
-    Array(ValueList& values) : values(values) { }
+    Array(ValueList& values) : values(make<ValueList>(values)) { }
     void add(ptr<Value>& value);
     void addAll(ValueList& values);
     void remove(ptr<Value>& value);

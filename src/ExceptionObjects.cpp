@@ -25,3 +25,7 @@ ptr<Value> ExceptionObjects::undefined_operation(const std::string &message) {
 ptr<Value> ExceptionObjects::undefined(const std::string &message) {
     return simple_exception("undefined", message);
 }
+
+ptr<Value> ExceptionObjects::call_failed(const std::string &message) {
+    return simple_exception("call_failed", message);
+}

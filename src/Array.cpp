@@ -1,11 +1,11 @@
 #include "../include/AbstractSyntaxTree/Values/Array.h"
 
 void Array::add(ptr<Value> &value) {
-    values.push_back(value);
+    values -> push_back(value);
 }
 
 void Array::addAll(ValueList &newValues) {
-    values.insert(values.end(), newValues.begin(), newValues.end());
+    values -> insert(values->end(), newValues.begin(), newValues.end());
 }
 
 void Array::remove(ptr<Value> &value) {
@@ -13,11 +13,11 @@ void Array::remove(ptr<Value> &value) {
 }
 
 void Array::clean() {
-    values.clear();
+    values -> clear();
 }
 
 ptr<Integer> Array::length() {
-    return make<Integer>(values.size());
+    return make<Integer>(values->size());
 }
 
 Type Array::getType() {
@@ -27,7 +27,7 @@ Type Array::getType() {
 std::string Array::asString() {
     std::string result = "[ ";
 
-    for(ptr<Value>& value : values) {
+    for(ptr<Value>& value : *values) {
         result += value -> asString() + ", ";
     }
 
@@ -38,21 +38,21 @@ std::string Array::asString() {
 }
 
 long long int Array::asInteger() {
-    return values.size();
+    return values->size();
 }
 
 double Array::asDouble() {
-    return values.size();
+    return values->size();
 }
 
 bool Array::asBoolean() {
-    return !values.empty();
+    return !values->empty();
 }
 
 ptr<ValueList> Array::getValues() {
-    return make<ValueList>(values);
+    return values;
 }
 
 ptr<Array> Array::asArray() {
-    return make<Array>(values);
+    return make<Array>(*values);
 }

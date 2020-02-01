@@ -6,3 +6,10 @@
 ptr<Value> ArrayExpression::evaluate(Environment *env) {
     throw ThrowPacket(make<String>("Array not yet implemented :("));
 }
+
+ArrayExpression::ArrayExpression() {
+    elements = make<ExpressionList>();
+}
+
+ArrayExpression::ArrayExpression(const ExpressionList& expressionList)
+    : elements(make<ExpressionList>(expressionList)) {}

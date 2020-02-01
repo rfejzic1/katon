@@ -1,6 +1,7 @@
 #include "../include/AbstractSyntaxTree/ValueExpression/ObjectExpression.h"
-
+#include "../include/AbstractSyntaxTree/Function.h"
 #include <utility>
+
 
 void ObjectExpression::putExpression(const Identifier &ident, Scope scope, ptr<Expression> expression, bool constant) {
     Symbol symbol(ident, constant, scope);
@@ -14,6 +15,7 @@ void ObjectExpression::putFunction(const Identifier &ident, Scope scope, ptr<Fun
 
 ptr<Value> ObjectExpression::evaluate(Environment *env) {
     Environment members;
+    ptr<Object> object = make<Object>();
 
     for(auto& it : expressionMap) {
         const Symbol* symbol = &it.first;
@@ -24,8 +26,10 @@ ptr<Value> ObjectExpression::evaluate(Environment *env) {
     for(auto& it : functionMap) {
         const Symbol* symbol = &it.first;
         ptr<Function> function = it.second;
+        function -> setOwner(object.get());
         members.putFunction(symbol->name, symbol->scope, function);
     }
 
-    return make<Object>(members);
+    object->setEnvironment(&members);
+    return object;
 }

@@ -8,7 +8,7 @@
 
 class Assignment : public BinaryOperator {
 public:
-    Assignment(ptr<Operation> operation, ptr<Symbol> left, ptr<Expression> right) : BinaryOperator(operation, left, right) { }
+    Assignment(ptr<Operation> operation, ptr<Expression> left, ptr<Expression> right) : BinaryOperator(operation, left, right) { }
 
     ptr<Value> evaluate(Environment *env) override {
         ptr<Symbol> symbol = std::dynamic_pointer_cast<Symbol>(leftExpression);
@@ -23,5 +23,6 @@ public:
             newValue = operation -> getResult(currValue, newValue);
 
         env -> putValue(symbol -> name, symbol -> scope, newValue, symbol -> constant);
+        return nullptr;
     }
 };
