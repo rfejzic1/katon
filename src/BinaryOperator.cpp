@@ -12,11 +12,6 @@ ptr<Value> BinaryOperator::evaluate(Environment* env) {
     ptr<Value> leftValue = leftExpression->evaluate(env);
     ptr<Value> rightValue = rightExpression->evaluate(env);
 
-    if(!rightValue || !leftValue) {
-        ptr<Value> object = ExceptionObjects::null_value("Both operands must have a value");
-        throw ThrowPacket(object);
-    }
-
     ptr<Value> result = operation -> getResult(leftValue, rightValue);
     return result;
 }

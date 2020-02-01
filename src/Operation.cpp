@@ -10,6 +10,11 @@ Type Operation::getGreaterType(ptr<Value> &left, ptr<Value> &right) {
 }
 
 ptr<Value> Operation::getResult(ptr<Value> &left, ptr<Value> &right) {
+    if(!left || !right) {
+        ptr<Value> object = ExceptionObjects::null_value("Both operands must have a value");
+        throw ThrowPacket(object);
+    }
+
     ptr<Value> result;
     Type type = getGreaterType(left, right);
 
