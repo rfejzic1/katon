@@ -4,7 +4,7 @@
 
 #include "BinaryOperator.h"
 
-class Disjunction : public BinaryOperator {
+class Disjunction : public Operation {
     ptr<Value> asIntegers(long long leftOperand, long long rightOperand) override {
         return make<Integer>(leftOperand || rightOperand);
     }
@@ -16,6 +16,4 @@ class Disjunction : public BinaryOperator {
     ptr<Value> asBooleans(bool leftOperand, bool rightOperand) override {
         return make<Boolean>(leftOperand || rightOperand);
     }
-public:
-    Disjunction(ptr<Expression> left, ptr<Expression> right) : BinaryOperator(std::move(left), std::move(right)) { }
 };
