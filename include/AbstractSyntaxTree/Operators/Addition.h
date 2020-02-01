@@ -2,9 +2,9 @@
 
 #include <utility>
 
-#include "BinaryOperator.h"
+#include "Operation.h"
 
-class Addition : public BinaryOperator {
+class Addition : public Operation {
     ptr<Value> asStrings(const std::string &leftOperand, const std::string &rightOperand) override {
         return make<String>(leftOperand + rightOperand);
     }
@@ -20,6 +20,4 @@ class Addition : public BinaryOperator {
     ptr<Value> asBooleans(bool leftOperand, bool rightOperand) override {
         return make<Boolean>(leftOperand + rightOperand);
     }
-public:
-    Addition(ptr<Expression> left, ptr<Expression> right) : BinaryOperator(std::move(left), std::move(right)) { }
 };
