@@ -7,5 +7,5 @@ class Interpreter {
     ptr<Object> object;
 public:
     explicit Interpreter(ptr<Object> object) : object(object) {}
-    void execute();
+    void execute(bool showExecutionTime = false);
 };

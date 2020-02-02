@@ -6,7 +6,7 @@
 #include "../include/AbstractSyntaxTree/ExceptionObjects.h"
 #include "../include/AbstractSyntaxTree/Packets.h"
 
-void Interpreter::execute() {
+void Interpreter::execute(bool showExecutionTime) {
     ptr<Function> main = object -> getFunction("main");
 
     if(!main)
@@ -19,7 +19,9 @@ void Interpreter::execute() {
         main -> call(initial);
     } catch(ReturnPacket& returnPacket) {}
 
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    std::cout << std::endl << "Executed in " << duration.count() << " ms" << std::endl;
+    if(showExecutionTime) {
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+        std::cout << std::endl << "Executed in " << duration.count() << " ms" << std::endl;
+    }
 }
