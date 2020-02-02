@@ -259,7 +259,19 @@ std::string Klex::parseOutString(char quote) {
     std::string lexeme;
 
     while(getChar() != EOF && getChar() != quote) {
-        lexeme.push_back(getChar());
+        if(getChar() == '\\') {
+            nextChar();
+            if(getChar() == 'n') {
+                lexeme.push_back('\n');
+            } else if(getChar() == 't') {
+                lexeme.push_back('\t');
+            } else {
+                lexeme.push_back('\\');
+                lexeme.push_back(getChar());
+            }
+        } else {
+            lexeme.push_back(getChar());
+        }
         nextChar();
     }
 
