@@ -79,12 +79,15 @@ Environment& Environment::operator=(const Environment &other) {
     return *this;
 }
 
-std::string Environment::toString() {
+std::string Environment::toString(bool pretty = false) {
     std::string result;
     for(const auto& it : symbols) {
         ptr<Value> value = std::dynamic_pointer_cast<Value>(it.second);
         if(value) {
-            result += "'" + it.first.name + "' = " + value->asString() + '\n';
+            if(pretty) result += '\t';
+            result += it.first.name + " = " + value->asString() + "";
+            if(!pretty) result += ";";
+            if(pretty) result += '\n';
         }
     }
     return result;

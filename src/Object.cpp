@@ -9,7 +9,7 @@ Type Object::getType() {
 
 std::string Object::asString() {
     std::string result = "{\n";
-    result += '\t' + members.toString();
+    result += members.toString(true);
     result += "}";
     return result;
 }

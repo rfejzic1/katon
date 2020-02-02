@@ -35,7 +35,7 @@ public:
     ptr<Function> getFunction(const Identifier& ident);
     void merge(Environment* other);
     void setFunctionsOwner(Object* object);
-    std::string toString();
+    std::string toString(bool pretty);
 
     ~Environment() { };
 };
