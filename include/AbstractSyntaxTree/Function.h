@@ -7,6 +7,8 @@
 #include "../RuntimeException.h"
 #include "./Values/Object.h"
 #include "Environment.h"
+#include "Packets.h"
+#include "ExceptionObjects.h"
 
 class Function : public Value, public Callable {
     ptr<IdentifierList> parameters;
@@ -18,10 +20,10 @@ public:
 
     ptr<Value> call(ValueList& arguments) override {
         if(!owner)
-            throw RuntimeException("Function owner not set!!!!");
+            throw ThrowPacket(ExceptionObjects::null_value("Function owner not set"));
 
         if(arguments.size() != parameters -> size())
-            throw RuntimeException("Number of arguments does not match number of parameters!");
+            throw ThrowPacket(ExceptionObjects::call_failed("Invalid number of arguments"));
 
         Environment localEnv = *(owner -> getEnvironment());
 
