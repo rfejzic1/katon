@@ -21,5 +21,5 @@ void Interpreter::execute() {
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    std::cout << "Executed in " << duration.count() << " ms" << std::endl;
+    std::cout << std::endl << "Executed in " << duration.count() << " ms" << std::endl;
 }

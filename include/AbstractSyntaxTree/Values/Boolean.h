@@ -9,7 +9,7 @@ struct Boolean : public Value {
     Boolean(bool value) : value(value) {}
 
     std::string asString() override {
-        return std::to_string(value);
+        return value ? "true" : "false";
     }
 
     long long int asInteger() override {

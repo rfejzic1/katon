@@ -25,14 +25,16 @@ Type Array::getType() {
 }
 
 std::string Array::asString() {
-    std::string result = "[ ";
+    std::string result = "[";
 
     for(ptr<Value>& value : *values) {
         result += value -> asString() + ", ";
     }
 
     result.pop_back();
-    result += " ]";
+    result.pop_back();
+
+    result += "]";
 
     return result;
 }

@@ -44,6 +44,7 @@
 #include "../include/AbstractSyntaxTree/Operators/MemberAccess.h"
 #include "../include/AbstractSyntaxTree/Operators/Call.h"
 #include "../include/AbstractSyntaxTree/Operators/ElementAccess.h"
+#include "../include/AbstractSyntaxTree/Statements/PrintStatement.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
@@ -287,6 +288,8 @@ ptr<Statement> Parser::statement() {
         stat = throwStatement();
     else if(match(TokenType::Return))
         stat = returnStatement();
+    else if(match(TokenType::Print))
+        stat = printStatement();
     else
         stat = expressionStatement();
 
@@ -416,6 +419,13 @@ ptr<Statement> Parser::expressionStatement() {
     ptr<Expression> expr = expression();
     consume(TokenType::StatEnd, "';'");
     return make<ExpressionStatement>(expr);
+}
+
+ptr<Statement> Parser::printStatement() {
+    consume();
+    ptr<Expression> expr = expression();
+    consume(TokenType::StatEnd, "';'");
+    return make<PrintStatement>(expr);
 }
 
 ptr<Expression> Parser::expression() {

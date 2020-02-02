@@ -6,7 +6,7 @@
 Type Operation::getGreaterType(ptr<Value> &left, ptr<Value> &right) {
     Type leftType = left -> getType();
     Type rightType = right -> getType();
-    return leftType >= rightType ? leftType : rightType;
+    return leftType <= rightType ? leftType : rightType;
 }
 
 ptr<Value> Operation::getResult(ptr<Value> &left, ptr<Value> &right) {

@@ -32,7 +32,7 @@ public:
                 Environment local = *env;
                 ptr<Value> newValue = iterator.next();
                 local.putValue(ident, Scope::Public, newValue, false);
-                statementBlock -> execute(env);
+                statementBlock -> execute(&local);
             } catch (BreakPacket&) {
                 break;
             } catch (ContinuePacket&) { }

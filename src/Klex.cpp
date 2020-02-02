@@ -71,6 +71,7 @@ void Klex::initLexToTokenTable() {
     lexToTokenTable["throw"] = TokenType::Throw;
     lexToTokenTable["lambda"] = TokenType::Lambda;
     lexToTokenTable["as"] = TokenType::As;
+    lexToTokenTable["print"] = TokenType::Print;
 }
 
 int Klex::getChar() {

@@ -1,10 +1,15 @@
 #include "../include/AbstractSyntaxTree/ValueExpression/ArrayExpression.h"
 
 #include "../include/AbstractSyntaxTree/Packets.h"
-#include "../include/AbstractSyntaxTree/Values/String.h"
+#include "../include/AbstractSyntaxTree/Values/Array.h"
 
 ptr<Value> ArrayExpression::evaluate(Environment *env) {
-    throw ThrowPacket(make<String>("Array not yet implemented :("));
+    ValueList valueList;
+    for(auto& element : *elements) {
+        ptr<Value> value = element->evaluate(env);
+        valueList.push_back(value);
+    }
+    return make<Array>(valueList);
 }
 
 ArrayExpression::ArrayExpression() {

@@ -1,19 +1,9 @@
-a = 10;
-
-fun funny(param) {
-    return param + 5;
-}
-
-obj = {
-    a = 1;
-
-    fun funny(a) {
-        print(a);
-    }
-};
+array = [1, true, 'Tarik', [1, 2], 5 + 3, {
+    name = 'Rijad';
+}];
 
 fun main() {
-    a = 5;
-    print(funny(a));
-    a.funny();
+    for i in array {
+        print i + ' ';
+    }
 }

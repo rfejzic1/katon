@@ -67,7 +67,8 @@ enum class TokenType {
     Continue,
     Throw,
     Lambda,
-    EndOfFile
+    EndOfFile,
+    Print
 };
 
 struct Token {

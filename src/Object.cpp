@@ -8,7 +8,10 @@ Type Object::getType() {
 }
 
 std::string Object::asString() {
-    return "";
+    std::string result = "{\n";
+    result += '\t' + members.toString();
+    result += "}";
+    return result;
 }
 
 long long int Object::asInteger() {
