@@ -3,8 +3,6 @@
 #include <chrono>
 
 #include "../include/AbstractSyntaxTree/Function.h"
-#include "../include/AbstractSyntaxTree/ExceptionObjects.h"
-#include "../include/AbstractSyntaxTree/Packets.h"
 
 void Interpreter::execute(bool showExecutionTime) {
     ptr<Function> main = object -> getFunction("main");

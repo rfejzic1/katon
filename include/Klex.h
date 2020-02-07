@@ -22,7 +22,6 @@ class Klex {
     unsigned long lineNum = 1;
     unsigned long colNum = 0;
 
-
     bool isSimpleString = false;
     bool isInterpolatedString = false;
     bool shouldParseOutString = false;

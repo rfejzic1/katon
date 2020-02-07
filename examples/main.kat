@@ -2,7 +2,7 @@ let person = {
     let name = 'John Doe';
 
     fun printName() {
-        print(name);
+        print name;
     }
 };
 
@@ -11,9 +11,11 @@ fun doSomething(something) {
 }
 
 fun main() {
-    doSomething(person) otherwise {
-        print("This has gone out of hand, hasn't it?");
-    };
+    try {
+        doSomething(person);
+    } catch e {
+        print e;
+    }
 }
 
 

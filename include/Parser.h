@@ -60,6 +60,7 @@ class Parser {
     ptr<Statement> returnStatement();
     ptr<Statement> throwStatement();
     ptr<Statement> printStatement();
+    ptr<Statement> inputStatement();
     ptr<Statement> localDecl(TokenType tokenType);
     ptr<Statement> expressionStatement();
     ptr<Expression> expression();

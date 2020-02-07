@@ -45,6 +45,7 @@
 #include "../include/AbstractSyntaxTree/Operators/Call.h"
 #include "../include/AbstractSyntaxTree/Operators/ElementAccess.h"
 #include "../include/AbstractSyntaxTree/Statements/PrintStatement.h"
+#include "../include/AbstractSyntaxTree/Statements/InputStatement.h"
 
 Parser::Parser(const char *filepath) : filepath(filepath), klex(nullptr) { }
 
@@ -199,7 +200,7 @@ void Parser::attributeDecl(ptr<ObjectExpression> &descriptor, Scope scope) {
     ptr<Expression> expr = expression();
     consume(TokenType::StatEnd, "';'");
 
-     descriptor -> putExpression(identifier, scope, expr, constant);
+    descriptor -> putExpression(identifier, scope, expr, constant);
 }
 
 void Parser::method(ptr<ObjectExpression> &descriptor, Scope scope) {
@@ -290,6 +291,8 @@ ptr<Statement> Parser::statement() {
         stat = returnStatement();
     else if(match(TokenType::Print))
         stat = printStatement();
+    else if(match(TokenType::Input))
+        stat = inputStatement();
     else
         stat = expressionStatement();
 
@@ -426,6 +429,13 @@ ptr<Statement> Parser::printStatement() {
     ptr<Expression> expr = expression();
     consume(TokenType::StatEnd, "';'");
     return make<PrintStatement>(expr);
+}
+
+ptr<Statement> Parser::inputStatement() {
+    consume();
+    ptr<Expression> expr = expression();
+    consume(TokenType::StatEnd, "';'");
+    return make<InputStatement>(expr);
 }
 
 ptr<Expression> Parser::expression() {

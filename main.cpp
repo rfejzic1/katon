@@ -17,8 +17,8 @@ int main(int argc, char **argv) {
 
     try {
         Parser parser(filename);
-        ptr<ObjectExpression> moduleDescriptor = parser.parse();
-        ptr<Object> module = moduleDescriptor -> evaluate(nullptr) -> asObject();
+        ptr<ObjectExpression> moduleExpression = parser.parse();
+        ptr<Object> module = moduleExpression -> evaluate(nullptr) -> asObject();
 
         Interpreter interpreter(module);
         interpreter.execute();

@@ -1,9 +1,10 @@
-array = [1, true, 'Tarik', [1, 2], 5 + 3, {
-    name = 'Rijad';
-}];
 
 fun main() {
-    for i in array {
-        print i + ' ';
-    }
+    let userInput = 5;
+    input userInput;
+    let num = userInput as Integer;
+
+    print userInput + 5;
+    print '\n';
+    print num + 5;
 }
