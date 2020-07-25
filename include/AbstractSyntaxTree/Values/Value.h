@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "../Expression.h"
 #include "../Member.h"
 #include "../Type.h"
